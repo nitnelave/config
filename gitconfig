@@ -1,0 +1,45 @@
+[alias]
+        st = status
+        fixup = !sh -c 'ref="$1" && shift && git commit -m \"fixup! $(git log -1 --format='\\''%s'\\'' $ref)\" \"$@\"' -
+        squash = !sh -c 'ref="$1" && shift && git commit -m \"squash! $(git log -1 --format='\\''%s'\\'' $ref)\" \"$@\"' -
+        ri = rebase --interactive --autosquash
+	d = difftool
+
+[core]
+        excludesfile = /home/nitnelave/.gitignore
+	editor = vim
+[user]
+	name = nitnelave
+	email = nitnelave1@gmail.com
+
+[sendemail]
+        smtpserver = imap.googlemail.com
+	smtpuser = nitnelave1@gmail.com
+        smtpencryption = tls
+        smtpserverport  = 587
+	confirm = auto
+[sendemail "akim"]
+	to = akim@lrde.epita.fr
+	from = Valentin Tolmer <nitnelave1@gmail.com>
+[sendemail "bison"]
+        to = bison-patches@gnu.org
+        from = Valentin Tolmer <nitnelave1@gmail.com>
+[gui]
+	recentrepo = /home/nitnelave/minecraft/code/CreeperHeal/CHwiki
+	recentrepo = /home/nitnelave/minecraft/code/CreeperHeal/CreeperTrap
+	recentrepo = /home/nitnelave/CVUT/PA/Nibbles
+	recentrepo = /home/nitnelave/minecraft/code/AdvMapHelper/AdvMapHelper
+	recentrepo = /home/nitnelave/minecraft/code/Bukkit/CraftBukkit
+	recentrepo = /home/nitnelave/minecraft/code/Bukkit/Bukkit
+	recentrepo = /home/nitnelave/code/bison/bison
+	recentrepo = /home/nitnelave/minecraft/code/CreeperHeal/CreeperHeal
+[merge]
+	summary = true
+[diff]
+	tool = vimdiff
+[difftool]
+	prompt = false
+[guitool "stash"]
+	cmd = git stash
+[guitool "pop"]
+	cmd = git stash pop
