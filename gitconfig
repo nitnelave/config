@@ -18,6 +18,7 @@
         alias = "!sh -c '[ $# = 2 ] && git config --global alias.\"$1\" \"$2\" && exit 0 || echo \"usage: git alias <new alias> <original command>\" >&2 && exit 1' -"
         aliases = !git config --get-regexp 'alias.*' | colrm 1 6 | sed 's/[ ]/ = /'
         lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
+	cont = rebase --continue
 
 
 [core]
@@ -39,6 +40,15 @@
 [sendemail "bison"]
         to = bison-patches@gnu.org
         from = Valentin Tolmer <nitnelave1@gmail.com>
+[gui]
+	recentrepo = /home/nitnelave/minecraft/code/CreeperHeal/CHwiki
+	recentrepo = /home/nitnelave/minecraft/code/CreeperHeal/CreeperTrap
+	recentrepo = /home/nitnelave/CVUT/PA/Nibbles
+	recentrepo = /home/nitnelave/minecraft/code/AdvMapHelper/AdvMapHelper
+	recentrepo = /home/nitnelave/minecraft/code/Bukkit/CraftBukkit
+	recentrepo = /home/nitnelave/minecraft/code/Bukkit/Bukkit
+	recentrepo = /home/nitnelave/code/bison/bison
+	recentrepo = /home/nitnelave/minecraft/code/CreeperHeal/CreeperHeal
 [merge]
 	summary = true
 [diff]
