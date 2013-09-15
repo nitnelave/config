@@ -17,3 +17,13 @@ EndSection
 
 FreeBSD: kdbmap us.dvorak
 Debian: setxkbmap dvorak
+
+Caps Lock -> Escape
+edit ~/.Xmodmap
+!! No Caps Lock
+clear lock
+!! Make Caps_lock an escape key.
+keycode 0x42 = Escape
+
+Caps Lock <-> Escape
+setxkbmap -option -option caps:swapescape
