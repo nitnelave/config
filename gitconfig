@@ -1,9 +1,24 @@
 [alias]
         st = status
-        fixup = !sh -c 'ref="$1" && shift && git commit -m \"fixup! $(git log -1 --format='\\''%s'\\'' $ref)\" \"$@\"' -
-        squash = !sh -c 'ref="$1" && shift && git commit -m \"squash! $(git log -1 --format='\\''%s'\\'' $ref)\" \"$@\"' -
+        fx = !sh -c 'ref="$1" && shift && git commit -m \"fixup! $(git log -1 --format='\\''%s'\\'' $ref)\" \"$@\"' -
+        sq = !sh -c 'ref="$1" && shift && git commit -m \"squash! $(git log -1 --format='\\''%s'\\'' $ref)\" \"$@\"' -
         ri = rebase --interactive --autosquash
 	d = difftool
+	co = checkout
+	br = branch
+        df = diff
+        dc = diff --cached
+	funcdiff = !sh -c \"git show \\\"\\$0:\\$2\\\" | sed -n \\\"/^[^ \\t].*\\$3(/,/^}/p\\\" > .tmp1 && git show \\\"\\$1:\\$2\\\" | sed -n \\\"/^[^ \\t].*\\$3(/,/^}/p\\\" > .tmp2 && git diff .tmp1 .tmp2\"
+	ci = commit
+	pop = stash
+        prune-all = !git remote | xargs -n 1 git remote prune
+        intercommit = !sh -c 'git show "$1" > .git/commit1 && git show "$2" > .git/commit2 && interdiff .git/commit[12] | less -FRS' -
+        edit-unmerged = "!f() { git diff --name-status --diff-filter=U | cut -f2 ; }; vim `f`"
+        add-unmerged = "!f() { git diff --name-status --diff-filter=U | cut -f2 ; }; git add `f`"
+        alias = "!sh -c '[ $# = 2 ] && git config --global alias.\"$1\" \"$2\" && exit 0 || echo \"usage: git alias <new alias> <original command>\" >&2 && exit 1' -"
+        aliases = !git config --get-regexp 'alias.*' | colrm 1 6 | sed 's/[ ]/ = /'
+        lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
+
 
 [core]
         excludesfile = /home/nitnelave/.gitignore
