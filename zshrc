@@ -27,7 +27,7 @@ ZSH=$HOME/.oh-my-zsh
 # DISABLE_AUTO_TITLE="true"
 
 # Uncomment following line if you want to disable command autocorrection
-# DISABLE_CORRECTION="true"
+DISABLE_CORRECTION="true"
 
 # Uncomment following line if you want red dots to be displayed while waiting for completion
  COMPLETION_WAITING_DOTS="true"
@@ -171,34 +171,41 @@ setprompt
 export EDITOR=/usr/local/bin/vim
 export NNTPSERVER="news.epita.fr"
 export LANG=en_US.UTF-8
-export LC_ALL=en_US.UTF-8
+export LC_ALL=fr_FR.UTF-8
 export XTERM_LOCALE=fr_FR.UTF-8
 export PAGER=most
-export LC_CTYPE=fr_FR.UTF-8
+export LC_CTYPE=en_US.UTF-8
 export TERM=rxvt
 export CC=gcc
 export CXX=g++
 export CLICOLOR="YES"
 export LSCOLORS="ExGxFxdxCxDxDxhbadExEx"
+export LC_COLLATE=fr_FR.UTF-8
+
+xmodmap ~/.Xmodmap
 
 
-
+SCRIPTS='/./home/tolmer_v/scripts'
 alias slrn="xterm -e slrn > /dev/null 2>&1 &"
 alias firefox="firefox > /dev/null 2>&1 &"
 alias reload="source ~/.zshrc"
-alias headers="~/./scripts/headers.sh"
-alias moulinette="~/./scripts/moulinette.sh"
-
-setxkbmap us dvorak-l
-xmodmap ~/.Xmodmap
-perl ~/private/jogsoul.pl ~/private/jogsoul.conf
-sh -c "~/.setlayoutgrid 0 2 2 0"
-
-printf '\33]701;%s\007' "$LC_CTYPE"
+alias gitignore="cat $HOME/scripts/templates/.gitignore > .gitignore"
+alias headers="$SCRIPTS/headers.sh"
+alias make_main="$SCRIPTS/main.sh"
+alias make_test="headers src/*/* && make_main src/*/*.c"
+alias moulinette="$SCRIPTS/moulinette.sh"
+alias implement="$SCRIPTS/implement.sh"
+alias cvalgrind="$SCRIPTS/valgrind-color.sh"
+alias mkd=". $SCRIPTS/mkd.sh"
+alias create_makefile="$SCRIPTS/createmakefile.sh"
+alias create_makefile_rec="$SCRIPTS/createmakefilerecursive.sh"
+alias train="while true; do; clear; sl; sleep 34; sl -l; sleep 26; done;"
+alias gut="git"
 
 alias ls="ls -G"
 alias gccw="gcc -Wextra -Wall -pedantic -std=c99 -Werror"
 alias gccws="gcc -Wall -Wextra -std=c99 -pedantic -Wfloat-equal -Wundef -Wshadow -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Waggregate-return -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations -Wnested-externs -Wunreachable-code"
+alias gdb="gdb -q"
+alias make="gmake"
 
-evince () { `/usr/local/bin/evince $1 > /dev/null 2>&1 &` ;}
-
+evince () { `/usr/local/bin/evince "$1" > /dev/null 2>&1 &` ;}
