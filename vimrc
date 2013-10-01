@@ -1,36 +1,5 @@
-""""""""""""""""""""""""""""""""""""""""""""""""""
-" Description:
-" This is the .vimrc file
-"
-" Maintainer:
-" Kévin "Chewie" Sztern
-" <chewie@deliciousmuffins.net>
-"
-" Complete_version:
-" You can find the complete configuration,
-" including all the plugins used, here:
-" https://github.com/Chewie/configs
-"
-" Acknowledgements:
-" Several elements of this .vimrc come from Pierre Bourdon's config
-" You can find it here: https://bitbucket.org/delroth/configs/
-"
-""""""""""""""""""""""""""""""""""""""""""""""""""
-
-
-""""""""""""""""""""""""""""""""""""""""""""""""""
-" General parameters
-""""""""""""""""""""""""""""""""""""""""""""""""""
-
 " Disable vi compatibility mode
 set nocompatible
-
-" Pathogen requires the ftplugins to be disabled
-filetype plugin off
-
-" /!\ Comment this line if you only have the .vimrc /!\
-" Load all the plugins in .vim/bundle
-" call pathogen#infect()
 
 " Enable filetype detection for plugins and indentation options
 filetype plugin indent on
@@ -41,15 +10,7 @@ set autoread
 " Write the file when we leave the buffer
 set autowrite
 
-" Disable backups, we have source control for that
 set nobackup
-
-" Force encoding to utf-8, for systems where this is not the default (windows
-" comes to mind)
-set encoding=utf-8
-
-" Disable swapfiles too
-set noswapfile
 
 " Hide buffers instead of closing them
 set hidden
@@ -57,10 +18,6 @@ set hidden
 " Set the time (in milliseconds) spent idle until various actions occur
 " In this configuration, it is particularly useful for the tagbar plugin
 set updatetime=500
-
-""""""""""""""""""""""""""""""""""""""""""""""""""
-" User interface
-""""""""""""""""""""""""""""""""""""""""""""""""""
 
 " Make backspace behave as expected
 set backspace=eol,indent,start
@@ -82,7 +39,6 @@ set number
 set laststatus=2
 
 " Format the status line
-" This status line comes from Pierre Bourdon's vimrc
 set statusline=%f\ %l\|%c\ %m%=%p%%\ (%Y%R)
 
 " Enhance command line completion
@@ -119,7 +75,7 @@ set wrap
 " Wrap on column 80
 set textwidth=79
 
-" Disable preview window on completion
+" Preview window on completion
 set completeopt=menu,longest
 
 " Ignore case on search
@@ -132,18 +88,12 @@ set smartcase
 set incsearch
 
 " Don't highlight matched strings
-set nohlsearch
+set hlsearch
 
 " Toggle g option by default on substition
 set gdefault
 
-""""""""""""""""""""""""""""""""""""""""""""""""""
-" Indentation options
-""""""""""""""""""""""""""""""""""""""""""""""""""
-
 " The length of a tab
-" This is for documentation purposes only,
-" do not change the default value of 8, ever.
 set tabstop=8
 
 " The number of spaces inserted when you press tab
@@ -165,10 +115,6 @@ set autoindent
 " This one is complicated. See :help cinoptions-values for details
 set cinoptions=(0,u0,U0,t0,g0,N-s,{s,>2s,^-s,n-s
 
-""""""""""""""""""""""""""""""""""""""""""""""""""
-" Mappings
-""""""""""""""""""""""""""""""""""""""""""""""""""
-
 " Set "," as map leader
 let mapleader = ","
 
@@ -182,20 +128,25 @@ cnoremap %s %s/\v
 " Toggle paste mode
 noremap <leader>pp :setlocal paste!<cr>
 
+" Dvorak mappings
 " Move between rows in wrapped lines
-
 no t gj
 no n gk
 no s l
 no l n
 no L N
+" end of line
 no - $
 no _ ^
+" change window
 no S <C-w><C-w>
-no N <C-w><C-r>
+" Fast move up/down
 no T 8<Down>
 no N 8<Up>
+" Move window
 no H <C-w><C-r>
+
+imap <C-Space> <C-n>
 
 nmap <F11> :!find . -iname '*.c' -o -iname '*.cpp' -o -iname '*.h' -o -iname '*.hpp' > cscope.files<CR>
   \:!cscope -b -i cscope.files -f cscope.out<CR>
@@ -209,3 +160,45 @@ nnoremap Y y$
 noremap ; :
 
 autocmd BufWritePre * :%s/\v\s+$//e
+autocmd BufWritePre .article :%s/\v^--$/-- /e
+
+highlight over80 ctermbg=red
+match over80 '\%>80v.*'
+
+function! s:insert_gates()
+  let gatename = substitute(toupper(expand("%:t")), "\\.", "_", "g") . "_"
+  execute "normal! i#ifndef " . gatename
+  execute "normal! o# define " . gatename . " \n\n\n"
+  execute "normal! Go#endif /* !" . gatename . " */"
+  normal! kk
+endfunction
+autocmd BufNewFile *.{h,hpp} call <SID>insert_gates()
+
+function! s:insert_shebang()
+  execute "normal! i#! /bin/sh\n\n"
+endfunction
+autocmd BufNewFile *.sh call <SID>insert_shebang()
+
+function! s:insert_include()
+  execute "normal! i#include \"" . substitute(expand("%:t"), "\\.c$", ".h", "") . "\"\n\n"
+endfunction
+autocmd BufNewFile *.c call <SID>insert_include()
+
+set list
+set listchars=tab:\ \ ,trail:.
+
+function! NumberToggle()
+  if(&relativenumber == 1)
+    set number
+  else
+    set relativenumber
+  endif
+endfunc
+
+nnoremap <C-l> :call NumberToggle()<cr>
+
+autocmd FocusLost * : set number
+autocmd FocusGained * : set relativenumber
+
+autocmd InsertEnter * : set number
+autocmd InsertLeave * : set relativenumber
