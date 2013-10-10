@@ -197,8 +197,10 @@ endfunc
 
 nnoremap <C-l> :call NumberToggle()<cr>
 
-autocmd FocusLost * : set number
+set relativenumber
+
+autocmd FocusLost * : set norelativenumber
 autocmd FocusGained * : set relativenumber
 
-autocmd InsertEnter * : set number
+autocmd InsertEnter * : set norelativenumber
 autocmd InsertLeave * : set relativenumber
