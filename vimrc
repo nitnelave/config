@@ -88,7 +88,7 @@ set smartcase
 set incsearch
 
 " Don't highlight matched strings
-set hlsearch
+set nohlsearch
 
 " Toggle g option by default on substition
 set gdefault
