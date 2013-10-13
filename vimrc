@@ -206,3 +206,11 @@ autocmd FocusGained * : set relativenumber
 autocmd InsertEnter * : set norelativenumber
 autocmd InsertEnter * : set number
 autocmd InsertLeave * : set relativenumber
+
+function! s:insert_python()
+  execute "normal! i#! env python\n\n"
+  set softtabstop=4
+  set shiftwidth=4
+endfunction
+autocmd BufNewFile *.py call <SID>insert_python()
+
