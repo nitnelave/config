@@ -185,7 +185,7 @@ export LC_COLLATE=fr_FR.UTF-8
 xmodmap ~/.Xmodmap
 
 
-SCRIPTS='/./home/tolmer_v/scripts'
+SCRIPTS='/.$HOME/scripts'
 alias slrn="xterm -e slrn > /dev/null 2>&1 &"
 alias firefox="firefox > /dev/null 2>&1 &"
 alias reload="source ~/.zshrc"
@@ -201,6 +201,8 @@ alias create_makefile="$SCRIPTS/createmakefile.sh"
 alias create_makefile_rec="$SCRIPTS/createmakefilerecursive.sh"
 alias train="while true; do; clear; sl; sleep 34; sl -l; sleep 26; done;"
 alias gut="git"
+alias create_testsuite="cp $HOME/scripts/templates/testsuite.py ."
+alias create_test="$SCRIPTS/create_test.py"
 
 alias ls="ls -G"
 alias gccw="gcc -Wextra -Wall -pedantic -std=c99 -Werror"
