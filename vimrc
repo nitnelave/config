@@ -159,6 +159,65 @@ nnoremap Y y$
 " map ; to :
 noremap ; :
 
+" tab settings
+noremap <silent> <C-H> :tabprevious<CR>
+noremap <silent> <C-S> :tabnext<CR>
+inoremap <silent> <C-H> <Esc>:tabprevious<CR>
+inoremap <silent> <C-S> <Esc>:tabnext<CR>
+function MoveToPrevTab()
+  "there is only one window
+  if tabpagenr('$') == 1 && winnr('$') == 1
+    return
+  endif
+  "preparing new window
+  let l:tab_nr = tabpagenr('$')
+  let l:cur_buf = bufnr('%')
+  if tabpagenr() != 1
+    close!
+    if l:tab_nr == tabpagenr('$')
+      tabprev
+    endif
+    vsp
+  else
+    close!
+    exe "0tabnew"
+  endif
+  "opening current buffer in new window
+  exe "b".l:cur_buf
+endfunc
+
+function MoveToNextTab()
+  "there is only one window
+  if tabpagenr('$') == 1 && winnr('$') == 1
+    return
+  endif
+  "preparing new window
+  let l:tab_nr = tabpagenr('$')
+  let l:cur_buf = bufnr('%')
+  if tabpagenr() < tab_nr
+    close!
+    if l:tab_nr == tabpagenr('$')
+      tabnext
+    endif
+    vsp
+  else
+    close!
+    tabnew
+  endif
+  "opening current buffer in new window
+  exe "b".l:cur_buf
+endfunc
+noremap <C-T> :call MoveToPrevTab()<CR>
+noremap <C-N> :call MoveToNextTab()<CR>
+inoremap <C-T> <Esc>:call MoveToPrevTab()<CR>
+inoremap <C-N> <Esc>:call MoveToNextTab()<CR>
+cnoremap tn<CR> :tabnew<CR>
+
+" Enter remap
+autocmd CmdwinEnter * nnoremap <CR> <CR>
+autocmd BufReadPost quickfix nnoremap <CR> <CR>
+nnoremap <CR> o<Esc>
+
 autocmd BufWritePre * :%s/\v\s+$//e
 autocmd BufWritePre .article :%s/\v^--$/-- /e
 
@@ -168,7 +227,7 @@ match over80 '\%>80v.*'
 function! s:insert_gates()
   let gatename = substitute(toupper(expand("%:t")), "\\.", "_", "g") . "_"
   execute "normal! i#ifndef " . gatename
-  execute "normal! o# define " . gatename . " \n\n\n"
+  execute "normal! o# define " . gatename . "\n\n\n"
   execute "normal! Go#endif /* !" . gatename . " */"
   normal! kk
 endfunction
@@ -199,9 +258,9 @@ nnoremap <C-l> :call NumberToggle()<cr>
 
 set relativenumber
 
-autocmd FocusLost * : set norelativenumber
-autocmd FocusLost * : set number
-autocmd FocusGained * : set relativenumber
+autocmd BufLeave * : set norelativenumber
+autocmd BufLeave * : set number
+autocmd BufEnter * : set relativenumber
 
 autocmd InsertEnter * : set norelativenumber
 autocmd InsertEnter * : set number
