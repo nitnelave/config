@@ -20,11 +20,11 @@
 
 
 [core]
-        excludesfile = /home/tolmer_v/.gitignore
+        excludesfile = ~/.gitignore
 	editor = vim
 [user]
 	name = Valentin Tolmer
-	email = valentin.tolmer@epita.fr
+	email = valentin.tolmer@gmail.com
 
 [sendemail]
         smtpserver = imap.googlemail.com
@@ -50,5 +50,3 @@
 	decorate = full
 [help]
 	autocorrect = 1
-[push]
-	default = simple
