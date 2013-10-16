@@ -1,0 +1,7 @@
+set username "tolmer_v"
+set hostname "news.epita.fr"
+set realname "Valentin Tolmer"
+
+set replyto "tolmer_v@epita.fr"
+set signature ".signature"
+set editor_command "vim '+set tw=72' +%d '%s'"
