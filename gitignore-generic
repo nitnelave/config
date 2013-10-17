@@ -1,0 +1,17 @@
+vgcore.*
+*.so
+*.swp
+*.swo
+*.core
+*.o
+*.pdf
+*.a
+*.o.fPIC
+*.~
+*.gz
+.gdb_history
+*.d
+*.war
+*.class
+*.iso
+0
