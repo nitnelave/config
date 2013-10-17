@@ -200,7 +200,7 @@ alias create_test="$SCRIPTS/create_test.py"
 alias train="while true; do; clear; sl; sleep 34; sl -l; sleep 26; done;"
 alias gut="git"
 
-alias ls="ls -phGb --color=always"
+alias ls="ls -phG"
 alias mkdir="mkdir -pv"
 alias gccw="gcc -Wextra -Wall -pedantic -std=c99 -Werror"
 alias gccws="gcc -Wall -Wextra -std=c99 -pedantic -Wfloat-equal -Wundef -Wshadow -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Waggregate-return -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations -Wnested-externs -Wunreachable-code"
