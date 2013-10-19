@@ -164,7 +164,7 @@ noremap <silent> <C-H> :tabprevious<CR>
 noremap <silent> <C-S> :tabnext<CR>
 inoremap <silent> <C-H> <Esc>:tabprevious<CR>
 inoremap <silent> <C-S> <Esc>:tabnext<CR>
-function MoveToPrevTab()
+function! MoveToPrevTab()
   "there is only one window
   if tabpagenr('$') == 1 && winnr('$') == 1
     return
@@ -186,7 +186,7 @@ function MoveToPrevTab()
   exe "b".l:cur_buf
 endfunc
 
-function MoveToNextTab()
+function! MoveToNextTab()
   "there is only one window
   if tabpagenr('$') == 1 && winnr('$') == 1
     return
