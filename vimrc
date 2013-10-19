@@ -164,7 +164,7 @@ noremap <silent> <C-H> :tabprevious<CR>
 noremap <silent> <C-S> :tabnext<CR>
 inoremap <silent> <C-H> <Esc>:tabprevious<CR>
 inoremap <silent> <C-S> <Esc>:tabnext<CR>
-function MoveToPrevTab()
+function! MoveToPrevTab()
   "there is only one window
   if tabpagenr('$') == 1 && winnr('$') == 1
     return
@@ -186,7 +186,7 @@ function MoveToPrevTab()
   exe "b".l:cur_buf
 endfunc
 
-function MoveToNextTab()
+function! MoveToNextTab()
   "there is only one window
   if tabpagenr('$') == 1 && winnr('$') == 1
     return
@@ -211,7 +211,7 @@ noremap <C-T> :call MoveToPrevTab()<CR>
 noremap <C-N> :call MoveToNextTab()<CR>
 inoremap <C-T> <Esc>:call MoveToPrevTab()<CR>
 inoremap <C-N> <Esc>:call MoveToNextTab()<CR>
-cnoremap tn<CR> :tabnew<CR>
+cab tn tabnew
 
 " Enter remap
 autocmd CmdwinEnter * nnoremap <CR> <CR>
@@ -274,3 +274,20 @@ function! s:insert_python()
 endfunction
 autocmd BufNewFile *.py call <SID>insert_python()
 
+function! s:format_text()
+  execute "%s/\|-\>/└─>/ge"
+  execute "%s/\\v( *)  - /\\1└─> /ge"
+  execute "%s/-\>/=>/ge"
+endfunction
+autocmd BufWritePre *.fr call <SID>format_text()
+autocmd BufWritePre *.en call <SID>format_text()
+
+
+
+
+let g:languagetool_jar='$HOME/.vim/LanguageTool/languagetool-commandline.jar'
+
+autocmd BufEnter *.en : set spell spelllang=en_us
+autocmd BufEnter *.fr : set spell spelllang=fr,en_us
+autocmd BufLeave *.en : set nospell
+autocmd BufLeave *.fr : set nospell
