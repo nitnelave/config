@@ -211,7 +211,7 @@ noremap <C-T> :call MoveToPrevTab()<CR>
 noremap <C-N> :call MoveToNextTab()<CR>
 inoremap <C-T> <Esc>:call MoveToPrevTab()<CR>
 inoremap <C-N> <Esc>:call MoveToNextTab()<CR>
-cnoremap tn<CR> :tabnew<CR>
+cab tn tabnew
 
 " Enter remap
 autocmd CmdwinEnter * nnoremap <CR> <CR>
