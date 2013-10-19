@@ -222,7 +222,8 @@ autocmd BufWritePre * :%s/\v\s+$//e
 autocmd BufWritePre .article :%s/\v^--$/-- /e
 
 highlight over80 ctermbg=red
-match over80 '\%>80v.*'
+match over80 /\%80v.\+/
+
 
 function! s:insert_gates()
   let gatename = substitute(toupper(expand("%:t")), "\\.", "_", "g") . "_"
