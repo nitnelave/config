@@ -67,6 +67,8 @@ bindkey "^[[3~" delete-char
 #Search history with arrow keys
 bindkey "^[[A" history-search-backward
 bindkey "^[[B" history-search-forward
+bindkey "^N" history-search-backward
+bindkey "^T" history-search-forward
 bindkey "^_" beginning-of-line
 bindkey "^[^_" end-of-line
 bindkey "^H" backward-word
