@@ -146,8 +146,6 @@ no N 8<Up>
 " Move window
 no H <C-w><C-r>
 
-imap <C-Space> <C-n>
-
 nmap <F11> :!find . -iname '*.c' -o -iname '*.cpp' -o -iname '*.h' -o -iname '*.hpp' > cscope.files<CR>
   \:!cscope -b -i cscope.files -f cscope.out<CR>
   \:cs reset<CR>
