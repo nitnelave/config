@@ -217,6 +217,7 @@ nnoremap <Space> i<Space><Esc>
 
 autocmd BufWritePre * :%s/\v\s+$//e
 autocmd BufWritePre .article :%s/\v^--$/-- /e
+autocmd BufWritePre .letter :%s/\v^--$/-- /e
 
 highlight over80 ctermbg=red
 match over80 /\%80v.\+/
