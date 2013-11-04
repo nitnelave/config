@@ -213,6 +213,7 @@ cab tn tabnew
 autocmd CmdwinEnter * nnoremap <CR> <CR>
 autocmd BufReadPost quickfix nnoremap <CR> <CR>
 nnoremap <CR> o<Esc>
+nnoremap <Space> i<Space><Esc>
 
 autocmd BufWritePre * :%s/\v\s+$//e
 autocmd BufWritePre .article :%s/\v^--$/-- /e
