@@ -201,6 +201,8 @@ alias create_testsuite="cp $HOME/scripts/templates/testsuite.py ."
 alias create_test="$SCRIPTS/create_test.py"
 alias train="while true; do; clear; sl; sleep 34; sl -l; sleep 26; done;"
 alias gut="git"
+alias gi="git"
+alias gu="git"
 
 alias ls="ls -phG"
 alias mkdir="mkdir -pv"
