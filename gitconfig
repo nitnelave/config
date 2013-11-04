@@ -8,6 +8,7 @@
         dc = diff --cached
 	ci = commit
 	pop = stash pop
+        poop = stash pop
         prune-all = !git remote | xargs -n 1 git remote prune
         edit-unmerged = "!f() { git diff --name-status --diff-filter=U | cut -f2 ; }; vim `f`"
         add-unmerged = "!f() { git diff --name-status --diff-filter=U | cut -f2 ; }; git add `f`"
