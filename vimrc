@@ -146,8 +146,6 @@ no N 8<Up>
 " Move window
 no H <C-w><C-r>
 
-imap <C-Space> <C-n>
-
 nmap <F11> :!find . -iname '*.c' -o -iname '*.cpp' -o -iname '*.h' -o -iname '*.hpp' > cscope.files<CR>
   \:!cscope -b -i cscope.files -f cscope.out<CR>
   \:cs reset<CR>
@@ -209,20 +207,21 @@ function! MoveToNextTab()
 endfunc
 noremap <C-T> :call MoveToPrevTab()<CR>
 noremap <C-N> :call MoveToNextTab()<CR>
-inoremap <C-T> <Esc>:call MoveToPrevTab()<CR>
-inoremap <C-N> <Esc>:call MoveToNextTab()<CR>
 cab tn tabnew
 
 " Enter remap
 autocmd CmdwinEnter * nnoremap <CR> <CR>
 autocmd BufReadPost quickfix nnoremap <CR> <CR>
 nnoremap <CR> o<Esc>
+nnoremap <Space> i<Space><Esc>
 
 autocmd BufWritePre * :%s/\v\s+$//e
 autocmd BufWritePre .article :%s/\v^--$/-- /e
+autocmd BufWritePre .letter :%s/\v^--$/-- /e
 
 highlight over80 ctermbg=red
-match over80 '\%>80v.*'
+match over80 /\%80v.\+/
+
 
 function! s:insert_gates()
   let gatename = substitute(toupper(expand("%:t")), "\\.", "_", "g") . "_"

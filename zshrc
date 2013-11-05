@@ -67,6 +67,8 @@ bindkey "^[[3~" delete-char
 #Search history with arrow keys
 bindkey "^[[A" history-search-backward
 bindkey "^[[B" history-search-forward
+bindkey "^N" history-search-backward
+bindkey "^T" history-search-forward
 bindkey "^_" beginning-of-line
 bindkey "^[^_" end-of-line
 bindkey "^H" backward-word
@@ -199,8 +201,11 @@ alias create_testsuite="cp $HOME/scripts/templates/testsuite.py ."
 alias create_test="$SCRIPTS/create_test.py"
 alias train="while true; do; clear; sl; sleep 34; sl -l; sleep 26; done;"
 alias gut="git"
+alias gi="git"
+alias gu="git"
+alias clean="make clean"
 
-alias ls="ls -phGb --color=always"
+alias ls="ls -phG"
 alias mkdir="mkdir -pv"
 alias gccw="gcc -Wextra -Wall -pedantic -std=c99 -Werror"
 alias gccws="gcc -Wall -Wextra -std=c99 -pedantic -Wfloat-equal -Wundef -Wshadow -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Waggregate-return -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations -Wnested-externs -Wunreachable-code"

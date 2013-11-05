@@ -1,0 +1,23 @@
+noremap <C-t> :tabopen<CR>
+
+noremap ; :
+
+noremap S :tabnext<CR>
+noremap H :tabprevious<CR>
+
+noremap t j
+noremap n k
+noremap T 20j
+noremap N 20k
+
+noremap l n
+noremap L N
+
+noremap <C-h> :back<CR>
+noremap <C-s> :forward<CR>
+
+noremap <C-n> <C-v><C-n>
+
+noremap <C-w> <C-v><C-w>
+
+set gui=tabs
