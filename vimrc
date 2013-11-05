@@ -287,6 +287,6 @@ autocmd BufWritePre *.en call <SID>format_text()
 let g:languagetool_jar='$HOME/.vim/LanguageTool/languagetool-commandline.jar'
 
 autocmd BufEnter *.en : set spell spelllang=en_us
-autocmd BufEnter *.fr : set spell spelllang=fr,en_us
+autocmd BufEnter *.fr : set spell spelllang=fr
 autocmd BufLeave *.en : set nospell
 autocmd BufLeave *.fr : set nospell
