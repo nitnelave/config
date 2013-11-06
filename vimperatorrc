@@ -20,4 +20,6 @@ noremap <C-n> <C-v><C-n>
 
 noremap <C-w> <C-v><C-w>
 
+set ds=duckduckgo
+
 set gui=tabs
