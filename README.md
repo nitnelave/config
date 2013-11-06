@@ -27,3 +27,6 @@ keycode 0x42 = Escape
 
 Caps Lock <-> Escape
 setxkbmap -option -option caps:swapescape
+
+less: For the "less" pager, the configuration file for the bindings is lesskey.
+Simply running "lesskey lesskey" will setup your pager.
