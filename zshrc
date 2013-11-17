@@ -223,3 +223,12 @@ alias gccws="gcc -Wall -Wextra -std=c99 -pedantic -Wfloat-equal -Wundef -Wshadow
 alias clangw="clang -Wextra -Wall -pedantic -std=c99 -Werror"
 alias clangws="clang -Wall -Wextra -std=c99 -pedantic -Wfloat-equal -Wundef -Wshadow -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Waggregate-return -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations -Wnested-externs -Wunreachable-code"
 alias gdb="gdb -q"
+
+function gmerge {
+  if git co $1 && git rebase master && git co master && git merge $1 && git push origin master; then
+    if git remote show origin | grep -E "$1 *tracked" >/dev/null; then
+      git push origin :$1
+    fi
+    git br -d $1
+  fi
+}
