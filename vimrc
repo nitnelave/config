@@ -157,6 +157,8 @@ nnoremap Y y$
 " map ; to :
 noremap ; :
 
+no Z z=1<CR>]s
+
 " tab settings
 noremap <silent> <C-H> :tabprevious<CR>
 noremap <silent> <C-S> :tabnext<CR>
