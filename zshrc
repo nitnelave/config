@@ -203,6 +203,7 @@ alias train="while true; do; clear; sl; sleep 34; sl -l; sleep 26; done;"
 alias gut="git"
 alias gi="git"
 alias gu="git"
+alias gt="git"
 alias clean="make clean"
 
 alias ls="ls -phG"
