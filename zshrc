@@ -185,8 +185,11 @@ setprompt
 
 
 ttyctl -f
-xmodmap ~/.Xmodmap
+xmodmap $HOME/.Xmodmap
 
+if ! ssh-add -l > /dev/null; then
+  ssh-add
+fi
 
 SCRIPTS='/.$HOME/scripts'
 alias vim="stty stop '' -ixoff ; vim"

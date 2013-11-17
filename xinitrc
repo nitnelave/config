@@ -7,3 +7,5 @@ export CXX=g++
 export CLICOLOR="YES"
 export LSCOLORS="ExGxFxdxCxDxDxhbadExEx"
 export LESS=-Q
+
+eval `ssh-agent`
