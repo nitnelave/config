@@ -214,6 +214,7 @@ alias gut="git"
 alias gi="git"
 alias gu="git"
 alias gt="git"
+alias gits="git"
 alias clean="make clean"
 
 alias ls="ls -phG"
