@@ -226,8 +226,9 @@ alias clangws="clang -Wall -Wextra -std=c99 -pedantic -Wfloat-equal -Wundef -Wsh
 alias gdb="gdb -q"
 
 function gmerge {
+  CURRENT=$(git symbolic-ref HEAD | sed "s/refs\/heads\///")
   if [ $# -lt 1 ]; then
-    BRANCH=$(git symbolic-ref HEAD | sed "s/refs\/heads\///")
+    BRANCH=$CURRENT
   else
     BRANCH=$1
   fi
@@ -236,10 +237,16 @@ function gmerge {
     echo "Use gmerge <branch>";
     return 1;
   fi
-  if git co $BRANCH && git rebase master && git co master && git merge $BRANCH && git push origin master; then
+  if git stash && git co master && git pull && git co $BRANCH && git rebase master && $MAKE && git co master && git merge $BRANCH && git push origin master; then
     if git remote show origin | grep -E "$BRANCH *tracked" >/dev/null; then
       git push origin :$BRANCH
     fi
     git br -d $BRANCH
+    if [ $# -gt 0 ]; then
+      git co $CURRENT
+    fi
+    if git shash show 2>/dev/null >/dev/null; then
+      git pop
+    fi
   fi
 }
