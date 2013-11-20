@@ -225,28 +225,4 @@ alias clangw="clang -Wextra -Wall -pedantic -std=c99 -Werror"
 alias clangws="clang -Wall -Wextra -std=c99 -pedantic -Wfloat-equal -Wundef -Wshadow -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Waggregate-return -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations -Wnested-externs -Wunreachable-code"
 alias gdb="gdb -q"
 
-function gmerge {
-  CURRENT=$(git symbolic-ref HEAD | sed "s/refs\/heads\///")
-  if [ $# -lt 1 ]; then
-    BRANCH=$CURRENT
-  else
-    BRANCH=$1
-  fi
-  if [ $BRANCH = "master" ]; then
-    echo "Cannot merge master";
-    echo "Use gmerge <branch>";
-    return 1;
-  fi
-  if git stash && git co master && git pull && git co $BRANCH && git rebase master && $MAKE && git co master && git merge $BRANCH && git push origin master; then
-    if git remote show origin | grep -E "$BRANCH *tracked" >/dev/null; then
-      git push origin :$BRANCH
-    fi
-    git br -d $BRANCH
-    if [ $# -gt 0 ]; then
-      git co $CURRENT
-    fi
-    if git shash show 2>/dev/null >/dev/null; then
-      git pop
-    fi
-  fi
-}
+alias gmerge="$SCRIPTS/gmerge.sh"
