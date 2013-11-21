@@ -185,9 +185,9 @@ setprompt
 
 
 ttyctl -f
-xmodmap $HOME/.Xmodmap
 
 if ! ssh-add -l > /dev/null; then
+  xmodmap $HOME/.Xmodmap
   ssh-add
 fi
 
