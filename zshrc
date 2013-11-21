@@ -191,7 +191,6 @@ if ! ssh-add -l > /dev/null; then
   ssh-add
 fi
 
-SCRIPTS='/.$HOME/scripts'
 alias vim="stty stop '' -ixoff ; vim"
 alias v=vim
 alias slrn="xterm -e slrn > /dev/null 2>&1 &"
