@@ -48,7 +48,7 @@ set number
 set laststatus=2
 
 " Format the status line
-set statusline=%f\ %l\|%c\ %m%=%p%%\ (%Y%R)
+set statusline=%f\ %l\|%c\ %m\ %#warningmsg#%{SyntasticStatuslineFlag()}%*%=%p%%\ (%Y%R)
 
 " Enhance command line completion
 set wildmenu
@@ -300,3 +300,26 @@ autocmd BufEnter *.en : set spell spelllang=en_us
 autocmd BufEnter *.fr : set spell spelllang=fr
 autocmd BufLeave *.en : set nospell
 autocmd BufLeave *.fr : set nospell
+
+" Syntastic
+
+highlight SyntasticErrorSign guifg=white ctermbg=black
+highlight SyntasticError gui=underline ctermbg=black
+highlight SyntasticErrorLine gui=underline ctermbg=black
+let g:syntastic_check_on_open = 1
+let g:syntastic_aggregate_errors = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_stl_format = '[%E{Err(%e): %fe}%B{, }%W{Warn(%w): %fw}]'
+let g:syntastic_cpp_check_header = 1
+let g:syntastic_cpp_remove_include_errors = 0
+let g:syntastic_cpp_config_file = ".syntastic_config"
+let g:syntastic_cpp_compiler = 'clang33'
+
+let g:syntastic_c_check_header = 1
+let g:syntastic_c_remove_include_errors = 1
+let g:syntastic_c_config_file = ".syntastic_config"
+let g:syntastic_c_compiler = 'gcc'
+
+noremap <C-W> :lnext<CR>
+noremap <C-C> :lprev<CR>
+
