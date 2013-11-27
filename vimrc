@@ -1,3 +1,12 @@
+autocmd!
+
+execute pathogen#infect()
+
+let g:pathogen_disabled = []
+
+execute "Helptags"
+
+
 " Disable vi compatibility mode
 set nocompatible
 
