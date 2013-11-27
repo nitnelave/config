@@ -20,6 +20,8 @@ noremap <C-n> <C-v><C-n>
 
 noremap <C-w> <C-v><C-w>
 
+cnoremap vs :tabopen<Space>
+
 set ds=duckduckgo
 
 set gui=tabs
