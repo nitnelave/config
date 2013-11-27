@@ -166,6 +166,8 @@ nnoremap Y y$
 " map ; to :
 noremap ; :
 
+cab reload source ~/.vimrc
+
 no Z z=1<CR>]s
 
 " tab settings
