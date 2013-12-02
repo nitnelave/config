@@ -186,10 +186,6 @@ setprompt
 
 ttyctl -f
 
-if ! ssh-add -l > /dev/null; then
-  xmodmap $HOME/.Xmodmap
-  ssh-add
-fi
 
 alias vim="stty stop '' -ixoff ; vim"
 alias v=vim
@@ -215,6 +211,7 @@ alias gu="git"
 alias gt="git"
 alias gits="git"
 alias clean="make clean"
+alias z="$SCRIPTS/metalock.sh"
 
 alias ls="ls -phG"
 alias mkdir="mkdir -pv"
@@ -225,3 +222,10 @@ alias clangws="clang -Wall -Wextra -std=c99 -pedantic -Wfloat-equal -Wundef -Wsh
 alias gdb="gdb -q"
 
 alias gmerge="$SCRIPTS/gmerge.sh"
+
+
+# Keep last
+if ! ssh-add -l > /dev/null; then
+  xmodmap $HOME/.Xmodmap
+  ssh-add
+fi
