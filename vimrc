@@ -235,6 +235,10 @@ autocmd BufWritePre .letter :%s/\v^--$/-- /e
 highlight over80 ctermbg=red
 match over80 /\%80v.\+/
 
+set foldmethod=syntax
+set foldnestmax=1
+set foldminlines=4
+set foldopen=hor,insert,jump,search,undo,quickfix,block,tag
 
 function! s:insert_gates()
   let gatename = substitute(toupper(expand("%:t")), "\\.", "_", "g") . "_"
