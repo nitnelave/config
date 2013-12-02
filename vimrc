@@ -325,6 +325,7 @@ let g:syntastic_c_check_header = 1
 let g:syntastic_c_remove_include_errors = 1
 let g:syntastic_c_config_file = ".syntastic_config"
 let g:syntastic_c_compiler = 'gcc'
+let g:syntastic_c_checkers = [ 'gcc', 'moulinette' ]
 
 noremap <C-W> :lnext<CR>
 noremap <C-C> :lprev<CR>
