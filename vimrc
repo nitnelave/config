@@ -48,7 +48,7 @@ set number
 set laststatus=2
 
 " Format the status line
-set statusline=%f\ %l\|%c\ %m\ %#warningmsg#%{SyntasticStatuslineFlag()}%*%=%p%%\ (%Y%R)
+set statusline=%f\ %l\|%c\ %m\ %#warningmsg#%{SyntasticStatuslineFlag()}%*%=%{fugitive#statusline()}%p%%\ (%Y%R)
 
 " Enhance command line completion
 set wildmenu
@@ -330,3 +330,17 @@ let g:syntastic_c_checkers = [ 'gcc', 'moulinette' ]
 noremap <C-W> :lnext<CR>
 noremap <C-C> :lprev<CR>
 
+" Project
+
+let g:proj_flags = "gins"
+
+" Fugitive
+
+cab gci Gcommit
+cab gdi Gdiff
+cab gbl Gblame
+cab grm Gremove
+cab git Git
+cab ged Gedit
+cab gsp Gsplit
+cab gvs Gvsplit
