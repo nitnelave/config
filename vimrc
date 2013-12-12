@@ -329,11 +329,12 @@ highlight SyntasticErrorLine gui=underline ctermbg=black
 let g:syntastic_check_on_open = 1
 let g:syntastic_aggregate_errors = 1
 let g:syntastic_auto_loc_list = 1
-let g:syntastic_stl_format = '[%E{Err(%e): %fe}%B{, }%W{Warn(%w): %fw}]'
+" let g:syntastic_stl_format = '[%E{Err(%e): %fe}%B{, }%W{Warn(%w): %fw}]'
 let g:syntastic_cpp_check_header = 1
 let g:syntastic_cpp_remove_include_errors = 0
 let g:syntastic_cpp_config_file = ".syntastic_config"
 let g:syntastic_cpp_compiler = 'g++'
+let g:syntastic_cpp_checkers = [ 'gcc', 'moulinette' ]
 
 let g:syntastic_c_check_header = 1
 let g:syntastic_c_remove_include_errors = 1
