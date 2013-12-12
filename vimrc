@@ -274,13 +274,9 @@ nnoremap <C-l> :call NumberToggle()<cr>
 
 set relativenumber
 
-autocmd BufLeave * : set norelativenumber
-autocmd BufLeave * : set number
-autocmd BufEnter * : set relativenumber
-
-autocmd InsertEnter * : set norelativenumber
-autocmd InsertEnter * : set number
-autocmd InsertLeave * : set relativenumber
+autocmd BufLeave,InsertEnter * : set norelativenumber
+autocmd BufLeave,InsertEnter * : set number
+autocmd BufEnter,InsertLeave * : set relativenumber
 
 function! s:insert_python()
   execute "normal! i#! env python\n\n"
@@ -294,8 +290,7 @@ function! s:format_text()
   execute "%s/\\v( *)  - /\\1└─> /ge"
   execute "%s/-\>/=>/ge"
 endfunction
-autocmd BufWritePre *.fr call <SID>format_text()
-autocmd BufWritePre *.en call <SID>format_text()
+autocmd BufWritePre *.{fr,en} call <SID>format_text()
 
 
 
@@ -304,8 +299,7 @@ let g:languagetool_jar='$HOME/.vim/LanguageTool/languagetool-commandline.jar'
 
 autocmd BufEnter *.en : set spell spelllang=en_us
 autocmd BufEnter *.fr : set spell spelllang=fr
-autocmd BufLeave *.en : set nospell
-autocmd BufLeave *.fr : set nospell
+autocmd BufLeave *.{en,fr} : set nospell
 
 " Syntastic
 
