@@ -293,7 +293,27 @@ endfunction
 autocmd BufWritePre *.{fr,en} call <SID>format_text()
 
 
+function! g:FromPDF()
+  execute "%s/ ::/::/ge"
+  execute "%s/:: /::/ge"
+  execute "%s/ ;/;/ge"
+  execute "%s/ (/(/ge"
+  execute "%s/( /(/ge"
+  execute "%s/ )/)/ge"
+  execute "%s/) /)/ge"
+  execute "%s/< /</ge"
+  execute "%s/ >/>/ge"
+  execute "%s/> />/ge"
+  execute "%s/ ,/,/ge"
+  execute "%s/ :/:/ge"
+  execute "%s/operator /operator/ge"
+  execute "%s/)const/) const/ge"
+  execute "%s/\\\v \\\&/\\\&/ge"
+  execute "g/\\\v\\\s*[0-9]+$/d"
+  normal! gg=G
+endfunction
 
+cab fpdf call g:FromPDF()
 
 let g:languagetool_jar='$HOME/.vim/LanguageTool/languagetool-commandline.jar'
 
