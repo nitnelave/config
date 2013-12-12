@@ -255,9 +255,9 @@ endfunction
 autocmd BufNewFile *.sh call <SID>insert_shebang()
 
 function! s:insert_include()
-  execute "normal! i#include \"" . substitute(expand("%:t"), "\\.c$", ".h", "") . "\"\n\n"
+  execute "normal! i#include \"" . substitute(substitute(expand("%:t"), "\\.cc$", ".hh", ""), "\\.c$", ".h", "") . "\"\n\n"
 endfunction
-autocmd BufNewFile *.c call <SID>insert_include()
+autocmd BufNewFile *.{c,cc} call <SID>insert_include()
 
 set list
 set listchars=tab:\ \ ,trail:.
