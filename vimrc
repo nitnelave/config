@@ -124,6 +124,7 @@ set autoindent
 " This one is complicated. See :help cinoptions-values for details
 set cinoptions=(0,u0,U0,t0,g0,N-s,>s
 
+set comments=s0:/*,mb:**,ex:*/,://	" Comments
 " Set "," as map leader
 let mapleader = ","
 
