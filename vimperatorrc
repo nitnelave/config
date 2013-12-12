@@ -1,3 +1,4 @@
+autocmd!
 noremap <C-t> :tabopen<CR>
 
 noremap ; :
