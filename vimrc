@@ -2,7 +2,7 @@ autocmd!
 
 execute pathogen#infect()
 
-let g:pathogen_disabled = []
+let g:pathogen_disabled = [ 'snipMate' ]
 
 execute "Helptags"
 
