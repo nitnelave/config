@@ -370,3 +370,17 @@ cab git Git
 cab ged Gedit
 cab gsp Gsplit
 cab gvs Gvsplit
+
+" Doxygen toolkit
+
+let g:DoxygenToolkit_startCommentTag	= "/**"
+let g:DoxygenToolkit_interCommentTag	= "** "
+let g:DoxygenToolkit_briefTag_pre	= "\\brief "
+let g:DoxygenToolkit_paramTag_pre	= "\\param "
+let g:DoxygenToolkit_returnTag	= "\\return "
+let g:DoxygenToolkit_fileTag		= "\\file "
+let g:DoxygenToolkit_authorTag	= "\\author "
+let g:DoxygenToolkit_dateTag		= "\\date "
+let g:DoxygenToolkit_blockTag		= "\\name "
+let g:DoxygenToolkit_classTag		= "\\class "
+let g:DoxygenToolkit_cinoptions	= "c0,C1"
