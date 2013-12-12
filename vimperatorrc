@@ -3,6 +3,8 @@ noremap <C-t> :tabopen<CR>
 
 noremap ; :
 
+noremap , ;
+
 noremap S :tabnext<CR>
 noremap H :tabprevious<CR>
 
