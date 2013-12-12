@@ -241,7 +241,7 @@ set foldminlines=4
 set foldopen=hor,insert,jump,search,undo,quickfix,block,tag
 
 function! s:insert_gates()
-  let gatename = substitute(toupper(expand("%:t")), "\\.", "_", "g") . "_"
+  let gatename = substitute(substitute(toupper(expand("%:t")), "\\.", "_", "g"), "-", "", "g") . "_"
   execute "normal! i#ifndef " . gatename
   execute "normal! o# define " . gatename . "\n\n\n"
   execute "normal! Go#endif /* !" . gatename . " */"
