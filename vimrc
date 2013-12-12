@@ -279,7 +279,7 @@ autocmd BufLeave,InsertEnter * : set number
 autocmd BufEnter,InsertLeave * : set relativenumber
 
 function! s:insert_python()
-  execute "normal! i#! env python\n\n"
+  execute "normal! i#! /usr/bin/env python\n\n"
   set softtabstop=4
   set shiftwidth=4
 endfunction
