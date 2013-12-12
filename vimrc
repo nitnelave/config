@@ -247,7 +247,7 @@ function! s:insert_gates()
   execute "normal! Go#endif /* !" . gatename . " */"
   normal! kk
 endfunction
-autocmd BufNewFile *.{h,hpp} call <SID>insert_gates()
+autocmd BufNewFile *.{h,hh,hpp} call <SID>insert_gates()
 
 function! s:insert_shebang()
   execute "normal! i#! /bin/sh\n\n"
