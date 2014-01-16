@@ -10,6 +10,7 @@ noremap H :tabprevious<CR>
 
 noremap t j
 noremap n k
+noremap s l
 noremap T 20j
 noremap N 20k
 
@@ -29,5 +30,9 @@ set ds=duckduckgo
 
 set gui=tabs
 
+set complete=lhS
+
 autocmd LocationChange .* :fmapc
 autocmd LocationChange mail\\.google\\.com/mail :fmap -depth 4 c / j k n p o u e x s r a # [ ] z ? gi gs gt gd ga gc
+
+colorscheme darkness2
