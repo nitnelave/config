@@ -32,7 +32,4 @@ set gui=tabs
 
 set complete=lhS
 
-autocmd LocationChange .* :fmapc
-autocmd LocationChange mail\\.google\\.com/mail :fmap -depth 4 c / j k n p o u e x s r a # [ ] z ? gi gs gt gd ga gc
-
 colorscheme darkness2
