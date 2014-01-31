@@ -1,0 +1,12 @@
+[include]
+        path = ~/.gitconfig-generic
+[guitool "stash"]
+	cmd = git stash
+[guitool "pop"]
+	cmd = git stash pop
+[gui]
+[alias]
+        fx = !sh -c 'ref="$1" && shift && git commit -m \"fixup! $(git log -1 --format='\\''%s'\\'' $ref)\" \"$@\"' -
+        sq = !sh -c 'ref="$1" && shift && git commit -m \"squash! $(git log -1 --format='\\''%s'\\'' $ref)\" \"$@\"' -
+	funcdiff = !sh -c \"git show \\\"\\$0:\\$2\\\" | sed -n \\\"/^[^ \\t].*\\$3(/,/^}/p\\\" > .tmp1 && git show \\\"\\$1:\\$2\\\" | sed -n \\\"/^[^ \\t].*\\$3(/,/^}/p\\\" > .tmp2 && git diff .tmp1 .tmp2\"
+        intercommit = !sh -c 'git show "$1" > .git/commit1 && git show "$2" > .git/commit2 && interdiff .git/commit[12] | less -FRS' -

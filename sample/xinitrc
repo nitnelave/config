@@ -1,0 +1,14 @@
+export SHELL=/bin/zsh
+. ./.xinitrc-generic
+export EDITOR=/usr/bin/vim
+export NNTPSERVER="news.epita.fr"
+export PATH=/usr/share/java/jre1.7.0_45/bin:$PATH
+export SCRIPTS=/home/nitnelave/scripts
+export LOCK="gnome-screensaver-command -l"
+export CPLUS_INCLUDE_PATH="/usr/include/c++/boost_1_55_0"
+export MAKE="make"
+
+gnome-screensaver &
+xfce4-power-manager &
+
+exec /usr/bin/i3
