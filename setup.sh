@@ -95,4 +95,14 @@ if ! [ -e DoxygenToolkit.vim ]; then
   wget http://www.vim.org/scripts/download_script.php?src_id=14064 -O DoxygenToolkit.vim
 fi
 
+cd ..
+if ! [ -e plugin/LanguageTool.vim ]; then
+  echo "Cloning LanguageTool..."
+  git clone https://github.com/vim-scripts/LanguageTool.git language
+  mkdir -p plugin doc
+  mv language/plugin/LanguageTool.vim plugin
+  mv language/doc/LanguageTool.txt doc
+  rm -r language
+fi
+
 echo "Configuration successful!"
