@@ -40,5 +40,41 @@ copy zshrc .zshrc
 echo "Setting up lesskey..."
 lesskey $CONFIG/lesskey
 
+echo "Cloning Vim plugins..."
+mkdir -p $HOME/.vim
+cd $HOME/.vim
+if ! [ -e autoload/pathogen.vim ]; then
+  echo "Cloning Pathogen..."
+  git clone https://github.com/tpope/vim-pathogen.git
+  rm CONTRIBUTING.markdown README.markdown
+fi
+mkdir -p bundle
+cd bundle
+if ! [ -e clang_complete ]; then
+  echo "Cloning Clang Complete..."
+  git clone https://github.com/Rip-Rip/clang_complete.git
+fi
+
+if ! [ -e project ]; then
+  echo "Downloading Project..."
+  wget http://www.vim.org/scripts/download_script.php?src_id=6273 -O project.tar
+  tar xf project.tar
+  rm project.tar
+fi
+
+if ! [ -e snipmate ]; then
+  echo "Cloning Snipmate..."
+  git clone https://github.com/msanders/snipmate.vim.git snipmate
+fi
+
+if ! [ -e vim-surround ]; then
+  echo "Cloning Vim-surround..."
+  git clone https://github.com/tpope/vim-surround.git
+fi
+
+if ! [ -e vim-repeat ]; then
+  echo "Cloning Vim-repeat..."
+  git clone https://github.com/tpope/vim-repeat.git
+fi
 
 echo "Configuration successful!"
