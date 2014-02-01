@@ -46,6 +46,8 @@ cd $HOME/.vim
 if ! [ -e autoload/pathogen.vim ]; then
   echo "Cloning Pathogen..."
   git clone https://github.com/tpope/vim-pathogen.git
+  mv vim-pathogen/* .
+  rm -r vim-pathogen
   rm CONTRIBUTING.markdown README.markdown
 fi
 mkdir -p bundle
