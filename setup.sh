@@ -85,7 +85,7 @@ if ! [ -e syntastic ]; then
   git clone https://github.com/scrooloose/syntastic.git
 fi
 
-if ! [ -e fugitive ]; then
+if ! [ -e vim-fugitive ]; then
   echo "Cloning Fugitive..."
   git clone https://github.com/tpope/vim-fugitive.git
 fi
