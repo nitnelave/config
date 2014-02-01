@@ -60,7 +60,8 @@ fi
 if ! [ -e project ]; then
   echo "Downloading Project..."
   wget http://www.vim.org/scripts/download_script.php?src_id=6273 -O project.tar
-  tar xf project.tar
+  mkdir project
+  (cd project && tar xf project.tar)
   rm project.tar
 fi
 
