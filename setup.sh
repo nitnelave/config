@@ -90,4 +90,9 @@ if ! [ -e fugitive ]; then
   git clone https://github.com/tpope/vim-fugitive.git
 fi
 
+if ! [ -e DoxygenToolkit.vim ]; then
+  echo "Downloading DoxygenToolkit..."
+  wget http://www.vim.org/scripts/download_script.php?src_id=14064 -O DoxygenToolkit.vim
+fi
+
 echo "Configuration successful!"
