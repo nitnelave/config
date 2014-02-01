@@ -79,4 +79,9 @@ if ! [ -e vim-repeat ]; then
   git clone https://github.com/tpope/vim-repeat.git
 fi
 
+if ! [ -e syntastic ]; then
+  echo "Cloning Syntastic..."
+  git clone https://github.com/scrooloose/syntastic.git
+fi
+
 echo "Configuration successful!"
