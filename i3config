@@ -140,3 +140,5 @@ bindsym $mod+p mode "resize"
 bar {
         status_command i3status
 }
+
+new_window 1pixel
