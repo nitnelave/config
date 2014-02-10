@@ -5,4 +5,6 @@ alias aquarium=asciiquarium
 alias ls="ls -phG --color"
 alias jogsoul="$SCRIPTS/jogsoul.pl"
 
+xmodmap $HOME/.Xmodmap
+
 evince () { `/usr/bin/evince "$1" > /dev/null 2>&1 &` ;}
