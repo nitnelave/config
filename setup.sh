@@ -17,6 +17,8 @@ link gitconfig .gitconfig-generic
 
 mkdir -p $HOME/.i3
 link i3config .i3/config
+mkdir -p $HOME/.config/zathura
+link zathurarc .config/zathura/zathurarc
 link signature .signature
 link slrnrc .slrnrc
 link vimperatorrc .vimperatorrc
