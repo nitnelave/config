@@ -9,6 +9,5 @@ export LSCOLORS="ExGxFxdxCxDxDxhbadExEx"
 export LESS=-Q
 
 xset b off
-setopt nobeep
 
 eval `ssh-agent`
