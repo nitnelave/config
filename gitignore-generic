@@ -15,3 +15,4 @@ vgcore.*
 *.class
 *.iso
 0
+.syntastic_config
