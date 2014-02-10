@@ -230,6 +230,5 @@ alias gmerge="$SCRIPTS/gmerge.sh"
 
 # Keep last
 if ! ssh-add -l > /dev/null; then
-  xmodmap $HOME/.Xmodmap
   ssh-add
 fi
