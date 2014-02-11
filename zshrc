@@ -230,10 +230,16 @@ alias gmerge="$SCRIPTS/gmerge.sh"
 
 
 # Keep last
-ssh-add -l >/dev/null
+if ! [ $SSH_AGENT_PID ]; then
+  SSH_AGENT_PID=$(pidof ssh-agent | cut -d ' ' -f 1);
+  if ! [ $SSH_AGENT_PID ]; then
+    eval `ssh-agent` >/dev/null
+  fi
+fi
+ssh-add -l >/dev/null 2>&1
 SSH_STATUS=$?
 if [ $SSH_STATUS -eq 2 ]; then
-  eval `ssh-agent`
+  eval `ssh-agent` >/dev/null
 fi
 if [ $SSH_STATUS -ne 0 ]; then
   ssh-add
