@@ -240,7 +240,9 @@ ssh-add -l >/dev/null 2>&1
 SSH_STATUS=$?
 if [ $SSH_STATUS -eq 2 ]; then
   eval `ssh-agent` >/dev/null
+  ssh-add -l >/dev/null 2>&1
+  SSH_STATUS=$?
 fi
-if [ $SSH_STATUS -ne 0 ]; then
+if [ $SSH_STATUS -eq 1 ]; then
   ssh-add
 fi
