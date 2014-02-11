@@ -229,6 +229,11 @@ alias gmerge="$SCRIPTS/gmerge.sh"
 
 
 # Keep last
-if ! ssh-add -l > /dev/null; then
+ssh-add -l >/dev/null
+SSH_STATUS=$?
+if [ $SSH_STATUS -eq 2 ]; then
+  eval `ssh-agent`
+fi
+if [ $SSH_STATUS -ne 0 ]; then
   ssh-add
 fi
