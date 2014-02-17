@@ -1,9 +1,12 @@
-map N scroll full_up
-map T scroll full_down
+map N scroll half-up
+map T scroll half-down
 map n scroll up
 map t scroll down
 map s scroll right
 map h scroll left
+map l search next
+map L search previous
+
 map + zoom in
 map - zoom out
 map u toggle_fullscreen
