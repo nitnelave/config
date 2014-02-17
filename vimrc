@@ -347,13 +347,13 @@ let g:syntastic_c_checkers = [ 'gcc', 'moulinette' ]
 noremap <C-W> :lnext<CR>
 noremap <C-C> :lprev<CR>
 
-command Moulinette let b:moulinette_ignore=0
-command NoMoulinette let b:moulinette_ignore=1
+command! Moulinette let b:moulinette_ignore=0
+command! NoMoulinette let b:moulinette_ignore=1
 cab mou Moulinette
 cab nomou NoMoulinette
 
-command Complete let b:complete_ignore=0
-command NoComplete let b:complete_ignore=1
+command! Complete let b:complete_ignore=0
+command! NoComplete let b:complete_ignore=1
 cab comp Complete
 cab nocomp NoComplete
 
