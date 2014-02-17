@@ -160,6 +160,8 @@ nmap <F11> :!find . -iname '*.c' -o -iname '*.cpp' -o -iname '*.h' -o -iname '*.
   \:!cscope -b -i cscope.files -f cscope.out<CR>
   \:cs reset<CR>
 
+noremap cs cl
+
 " Yank from cursor to end of line, to be consistent with C and D
 nnoremap Y y$
 
