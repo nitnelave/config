@@ -213,6 +213,7 @@ alias gt="git"
 alias gits="git"
 alias clean="make clean"
 alias z="$SCRIPTS/metalock.sh"
+alias s="ls"
 
 alias ls="ls -phG"
 alias mkdir="mkdir -pv"
