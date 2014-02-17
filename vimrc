@@ -328,10 +328,15 @@ autocmd BufLeave *.{en,fr} : set nospell
 highlight SyntasticErrorSign guifg=white ctermbg=black
 highlight SyntasticError gui=underline ctermbg=black
 highlight SyntasticErrorLine gui=underline ctermbg=black
-let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_open = 0
 let g:syntastic_aggregate_errors = 1
 let g:syntastic_auto_loc_list = 1
 " let g:syntastic_stl_format = '[%E{Err(%e): %fe}%B{, }%W{Warn(%w): %fw}]'
+let g:syntastic_mode_map = { 'mode': 'passive',
+      \ 'active_filetypes': [],
+      \ 'passive_filetypes': [] }
+
+
 let g:syntastic_cpp_check_header = 1
 let g:syntastic_cpp_remove_include_errors = 0
 let g:syntastic_cpp_config_file = ".syntastic_config"
