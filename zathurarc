@@ -6,6 +6,7 @@ map s scroll right
 map h scroll left
 map l search next
 map L search previous
+map A adjust_window width
 
 map + zoom in
 map - zoom out
