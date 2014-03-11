@@ -228,6 +228,7 @@ alias clang++ws="clang++ -Wall -Wextra -std=c++11 -pedantic -Wfloat-equal -Wunde
 alias gdb="gdb -q"
 
 alias gmerge="$SCRIPTS/gmerge.sh"
+alias cortune="fortune | tr '\n' '$' | sed 's/$\t\t\-\-/\n        --/g' | tr '$' ' ' | sed 's/\(A\|Q\):\t/\$$\1:/g' | sed 's/^\$\+//g' | tr '$' '\n' | cowsay"
 
 
 # Keep last
@@ -247,3 +248,4 @@ fi
 if [ $SSH_STATUS -eq 1 ]; then
   ssh-add
 fi
+cortune
