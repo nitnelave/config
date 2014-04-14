@@ -1,6 +1,6 @@
 #! /bin/sh
 
-echo "Loading config folder in ${CONFIG=$HOME/config}"
+echo "Loading config folder in ${CONFIG=`dirname $0`}"
 
 link () {
   if ! [ -e $HOME/$2 ]; then
