@@ -1,0 +1,39 @@
+set smartindent
+set autoindent
+set ignorecase
+set smartcase
+set incsearch
+set number
+set scrolloff=8
+set textwidth=80
+set softtabstop=4
+set tabstop=8
+set expandtab
+set shiftround
+set shiftwidth=4
+set globalregisters
+set atomicinsert
+set regexsearch
+set saney
+set visualmouse
+set cleanindent
+set exitlinkmode
+set contentassistmode
+set startnormalmode
+no t j
+no n k
+no T 8j
+no N 8k
+no <C-H> <C-W>h
+no <C-S> <C-W>l
+no H :tabprevious<enter>
+no S :tabnext<enter>
+no s l
+no l n
+no L N
+no ; :
+no - $
+no _ ^
+
+eclipseaction findref org.eclipse.jdt.ui.edit.text.java.search.references.in.workspace
+nmap gr :findref<enter>
