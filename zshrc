@@ -192,6 +192,7 @@ alias vim="stty stop '' -ixoff ; vim"
 alias v=vim
 # alias slrn="xterm -e slrn > /dev/null 2>&1 &"
 alias firefox="firefox > /dev/null 2>&1 &"
+alias eclipse="eclipse > /dev/null 2>&1 &"
 alias reload="source ~/.zshrc"
 alias gitignore="cp $HOME/scripts/templates/.gitignore ."
 alias headers="$SCRIPTS/headers.sh"
