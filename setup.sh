@@ -22,6 +22,7 @@ link zathurarc .config/zathura/zathurarc
 link signature .signature
 link slrnrc .slrnrc
 link vrapperrc .vrapperrc
+link idea/ideavimrc .ideavimrc
 link vimperatorrc .vimperatorrc
 link Xdefaults .Xdefaults
 link oh-my-zsh .oh-my-zsh

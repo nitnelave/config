@@ -1,0 +1,17 @@
+"set ignorecase
+"set smartcase
+"set incsearch
+nnoremap t j
+nnoremap n k
+nnoremap T 8j
+nnoremap N 8k
+nnoremap s l
+nnoremap l n
+nnoremap L N
+nnoremap ; :
+nnoremap - $
+nnoremap _ ^
+nnoremap <CR> o<Esc><Esc>
+nnoremap <Space> i<Space><Esc>
+nnoremap U <C-R>
+
