@@ -1,10 +1,10 @@
 #! /bin/sh
 
-echo "Loading config folder in ${CONFIG=`dirname $0`}"
+echo "Loading config folder in ${CONFIG=`dirname $(pwd)/$0`}"
 
 link () {
-  if ! [ -e $HOME/$2 ]; then
-    ln -s $CONFIG/$1 $HOME/$2
+  if ! [ -e "$HOME/$2" ]; then
+    ln -s "$CONFIG/$1" "$HOME/$2"
     echo "$HOME/$2 --> $CONFIG/$1"
   fi
 }
