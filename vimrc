@@ -132,6 +132,8 @@ let mapleader = ","
 nnoremap / /\v
 nnoremap ? ?\v
 
+nnoremap U <C-R>
+
 " 'very magic' regexp substitutions
 cnoremap %s %s/\v
 
