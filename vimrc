@@ -264,7 +264,7 @@ endfunction
 autocmd BufNewFile *.{c,cc} call <SID>insert_include()
 
 set list
-set listchars=tab:\ \ ,trail:.
+set listchars=tab:>-,trail:.
 
 function! NumberToggle()
   if(&relativenumber == 1)
