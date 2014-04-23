@@ -21,6 +21,7 @@ mkdir -p $HOME/.config/zathura
 link zathurarc .config/zathura/zathurarc
 link signature .signature
 link slrnrc .slrnrc
+link dircolors .dircolors
 link vrapperrc .vrapperrc
 link idea/ideavimrc .ideavimrc
 link vimperatorrc .vimperatorrc

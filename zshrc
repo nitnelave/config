@@ -236,6 +236,8 @@ alias tax="tar xf"
 alias gmerge="$SCRIPTS/gmerge.sh"
 alias cortune="fortune | tr '\n' '$' | sed 's/$\t\t\-\-/\n        --/g' | tr '$' ' ' | sed 's/\(A\|Q\):\t/\$$\1:/g' | sed 's/^\$\+//g' | tr '$' '\n' | cowsay"
 
+eval `dircolors ~/.dircolors`
+
 
 # Keep last
 if ! [ $SSH_AGENT_PID ]; then

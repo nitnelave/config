@@ -5,7 +5,6 @@ export TERM=rxvt
 export CC=gcc
 export CXX=g++
 export CLICOLOR="YES"
-export LSCOLORS="ExGxFxdxCxDxDxhbadExEx"
 export LESS=-Q
 
 xset b off
