@@ -1,3 +1,6 @@
+eval `dircolors ~/.dircolors`
+zstyle -e ':completion:*:default' list-colors 'reply=("${PREFIX:+=(#bi)($PREFIX:t)(?)*==02=01}:${(s.:.)LS_COLORS}")'
+
 # Path to your oh-my-zsh configuration.
 ZSH=$HOME/.oh-my-zsh
 
@@ -235,8 +238,6 @@ alias tax="tar xf"
 
 alias gmerge="$SCRIPTS/gmerge.sh"
 alias cortune="fortune | tr '\n' '$' | sed 's/$\t\t\-\-/\n        --/g' | tr '$' ' ' | sed 's/\(A\|Q\):\t/\$$\1:/g' | sed 's/^\$\+//g' | tr '$' '\n' | cowsay"
-
-eval `dircolors ~/.dircolors`
 
 
 # Keep last
