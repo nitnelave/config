@@ -9,6 +9,14 @@ link () {
   fi
 }
 
+echo "Cloning Scripts repo"
+
+if [ ! -e $HOME/scripts ]; then
+  mkdir -p $HOME/scripts
+  echo "Cloning scripts..."
+  (cd $HOME && git clone git@bitbucket.org:nitnelave/scripts.git scripts)
+fi
+
 echo "Linking to config files..."
 
 link vimrc .vimrc
@@ -27,6 +35,11 @@ link idea/ideavimrc .ideavimrc
 link vimperatorrc .vimperatorrc
 link Xdefaults .Xdefaults
 link oh-my-zsh .oh-my-zsh
+mkdir -p $HOME/.gnupg
+if ! [ -e "$HOME/.gnupg/pubring.gpg" ]; then
+  ln -s $HOME'/scripts/gpg/*' "$HOME/.gnupg"
+  echo "$HOME/.gnupg --> $HOME/scripts/gpg"
+fi
 
 copy () {
   if ! [ -e $HOME/$2 ]; then
