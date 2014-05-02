@@ -11,8 +11,8 @@ link () {
 
 echo "Cloning Scripts repo"
 
-if [ ! -e $HOME/scripts ]; then
-  mkdir -p $HOME/scripts
+if [ ! -e $SCRIPTS ]; then
+  mkdir -p $SCRIPTS
   echo "Cloning scripts..."
   (cd $HOME && git clone git@bitbucket.org:nitnelave/scripts.git scripts)
 fi
@@ -37,8 +37,16 @@ link Xdefaults .Xdefaults
 link oh-my-zsh .oh-my-zsh
 mkdir -p $HOME/.gnupg
 if ! [ -e "$HOME/.gnupg/pubring.gpg" ]; then
-  ln -s $HOME'/scripts/gpg/*' "$HOME/.gnupg"
+  for i in `ls $SCRIPTS/gpg`; do
+    ln -s $SCRIPTS/gpg/$i $HOME/.gnupg/$i
+  done
   echo "$HOME/.gnupg --> $HOME/scripts/gpg"
+fi
+
+mkdir -p $HOME/.m2
+if ! [ -e "$HOME/.m2/settings.xml" ]; then
+  ln -s $SCRIPTS/m2/settings.xml $HOME/.m2/settings.xml
+  echo "$HOME/.m2/settings.xml --> $HOME/scripts/m2/settings.xml"
 fi
 
 copy () {
