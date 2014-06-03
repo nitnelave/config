@@ -35,6 +35,7 @@ link idea/ideavimrc .ideavimrc
 link vimperatorrc .vimperatorrc
 link Xdefaults .Xdefaults
 link oh-my-zsh .oh-my-zsh
+link "vim/RainbowParenthesis.vim" ".vim/plugin/RainbowParenthesis.vim"
 mkdir -p $HOME/.gnupg
 if ! [ -e "$HOME/.gnupg/pubring.gpg" ]; then
   for i in `ls $SCRIPTS/gpg`; do

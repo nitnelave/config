@@ -393,3 +393,5 @@ let g:DoxygenToolkit_dateTag		= "\\date "
 let g:DoxygenToolkit_blockTag		= "\\name "
 let g:DoxygenToolkit_classTag		= "\\class "
 let g:DoxygenToolkit_cinoptions	= "c0,C1"
+
+source ~/.vim/plugin/RainbowParenthesis.vim
