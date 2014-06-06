@@ -15,7 +15,5 @@ map u toggle_fullscreen
 set default-bg "#002B36"
 set default-fg "#93A1A1"
 
-"set adjustopen width
-"set save_position true
-"set save_zoom_level true
 
+set save_position true
