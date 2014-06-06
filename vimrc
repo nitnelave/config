@@ -6,6 +6,10 @@ if !has('python')
   call add(g:pathogen_disabled, 'clang_complete')
 endif
 
+if !has('clientserver')
+  call add(g:pathogen_disabled, 'AsyncCommand')
+endif
+
 execute pathogen#infect()
 
 " Disable vi compatibility mode

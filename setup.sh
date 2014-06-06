@@ -122,6 +122,11 @@ if ! [ -e DoxygenToolkit.vim ]; then
   wget http://www.vim.org/scripts/download_script.php?src_id=14064 -O DoxygenToolkit.vim
 fi
 
+if ! [ -e AsyncCommand ]; then
+  echo "Downloading AsyncCommand..."
+  git clone https://github.com/pydave/AsyncCommand.git
+fi
+
 cd ..
 if ! [ -e plugin/LanguageTool.vim ]; then
   echo "Cloning LanguageTool..."
