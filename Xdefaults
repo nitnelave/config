@@ -9,6 +9,11 @@ xterm*Background:       black
 urxvt*foreground: #f2f2f2
 urxvt*background: #101010
 
+urxvt*url-launcher: firefox
+Uxxvt.matcher.button:   0
+URxvt.perl-ext-common:  default,matcher
+URxvt.colorUL: #1E90FF
+
 ! Normal
 ! color0    black
 ! color1    red
