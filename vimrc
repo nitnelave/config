@@ -1,11 +1,12 @@
 autocmd!
 
+let g:pathogen_disabled = ['ultisnips']
+
+if !has('python')
+  call add(g:pathogen_disabled, 'clang_complete')
+endif
+
 execute pathogen#infect()
-
-let g:pathogen_disabled = [ 'ultisnips' ]
-
-execute "Helptags"
-
 
 " Disable vi compatibility mode
 set nocompatible
