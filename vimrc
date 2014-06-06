@@ -397,3 +397,8 @@ let g:DoxygenToolkit_classTag		= "@class "
 let g:DoxygenToolkit_cinoptions	= "c0,C1"
 
 source ~/.vim/plugin/RainbowParenthesis.vim
+
+" Clang_complete
+
+let g:clang_user_options='|| exit 0'
+let g:clang_close_preview=1
