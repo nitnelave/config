@@ -237,8 +237,8 @@ nnoremap <Space> i<Space><Esc>
 autocmd BufWritePre * :%s/\v\s+$//e
 autocmd BufWritePre .{article,letter,followup} :%s/\v^--$/-- /e
 
-highlight over80 ctermbg=red
-autocmd BufReadPre *.{c,cc,h,hh,cpp,hxx} match over80 /\%80v.\+/
+"highlight over80 ctermbg=red
+"autocmd BufReadPre *.{c,cc,h,hh,cpp,hxx} match over80 /\%80v.\+/
 
 set foldmethod=syntax
 set foldnestmax=1
