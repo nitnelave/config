@@ -49,7 +49,7 @@ set number
 set laststatus=2
 
 " Format the status line
-set statusline=%f\ %l\|%c\ %m\ %#warningmsg#%{SyntasticStatuslineFlag()}%*%=%{fugitive#statusline()}%p%%\ (%Y%R)
+set statusline=%f\ %l\|%c\ %m\ %#warningmsg#%*%=%p%%\ (%Y%R)
 
 " Enhance command line completion
 set wildmenu
