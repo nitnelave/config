@@ -135,6 +135,8 @@ fi
 if ! [ -e ~/.fzf ]; then
   git clone https://github.com/junegunn/fzf.git ~/.fzf
   ~/.fzf/install
+  cp $CONFIG/fzf_shortcut.patch ~/.fzf
+  (cd ~/.fzf && git apply fzf_shortcut.patch)
 fi
 
 echo "Configuration successful!"

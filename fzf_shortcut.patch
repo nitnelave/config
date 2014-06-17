@@ -1,0 +1,27 @@
+From 0155e591f5a8a8cdd8691ae5a60b240b26a3bad7 Mon Sep 17 00:00:00 2001
+From: Valentin Tolmer <valentin.tolmer@gmail.com>
+Date: Tue, 17 Jun 2014 12:12:09 +0200
+Subject: [PATCH] fzf: change shortcuts
+
+---
+ fzf |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/fzf b/fzf
+index 4adda6d..1cb6604 100755
+--- a/fzf
++++ b/fzf
+@@ -982,8 +982,8 @@ class FZF
+           end
+         }
+       }
+-      actions[ctrl(:p)] = actions[ctrl(:k)]
+-      actions[ctrl(:n)] = actions[ctrl(:j)]
++      actions[ctrl(:n)] = actions[ctrl(:k)]
++      actions[ctrl(:t)] = actions[ctrl(:j)]
+       actions[:stab]    = actions[ctrl(:i)]
+       actions[127]      = actions[ctrl(:h)]
+       actions[ctrl(:q)] = actions[ctrl(:g)] = actions[ctrl(:c)] = actions[:esc]
+-- 
+1.7.10.4
+
