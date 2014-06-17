@@ -235,6 +235,7 @@ alias clang++w="clang++ -Wextra -Wall -pedantic -std=c++11 -Werror"
 alias clang++ws="clang++ -Wall -Wextra -std=c++11 -pedantic -Wfloat-equal -Wundef -Wshadow -Wpointer-arith -Wcast-qual -Wcast-align -Wmissing-declarations -Wunreachable-code"
 alias gdb="gdb -q"
 alias tax="tar xf"
+alias suspend="sudo pm-suspend"
 
 alias gmerge="$SCRIPTS/gmerge.sh"
 alias cortune="fortune | tr '\n' '$' | sed 's/$\t\t\-\-/\n        --/g' | tr '$' ' ' | sed 's/\(A\|Q\):\t/\$$\1:/g' | sed 's/^\$\+//g' | tr '$' '\n' | cowsay"
