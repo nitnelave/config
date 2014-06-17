@@ -132,4 +132,9 @@ if ! [ -e plugin/LanguageTool.vim ]; then
   rm -r language
 fi
 
+if ! [ -e ~/.fzf ]; then
+  git clone https://github.com/junegunn/fzf.git ~/.fzf
+  ~/.fzf/install
+fi
+
 echo "Configuration successful!"
