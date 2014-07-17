@@ -201,7 +201,7 @@ alias mkd=". $SCRIPTS/mkd.sh"
 alias cvalgrind="$SCRIPTS/valgrind-color.sh"
 alias moulinette="$SCRIPTS/moulinette.py"
 alias screen="$SCRIPTS/screen.sh"
-alias z=$LOCK
+alias z="$LOCK"
 
 # Maven
 alias mvn-javadoc="mvn clean javadoc:javadoc scm-publish:publish-scm"
