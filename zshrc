@@ -4,30 +4,11 @@ zstyle -e ':completion:*:default' list-colors 'reply=("${PREFIX:+=(#bi)($PREFIX:
 # Path to your oh-my-zsh configuration.
 ZSH=$HOME/.oh-my-zsh
 
-# Set name of the theme to load.
-# Look in ~/.oh-my-zsh/themes/
-# Optionally, if you set this to "random", it'll load a random theme each
-# time that oh-my-zsh is loaded.
-#ZSH_THEME="robbyrussell"
-
-# Example aliases
-# alias zshconfig="mate ~/.zshrc"
-# alias ohmyzsh="mate ~/.oh-my-zsh"
-
 # Set to this to use case-sensitive completion
 CASE_SENSITIVE="true"
 
 # Uncomment this to disable bi-weekly auto-update checks
 DISABLE_AUTO_UPDATE="true"
-
-# Uncomment to change how often before auto-updates occur? (in days)
-# export UPDATE_ZSH_DAYS=13
-
-# Uncomment following line if you want to disable colors in ls
-# DISABLE_LS_COLORS="true"
-
-# Uncomment following line if you want to disable autosetting terminal title.
-# DISABLE_AUTO_TITLE="true"
 
 # Uncomment following line if you want to disable command autocorrection
 DISABLE_CORRECTION="true"
@@ -47,27 +28,24 @@ plugins=(git)
 
 source $ZSH/oh-my-zsh.sh
 
-# Customize to your needs...
+# Completion
 zstyle ':completion:*' insert-unambiguous true
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
 zstyle :compinstall filename '/home/tolmer_v/.zshrc'
 
+# History
 setopt appendhistory extended_glob HIST_IGNORE_ALL_DUPS HIST_SAVE_NO_DUPS sh_word_split
-unsetopt beep notify
 autoload -Uz compinit
 compinit
 HISTFILE=~/.histfile
 HISTSIZE=10000
 SAVEHIST=10000
 bindkey -v
-# End of lines configured by zsh-newuser-install
 
-#bindkey "^[OH" beginning-of-line
-#bindkey "^[OF" end-of-line
+unsetopt beep notify
+
+# Key shortcuts
 bindkey "^[[3~" delete-char
-#bindkey "^[[1;5C" forward-word
-#bindkey "^[[1;5D" backward-word
-#Search history with arrow keys
 bindkey "^[[A" history-search-backward
 bindkey "^[[B" history-search-forward
 bindkey "^N" history-search-backward
@@ -78,9 +56,8 @@ bindkey "^H" backward-word
 bindkey "^S" forward-word
 bindkey "^?" backward-delete-char
 
+# Colors
 autoload -U colors && colors
-
-
 export LESS_TERMCAP_mb=$'\E[01;31m'       # begin blinking
 export LESS_TERMCAP_md=$'\E[01;31;74m'  # begin bold
 export LESS_TERMCAP_me=$'\E[0m'           # end mode
@@ -89,6 +66,9 @@ export LESS_TERMCAP_so=$'\E[38;1;246m'    # begin standout-mode - info box
 export LESS_TERMCAP_ue=$'\E[0m'           # end underline
 export LESS_TERMCAP_us=$'\E[032;1;146m' # begin underline
 
+
+
+# Prompt
 function precmd {
   local TERMWIDTH
   (( TERMWIDTH = ${COLUMNS} - 1 ))
@@ -181,64 +161,68 @@ $PR_NO_COLOUR '
 
 setprompt
 
-#PROMPT="%(!.%F{red}%B.%F{white})%n %F{cyan}%~%f%#%f%b "
-#RPROMPT='%F{blue}%T%f%f'
-#PROMPT="$fg[red]zsh: $fg[cyan]%~> "
-#RPROMPT=
-#setopt nopromptcr
 
 
 ttyctl -f
 
 
-alias vim="stty stop '' -ixoff ; vim"
-alias v=vim
-# alias slrn="xterm -e slrn > /dev/null 2>&1 &"
-alias firefox="firefox > /dev/null 2>&1 &"
-alias eclipse="eclipse > /dev/null 2>&1 &"
-alias reload="source ~/.zshrc"
-alias gitignore="cp $HOME/scripts/templates/.gitignore ."
-alias pom-xml="cp $HOME/scripts/templates/pom.xml ."
-alias headers="$SCRIPTS/headers.sh"
-alias make_main="$SCRIPTS/main.sh"
-alias make_test="headers src/*/* && make_main src/*/*.c"
-alias moulinette="$SCRIPTS/moulinette.py"
-alias implement="$SCRIPTS/implement.sh"
-alias cvalgrind="$SCRIPTS/valgrind-color.sh"
-alias mkd=". $SCRIPTS/mkd.sh"
-alias create_makefile="$SCRIPTS/createmakefile.sh"
-alias create_makefile_rec="$SCRIPTS/createmakefilerecursive.sh"
-alias create_testsuite="cp $HOME/scripts/templates/testsuite.py ."
-alias create_test="$SCRIPTS/create_test.py"
-alias train="while true; do; clear; sl; sleep 34; sl -l; sleep 26; done;"
-alias gut="git"
-alias gi="git"
-alias gu="git"
-alias gt="git"
-alias gits="git"
-alias clean="make clean"
-alias z="$SCRIPTS/metalock.sh"
-alias s="ls"
-alias mvn-snapshot="mvn clean deploy"
-alias mvn-release="mvn release:clean && mvn release:prepare && mvn release:perform"
-alias mvn-javadoc="mvn clean javadoc:javadoc scm-publish:publish-scm"
-
-alias ls="ls -phG"
-alias mkdir="mkdir -pv"
-alias gccw="gcc -Wextra -Wall -pedantic -std=c99 -Werror"
-alias gccws="gcc -Wall -Wextra -std=c99 -pedantic -Wfloat-equal -Wundef -Wshadow -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Waggregate-return -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations -Wnested-externs -Wunreachable-code"
-alias g++w="g++ -Wextra -Wall -pedantic -std=c++11 -Werror"
-alias g++ws="g++ -Wall -Wextra -std=c++11 -pedantic -Wfloat-equal -Wundef -Wshadow -Wpointer-arith -Wcast-qual -Wcast-align -Wmissing-declarations -Wunreachable-code"
-alias clangw="clang -Wextra -Wall -pedantic -std=c99 -Werror"
-alias clangws="clang -Wall -Wextra -std=c99 -pedantic -Wfloat-equal -Wundef -Wshadow -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Waggregate-return -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations -Wnested-externs -Wunreachable-code"
+# Compilers
 alias clang++w="clang++ -Wextra -Wall -pedantic -std=c++11 -Werror"
 alias clang++ws="clang++ -Wall -Wextra -std=c++11 -pedantic -Wfloat-equal -Wundef -Wshadow -Wpointer-arith -Wcast-qual -Wcast-align -Wmissing-declarations -Wunreachable-code"
-alias gdb="gdb -q"
-alias tax="tar xf"
-alias suspend="sudo pm-suspend"
+alias clangw="clang -Wextra -Wall -pedantic -std=c99 -Werror"
+alias clangws="clang -Wall -Wextra -std=c99 -pedantic -Wfloat-equal -Wundef -Wshadow -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Waggregate-return -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations -Wnested-externs -Wunreachable-code"
+alias g++w="g++ -Wextra -Wall -pedantic -std=c++11 -Werror"
+alias g++ws="g++ -Wall -Wextra -std=c++11 -pedantic -Wfloat-equal -Wundef -Wshadow -Wpointer-arith -Wcast-qual -Wcast-align -Wmissing-declarations -Wunreachable-code"
+alias gccw="gcc -Wextra -Wall -pedantic -std=c99 -Werror"
+alias gccws="gcc -Wall -Wextra -std=c99 -pedantic -Wfloat-equal -Wundef -Wshadow -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Waggregate-return -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations -Wnested-externs -Wunreachable-code"
 
+# Git
+alias gi="git"
+alias gits="git"
 alias gmerge="$SCRIPTS/gmerge.sh"
+alias gt="git"
+alias gu="git"
+alias gut="git"
+
+
+# Templates
+alias create_makefile="$SCRIPTS/createmakefile.sh"
+alias create_makefile_rec="$SCRIPTS/createmakefilerecursive.sh"
+alias create_test="$SCRIPTS/create_test.py"
+alias create_testsuite="cp $HOME/scripts/templates/testsuite.py ."
+alias gitignore="cp $HOME/scripts/templates/.gitignore ."
+alias pom-xml="cp $HOME/scripts/templates/pom.xml ."
+
+
+# Scripts
+alias headers="$SCRIPTS/headers.sh"
+alias implement="$SCRIPTS/implement.sh"
+alias mkd=". $SCRIPTS/mkd.sh"
+alias cvalgrind="$SCRIPTS/valgrind-color.sh"
+alias moulinette="$SCRIPTS/moulinette.py"
+alias screen="$SCRIPTS/screen.sh"
+alias z=$LOCK
+
+# Maven
+alias mvn-javadoc="mvn clean javadoc:javadoc scm-publish:publish-scm"
+alias mvn-release="mvn release:clean && mvn release:prepare && mvn release:perform"
+alias mvn-snapshot="mvn clean deploy"
+
+# misc commands
+alias gdb="gdb -q"
+alias eclipse="eclipse > /dev/null 2>&1 &"
+alias firefox="firefox > /dev/null 2>&1 &"
+alias ls="ls -phG"
 alias cortune="fortune | tr '\n' '$' | sed 's/$\t\t\-\-/\n        --/g' | tr '$' ' ' | sed 's/\(A\|Q\):\t/\$$\1:/g' | sed 's/^\$\+//g' | tr '$' '\n' | cowsay"
+alias mkdir="mkdir -pv"
+alias reload="source ~/.zshrc"
+alias s="ls"
+alias no="ls"
+alias suspend="sudo pm-suspend"
+alias tax="tar xf"
+alias train="while true; do; clear; sl; sleep 34; sl -l; sleep 26; done;"
+alias v=vim
+alias vim="stty stop '' -ixoff ; vim"
 
 #fonction bash pour installer des lib dans des paths
 #Merci Luca!
