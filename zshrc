@@ -14,7 +14,7 @@ DISABLE_AUTO_UPDATE="true"
 DISABLE_CORRECTION="true"
 
 # Uncomment following line if you want red dots to be displayed while waiting for completion
-#COMPLETION_WAITING_DOTS="true"
+COMPLETION_WAITING_DOTS="true"
 
 # Uncomment following line if you want to disable marking untracked files under
 # VCS as dirty. This makes repository status check for large repositories much,
@@ -24,14 +24,14 @@ DISABLE_CORRECTION="true"
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(git)
+plugins=(git git-extras ssh-agent)
 
 source $ZSH/oh-my-zsh.sh
 
 # Completion
 zstyle ':completion:*' insert-unambiguous true
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
-zstyle :compinstall filename '/home/tolmer_v/.zshrc'
+zstyle :compinstall filename '$HOME/.zshrc'
 
 # History
 setopt appendhistory extended_glob HIST_IGNORE_ALL_DUPS HIST_SAVE_NO_DUPS sh_word_split
@@ -297,22 +297,7 @@ function add-prefix {
     export PKG_CONFIG_PATH="$prefix/share/pkgconfig:$prefix/lib/pkgconfig:$PKG_CONFIG_PATH"
 }
 
-
-# Keep last
-if ! [ $SSH_AGENT_PID ]; then
-  SSH_AGENT_PID=$(pidof ssh-agent | cut -d ' ' -f 1);
-  if ! [ $SSH_AGENT_PID ]; then
-    eval `ssh-agent` >/dev/null
-  fi
+# funny message
+if which cowsay >/dev/null && which fortune >/dev/null; then
+  cortune
 fi
-ssh-add -l >/dev/null 2>&1
-SSH_STATUS=$?
-if [ $SSH_STATUS -eq 2 ]; then
-  eval `ssh-agent` >/dev/null
-  ssh-add -l >/dev/null 2>&1
-  SSH_STATUS=$?
-fi
-if [ $SSH_STATUS -eq 1 ]; then
-  ssh-add
-fi
-cortune
