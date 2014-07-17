@@ -343,6 +343,7 @@ let g:syntastic_cpp_check_header = 1
 let g:syntastic_cpp_remove_include_errors = 0
 let g:syntastic_cpp_config_file = ".syntastic_config"
 let g:syntastic_cpp_compiler = 'g++'
+let g:syntastic_cpp_compiler_options = ' -std=c++11'
 let g:syntastic_cpp_checkers = [ 'gcc', 'moulinette' ]
 
 let g:syntastic_c_check_header = 1
