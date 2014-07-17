@@ -50,6 +50,8 @@ bindsym $mod+s focus right
 # move focused window
 bindsym $mod+Shift+h move container to output left
 bindsym $mod+Shift+s move container to output right
+bindsym $mod+Ctrl+h move workspace to output left
+bindsym $mod+Ctrl+s move workspace to output right
 bindsym $mod+Shift+t move left
 bindsym $mod+Shift+n move right
 
