@@ -32,4 +32,4 @@ set gui=tabs
 
 set complete=lhS
 
-colorscheme darkness2
+colorscheme vimPgray

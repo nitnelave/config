@@ -139,4 +139,8 @@ if ! [ -e ~/.fzf ]; then
   (cd ~/.fzf && git apply fzf_shortcut.patch)
 fi
 
+if ! [ -e ~/.vimperator/colors/vimPgray.vimp ]; then
+  wget -O ~/.vimperator/colors/vimPgray.vimp   https://raw.githubusercontent.com/livibetter/dotfiles/master/vimperator/colors/vimPgray.vimp
+fi
+
 echo "Configuration successful!"
