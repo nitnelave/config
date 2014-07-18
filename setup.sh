@@ -145,6 +145,7 @@ if ! [ -e ~/.fzf ]; then
 fi
 
 if ! [ -e ~/.vimperator/colors/vimPgray.vimp ]; then
+  mkdir -p ~/.vimperator/colors
   wget -O ~/.vimperator/colors/vimPgray.vimp   https://raw.githubusercontent.com/livibetter/dotfiles/master/vimperator/colors/vimPgray.vimp
 fi
 
