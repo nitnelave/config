@@ -46,6 +46,13 @@ if ! [ -e "$HOME/.xprofile" ]; then
   echo "$HOME/.xprofile --> $HOME/.xsession"
 fi
 
+if ! [ -e "$HOME/.lesskey" ]; then
+  ln -s "$CONFIG/lesskey" "$HOME/.lesskey"
+  echo "$HOME/.lesskey --> $CONFIG/lesskey"
+  lesskey "$HOME/.lesskey"
+  echo "Configured LESS keys"
+fi
+
 mkdir -p $HOME/.gnupg
 if ! [ -e "$HOME/.gnupg/pubring.gpg" ]; then
   for i in `ls $SCRIPTS/gpg`; do
