@@ -33,11 +33,19 @@ link signature .signature
 link slrnrc .slrnrc
 link dircolors .dircolors
 link vrapperrc .vrapperrc
+link xsession .xsession
+link xkb .xkb
 link idea/ideavimrc .ideavimrc
 link vimperatorrc .vimperatorrc
 link Xdefaults .Xdefaults
 link oh-my-zsh .oh-my-zsh
 link "vim/RainbowParenthesis.vim" ".vim/plugin/RainbowParenthesis.vim"
+
+if ! [ -e "$HOME/.xprofile" ]; then
+  ln -s "$HOME/.xsession" "$HOME/.xprofile"
+  echo "$HOME/.xprofile --> $HOME/.xsession"
+fi
+
 mkdir -p $HOME/.gnupg
 if ! [ -e "$HOME/.gnupg/pubring.gpg" ]; then
   for i in `ls $SCRIPTS/gpg`; do

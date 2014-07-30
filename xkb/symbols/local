@@ -1,0 +1,32 @@
+// Left and right handed dvorak layouts
+// by sqweek <sqweek@gmail.com> 2006-01-30
+// Based on the corresponding layouts in the console-tools package.
+partial alphanumeric_keys
+xkb_symbols "local" {
+
+    name[Group1]= "English (Dvorak custom)";
+
+    include "us(dvorak)"
+
+    key <AE04> { [         4,  dollar,    EuroSign ] };
+
+    key <AD01> { [  apostrophe,	quotedbl, adiaeresis,       Adiaeresis ] };
+    key <AD02> { [     comma,    less,  ediaeresis,     Ediaeresis ] };
+    key <AD03> { [    period, greater, ecircumflex,   Ecircumflex	] };
+    key <AD04> { [         p,       P,  udiaeresis, Udiaeresis ] };
+    key <AD05> { [         y,       Y, idiaeresis, Idiaeresis ] };
+    key <AD08> { [         c,       C,    ccedilla,    Ccedilla ] };
+
+    key <AC01> { [         a,       A,      agrave, Agrave ] };
+    key <AC02> { [         o,       O, ocircumflex, Ocircumflex ] };
+    key <AC03> { [         e,       E,      eacute, Eacute ] };
+    key <AC04> { [         u,       U,      ugrave, Ugrave ] };
+    key <AC05> { [         i,       I, icircumflex, Icircumflex ] };
+
+    key <AB01> { [ semicolon,   colon, acircumflex, Acircumflex ] };
+    key <AB02> { [         q,       Q,  odiaeresis,      Odiaeresis ] };
+    key <AB03> { [         j,       J,      egrave, Egrave ] };
+    key <AB04> { [         k,       K, ucircumflex, Ucircumflex ] };
+
+    include "level3(ralt_switch)"
+};
