@@ -2,7 +2,7 @@
 
 echo "Loading config folder in ${CONFIG=`dirname $(pwd)/$0`}"
 
-SCRIPTS?="$HOME/scripts"
+SCRIPTS=${SCRIPTS:-$HOME/scripts}
 
 link () {
   if ! [ -e "$HOME/$2" ]; then
