@@ -56,7 +56,7 @@ fi
 
 mkdir -p $HOME/.m2
 if ! [ -e "$HOME/.m2/settings.xml" ]; then
-  ln -s $SCRIPTS/m2/settings.xml $HOME/.m2/settings.xml
+  ln -s "$SCRIPTS/m2/settings.xml" "$HOME/.m2/settings.xml"
   echo "$HOME/.m2/settings.xml --> $HOME/scripts/m2/settings.xml"
 fi
 
