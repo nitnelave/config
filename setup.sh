@@ -2,6 +2,8 @@
 
 echo "Loading config folder in ${CONFIG=`dirname $(pwd)/$0`}"
 
+SCRIPTS?="$HOME/scripts"
+
 link () {
   if ! [ -e "$HOME/$2" ]; then
     ln -s "$CONFIG/$1" "$HOME/$2"
