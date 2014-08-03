@@ -28,7 +28,7 @@ cnoremap vs :tabopen<Space>
 
 set ds=duckduckgo
 
-set gui=tabs
+set gui=nonavigation
 
 set complete=lhS
 
