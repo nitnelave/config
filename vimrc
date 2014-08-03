@@ -364,6 +364,7 @@ command! Moulinette let b:moulinette_ignore=0
 command! NoMoulinette let b:moulinette_ignore=1
 cab mou Moulinette
 cab nomou NoMoulinette
+let b:moulinette_ignore=1
 
 command! Complete let b:complete_ignore=0
 command! NoComplete let b:complete_ignore=1
