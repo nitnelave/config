@@ -33,7 +33,7 @@ link signature .signature
 link slrnrc .slrnrc
 link dircolors .dircolors
 link vrapperrc .vrapperrc
-link xsession .xsession
+link xsession .xsession-generic
 link xkb .xkb
 link idea/ideavimrc .ideavimrc
 link vimperatorrc .vimperatorrc
@@ -84,6 +84,7 @@ copy gitconfig .gitconfig
 copy jnewsrc .jnewsrc
 copy xinitrc .xinitrc
 copy zshrc .zshrc
+copy xsession .xsession
 
 echo "Setting up lesskey..."
 lesskey "$HOME/.lesskey"
