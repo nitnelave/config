@@ -248,6 +248,7 @@ set foldmethod=syntax
 set foldnestmax=1
 set foldminlines=4
 set foldopen=hor,insert,jump,search,undo,quickfix,block,tag
+set foldlevel=99
 
 function! s:insert_gates()
   let gatename = substitute(substitute(toupper(expand("%:t")), "\\.", "_", "g"), "-", "", "g") . "_"
