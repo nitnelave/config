@@ -40,17 +40,11 @@ link vimperatorrc .vimperatorrc
 link Xdefaults .Xdefaults
 link oh-my-zsh .oh-my-zsh
 link "vim/RainbowParenthesis.vim" ".vim/plugin/RainbowParenthesis.vim"
+link lesskey .lesskey
 
 if ! [ -e "$HOME/.xprofile" ]; then
   ln -s "$HOME/.xsession" "$HOME/.xprofile"
   echo "$HOME/.xprofile --> $HOME/.xsession"
-fi
-
-if ! [ -e "$HOME/.lesskey" ]; then
-  ln -s "$CONFIG/lesskey" "$HOME/.lesskey"
-  echo "$HOME/.lesskey --> $CONFIG/lesskey"
-  lesskey "$HOME/.lesskey"
-  echo "Configured LESS keys"
 fi
 
 mkdir -p $HOME/.gnupg
@@ -82,7 +76,7 @@ copy xinitrc .xinitrc
 copy zshrc .zshrc
 
 echo "Setting up lesskey..."
-lesskey $CONFIG/lesskey
+lesskey "$HOME/.lesskey"
 
 echo "Cloning Vim plugins..."
 mkdir -p $HOME/.vim
