@@ -5,3 +5,4 @@ set realname "Valentin Tolmer"
 set replyto "valentin.tolmer@lrde.epita.fr"
 set signature ".signature"
 set editor_command "vim '+set tw=72' +%d '%s'"
+set sorting_method 9
