@@ -44,12 +44,16 @@ bindkey -v
 
 unsetopt beep notify
 
+autoload up-line-or-beginning-search
+autoload down-line-or-beginning-search
+zle -N up-line-or-beginning-search
+zle -N down-line-or-beginning-search
 # Key shortcuts
 bindkey "^[[3~" delete-char
 bindkey "^[[A" history-search-backward
 bindkey "^[[B" history-search-forward
-bindkey "^N" history-search-backward
-bindkey "^T" history-search-forward
+bindkey "^N" up-line-or-beginning-search
+bindkey "^T" down-line-or-beginning-search
 bindkey "^_" beginning-of-line
 bindkey "^[^_" end-of-line
 bindkey "^H" backward-word
