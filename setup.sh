@@ -42,6 +42,16 @@ link oh-my-zsh .oh-my-zsh
 link "vim/RainbowParenthesis.vim" ".vim/plugin/RainbowParenthesis.vim"
 link lesskey .lesskey
 
+
+if ! [ -e "$HOME/.weechat/irc.conf" ] || [ ! -h "$HOME/.weechat/irc.conf" ]; then
+  mkdir -p "$HOME/.weechat"
+  rm -f "$HOME/.weechat/irc.conf"
+  ln -s "$CONFIG/weechat/irc.conf" "$HOME/.weechat/irc.conf"
+  echo "$HOME/.weechat/irc.conf --> $CONFIG/weechat/irc.conf"
+fi
+mkdir -p "$HOME/.weechat"
+link "weechat/irc.conf" ".weechat/irc.conf"
+
 if ! [ -e "$HOME/.xprofile" ]; then
   ln -s "$HOME/.xsession" "$HOME/.xprofile"
   echo "$HOME/.xprofile --> $HOME/.xsession"
