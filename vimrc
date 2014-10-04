@@ -240,6 +240,7 @@ nnoremap <Space> i<Space><Esc>
 
 autocmd BufWritePre * :%s/\v\s+$//e
 autocmd BufWritePre .{article,letter,followup} :%s/\v^--$/-- /e
+autocmd BufWritePre /tmp/mutt-* :%s/\v^--$/-- /e
 
 "highlight over80 ctermbg=red
 "autocmd BufReadPre *.{c,cc,h,hh,cpp,hxx} match over80 /\%80v.\+/
@@ -426,3 +427,5 @@ function! g:AccentsToLatex()
 endfunction
 
 cab accents call g:AccentsToLatex()
+
+au BufRead /tmp/mutt-* set tw=72
