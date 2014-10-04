@@ -10,3 +10,5 @@ export LESS=-Q
 xset b off
 
 eval `ssh-agent`
+
+./.xsession
