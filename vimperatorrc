@@ -20,9 +20,7 @@ noremap L N
 noremap <C-h> :back<CR>
 noremap <C-s> :forward<CR>
 
-noremap <C-n> <C-v><C-n>
-
-noremap <C-w> <C-v><C-w>
+noremap <C-w> :tabclose<CR>
 
 cnoremap vs :tabopen<Space>
 
