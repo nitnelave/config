@@ -215,7 +215,6 @@ alias mvn-snapshot="mvn clean deploy"
 # misc commands
 alias gdb="gdb -q"
 alias eclipse="eclipse > /dev/null 2>&1 &"
-alias firefox="firefox > /dev/null 2>&1 &"
 alias ls="ls -phG"
 alias cortune="fortune | tr '\n' '$' | sed 's/$\t\t\-\-/\n        --/g' | tr '$' ' ' | sed 's/\(A\|Q\):\t/\$$\1:/g' | sed 's/^\$\+//g' | tr '$' '\n' | cowsay"
 alias mkdir="mkdir -pv"
