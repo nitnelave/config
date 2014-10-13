@@ -133,11 +133,11 @@ setprompt () {
     PR_SET_CHARSET="%{$terminfo[enacs]%}"
     PR_SHIFT_IN="%{$terminfo[smacs]%}"
     PR_SHIFT_OUT="%{$terminfo[rmacs]%}"
-    PR_HBAR=${altchar[q]:--}
-    PR_ULCORNER=${altchar[l]:--}
-    PR_LLCORNER=${altchar[m]:--}
-    PR_LRCORNER=${altchar[j]:--}
-    PR_URCORNER=${altchar[k]:--}
+    PR_HBAR=─
+    PR_ULCORNER=┌
+    PR_LLCORNER=└
+    PR_LRCORNER=┘
+    PR_URCORNER=┐
 
 
     ZSH_THEME_GIT_PROMPT_PREFIX="(on %{$fg[white]%}"
