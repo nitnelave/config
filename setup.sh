@@ -37,6 +37,7 @@ link xsession .xsession-generic
 link xkb .xkb
 link idea/ideavimrc .ideavimrc
 link vimperatorrc .vimperatorrc
+link pentadactylrc .pentadactylrc
 link Xdefaults .Xdefaults
 link oh-my-zsh .oh-my-zsh
 link "vim/RainbowParenthesis.vim" ".vim/plugin/RainbowParenthesis.vim"
