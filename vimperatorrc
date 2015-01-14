@@ -22,7 +22,7 @@ noremap <C-s> :forward<CR>
 
 noremap <C-w> :tabclose<CR>
 
-cnoremap vs :tabopen<Space>
+noremap vs :tabopen<Space>
 
 set ds=duckduckgo
 
