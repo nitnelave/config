@@ -160,6 +160,25 @@ if ! [ -e plugin/LanguageTool.vim ]; then
   rm -r language
 fi
 
+if ! [ -e plugin/supertab.vim ]; then
+  echo "Cloning Supertab..."
+  wget http://www.vim.org/scripts/download_script.php?src_id=21752 -O /tmp/supertab.vmb
+  vim -S /tmp/supertab.vmb
+  rm /tmp/supertab.vmb
+fi
+
+
+if ! [ -e ftplugin/tex_LatexBox.vim ]; then
+  echo "Cloning LatexBox..."
+  wget http://www.vim.org/scripts/download_script.php?src_id=16732 -O /tmp/latex.vmb
+  vim -S /tmp/latex.vmb
+  rm /tmp/latex.vmb
+  wget -O /tmp/latexSuite.tar.gz http://www.vim.org/scripts/download_script.php?src_id=2535
+  tar xf /tmp/latexSuite.tar.gz
+  mkdir -p $HOME/.vim/dictionaries
+  cp /tmp/ftplugin/latex-suite/dictionaries/dictionary $HOME/.vim/dictionaries/
+fi
+
 if ! [ -e ~/.fzf ]; then
   git clone https://github.com/junegunn/fzf.git ~/.fzf
   ~/.fzf/install

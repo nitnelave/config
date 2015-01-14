@@ -429,3 +429,9 @@ endfunction
 cab accents call g:AccentsToLatex()
 
 au BufRead /tmp/mutt-* set tw=72
+
+" LatexBox
+
+let g:LatexBox_latexmk_options = "-pvc -pdfps"
+au FileType * exec("setlocal dictionary+=".$HOME."/.vim/dictionaries/".expand('<amatch>'))
+set complete+=k
