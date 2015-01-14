@@ -226,6 +226,8 @@ alias suspend="sudo pm-suspend"
 alias tax="tar xf"
 alias train="while true; do; clear; sl; sleep 34; sl -l; sleep 26; done;"
 alias v=vim
+alias vs="vim --servername VIM"
+alias va="vim --servername VIM --remote-tab"
 alias vim="stty stop '' -ixoff ; vim"
 
 # funny message
