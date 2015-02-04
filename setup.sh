@@ -33,7 +33,7 @@ link signature .signature
 link slrnrc .slrnrc
 link dircolors .dircolors
 link vrapperrc .vrapperrc
-link xsession .xsession-generic
+link xinitrc .xstart-generic
 link xkb .xkb
 link idea/ideavimrc .ideavimrc
 link vimperatorrc .vimperatorrc
@@ -83,9 +83,27 @@ echo "Copying defaults..."
 
 copy gitconfig .gitconfig
 copy jnewsrc .jnewsrc
-copy xinitrc .xinitrc
 copy zshrc .zshrc
-copy xsession .xsession
+
+if ! [ -e "$HOME/.xstart" ]; then
+  echo ". ./.xstart-generic" > "$HOME/.xstart"
+fi
+
+xinit () {
+  if ! [ -e "$HOME/$1" ]; then
+    echo ". ./.xstart" > "$HOME/$1"
+  else
+    if ! echo ". ./.xstart" | diff "$HOME/$1" -; then
+      cat "$HOME/$1" >> "$HOME/.xstart"
+    fi
+  fi
+}
+
+xinit .xsession
+xinit .xinitrc
+
+rm -rf "$HOME/.xinitrc-generic" "$HOME/.xsession-generic"
+
 
 echo "Setting up lesskey..."
 lesskey "$HOME/.lesskey"
