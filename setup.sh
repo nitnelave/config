@@ -33,7 +33,7 @@ link signature .signature
 link slrnrc .slrnrc
 link dircolors .dircolors
 link vrapperrc .vrapperrc
-link xinitrc .xstart-generic
+link xstart .xstart-generic
 link xkb .xkb
 link idea/ideavimrc .ideavimrc
 link vimperatorrc .vimperatorrc
