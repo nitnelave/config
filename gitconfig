@@ -54,3 +54,5 @@
 	decorate = full
 [help]
 	autocorrect = 1
+[push]
+	default = simple
