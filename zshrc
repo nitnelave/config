@@ -230,6 +230,8 @@ alias vs="vim --servername VIM"
 alias va="vim --servername VIM --remote-tab"
 alias vim="stty stop '' -ixoff ; vim"
 
+alias ipython-slides="ipython nbconvert --to slides --post serve"
+
 # funny message
 if which cowsay >/dev/null && which fortune >/dev/null; then
   cortune
