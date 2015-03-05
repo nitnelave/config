@@ -300,8 +300,10 @@ function! s:format_text()
   execute "%s/\|-\>/└─>/ge"
   execute "%s/\\v( *)  - /\\1└─> /ge"
   execute "%s/-\>/=>/ge"
+  syntax off
 endfunction
 autocmd BufWritePre *.{fr,en} call <SID>format_text()
+autocmd BufEnter *.{fr,en} call <SID>format_text()
 
 
 function! g:FromPDF()
