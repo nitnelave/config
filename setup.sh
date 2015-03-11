@@ -95,6 +95,7 @@ xinit () {
   else
     if ! echo ". ./.xstart" | diff "$HOME/$1" -; then
       cat "$HOME/$1" >> "$HOME/.xstart"
+      echo ". ./.xstart" > "$HOME/$1"
     fi
   fi
 }
