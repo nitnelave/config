@@ -169,6 +169,11 @@ nmap <F11> :!find . -iname '*.c' -o -iname '*.cpp' -o -iname '*.h' -o -iname '*.
 
 noremap cs cl
 
+" VCSN
+
+map <c-y> 0df:dwi* <Esc>A: Here.<Esc>t0
+vmap <c-y> :normal <c-y><CR>
+
 " Yank from cursor to end of line, to be consistent with C and D
 nnoremap Y y$
 
