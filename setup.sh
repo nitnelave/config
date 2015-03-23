@@ -209,6 +209,7 @@ if ! [ -e ftdetect/markdown.vim ]; then
   wget http://www.vim.org/scripts/download_script.php?src_id=15150 -O /tmp/markdown.vba.gz
   (cd /tmp && gzip -d markdown.vba.gz)
   vim /tmp/markdown.vba +":source % | quit!"
+  patch ~/.vim/syntax/markdown.vim < "$CONFIG/markdown.diff"
 fi
 
 echo "Configuration successful!"
