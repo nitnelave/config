@@ -24,6 +24,7 @@ echo "Linking to config files..."
 link vimrc .vimrc
 link zshrc .zshrc-generic
 link gitconfig .gitconfig-generic
+link gitignore-generic .gitignore
 
 mkdir -p $HOME/.i3
 link i3config .i3/config
