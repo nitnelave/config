@@ -204,4 +204,11 @@ if ! [ -e ~/.vimperator/colors/vimPgray.vimp ]; then
   wget -O ~/.vimperator/colors/vimPgray.vimp   https://raw.githubusercontent.com/livibetter/dotfiles/master/vimperator/colors/vimPgray.vimp
 fi
 
+if ! [ -e ftdetect/markdown.vim ]; then
+  echo "Cloning Markdown..."
+  wget http://www.vim.org/scripts/download_script.php?src_id=15150 -O /tmp/markdown.vba.gz
+  (cd /tmp && gzip -d markdown.vba.gz)
+  vim /tmp/markdown.vba +":source % | quit!"
+fi
+
 echo "Configuration successful!"
