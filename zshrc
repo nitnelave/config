@@ -234,6 +234,12 @@ alias ipython-slides="ipython nbconvert --to slides --post serve"
 alias node7="ssh -t vtolmer@ssh.lrde.epita.fr \"ssh -t node7 zsh\""
 alias ssh-tunnel="ssh vtolmer@ssh.lrde.epita.fr -L 8888:localhost:8888 -t 'ssh node7 -L 8888:localhost:8888 -t zsh'"
 
+if [ -f "$HOME/.local/bin/thefuck" ]
+then
+  export PATH="$PATH:$HOME/.local/bin/"
+  eval `~/.local/bin/thefuck --alias`
+fi
+
 # funny message
 if which cowsay >/dev/null && which fortune >/dev/null; then
   cortune

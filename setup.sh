@@ -212,4 +212,8 @@ if ! [ -e ftdetect/markdown.vim ]; then
   patch ~/.vim/syntax/markdown.vim < "$CONFIG/markdown.diff"
 fi
 
+if ! [ -f "$HOME/.local/bin/thefuck" ]; then
+  pip3 install --user thefuck
+fi
+
 echo "Configuration successful!"
