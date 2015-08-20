@@ -16,3 +16,5 @@ vgcore.*
 *.iso
 0
 .syntastic_config
+.idea
+*.iml
