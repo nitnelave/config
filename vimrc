@@ -418,19 +418,19 @@ let g:clang_user_options='|| exit 0'
 let g:clang_close_preview=1
 
 function! g:AccentsToLatex()
-  execute "%s/é/\\\\'e/e"
-  execute "%s/è/\\\\`e/e"
-  execute "%s/ê/\\\\^e/e"
-  execute "%s/î/\\\\^i/e"
-  execute "%s/à/\\\\`a/e"
-  execute "%s/â/\\\\^a/e"
-  execute "%s/û/\\\\^u/e"
-  execute "%s/ä/\\\\\"a/e"
-  execute "%s/ü/\\\\\"u/e"
-  execute "%s/ë/\\\\\"e/e"
-  execute "%s/ï/\\\\\"i/e"
-  execute "%s/ç/\\\\c{c}/e"
-  execute "%s/\%/\\\\%/e"
+  execute "'<,'>s/é/\\\\'e/e"
+  execute "'<,'>s/è/\\\\`e/e"
+  execute "'<,'>s/ê/\\\\^e/e"
+  execute "'<,'>s/î/\\\\^i/e"
+  execute "'<,'>s/à/\\\\`a/e"
+  execute "'<,'>s/â/\\\\^a/e"
+  execute "'<,'>s/û/\\\\^u/e"
+  execute "'<,'>s/ä/\\\\\"a/e"
+  execute "'<,'>s/ü/\\\\\"u/e"
+  execute "'<,'>s/ë/\\\\\"e/e"
+  execute "'<,'>s/ï/\\\\\"i/e"
+  execute "'<,'>s/ç/\\\\c{c}/e"
+  execute "'<,'>s/\%/\\\\%/e"
 endfunction
 
 cab accents call g:AccentsToLatex()
