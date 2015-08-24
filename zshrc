@@ -229,6 +229,7 @@ alias v=vim
 alias vs="vim --servername VIM"
 alias va="vim --servername VIM --remote-tab"
 alias vim="stty stop '' -ixoff ; vim"
+alias grep="grep --color=auto"
 
 alias ipython-slides="ipython nbconvert --to slides --post serve"
 alias bratislava="ssh -t vtolmer@ssh.lrde.epita.fr \"ssh -t bratislava zsh\""
