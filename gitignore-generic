@@ -18,3 +18,4 @@ vgcore.*
 .syntastic_config
 .idea
 *.iml
+__pycache__
