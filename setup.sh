@@ -43,6 +43,7 @@ link Xdefaults .Xdefaults
 link oh-my-zsh .oh-my-zsh
 link "vim/RainbowParenthesis.vim" ".vim/plugin/RainbowParenthesis.vim"
 link lesskey .lesskey
+link ssh_config .ssh/config
 
 
 if ! [ -e "$HOME/.weechat/irc.conf" ] || [ ! -h "$HOME/.weechat/irc.conf" ]; then
