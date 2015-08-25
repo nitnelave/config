@@ -86,9 +86,6 @@ set showmatch
 " Enable line wrapping
 set wrap
 
-" Wrap on column 80
-set textwidth=79
-
 " Preview window on completion
 set completeopt=menu,longest
 
@@ -184,6 +181,9 @@ noremap ; :
 cab reload source ~/.vimrc
 
 no Z z=1<CR>]s
+
+autocmd BufNewFile,BufRead *.{c,cc,h,hh,hxx,hpp,cpp,md,fr,en,txt} : set tw=79
+autocmd BufNewFile,BufRead *.{java} : set tw=119
 
 " tab settings
 noremap <silent> <C-H> :tabprevious<CR>
