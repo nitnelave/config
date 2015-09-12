@@ -19,3 +19,6 @@ vgcore.*
 .idea
 *.iml
 __pycache__
+*.aux
+*.log
+*.out
