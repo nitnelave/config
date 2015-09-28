@@ -1,13 +1,11 @@
 autocmd!
 
-let g:pathogen_disabled = ['ultisnips']
+if !exists('g:pathogen_disabled')
+  let g:pathogen_disabled = []
+endif
 
 if !has('python')
   call add(g:pathogen_disabled, 'clang_complete')
-endif
-
-if !has('clientserver')
-  call add(g:pathogen_disabled, 'AsyncCommand')
 endif
 
 execute pathogen#infect()
@@ -255,6 +253,7 @@ set foldnestmax=1
 set foldminlines=4
 set foldopen=hor,insert,jump,search,undo,quickfix,block,tag
 set foldlevel=99
+set nofoldenable
 
 function! s:insert_gates()
   let gatename = substitute(substitute(toupper(expand("%:t")), "\\.", "_", "g"), "-", "", "g") . "_"
@@ -382,7 +381,9 @@ cab nocomp NoComplete
 
 " Project
 
-let g:proj_flags = "gins"
+let g:proj_flags = "cgist"
+
+let g:proj_window_width = 40
 
 " Fugitive
 

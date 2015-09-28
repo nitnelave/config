@@ -21,7 +21,7 @@ fi
 
 echo "Linking to config files..."
 
-link vimrc .vimrc
+link vimrc .vimrc-generic
 link zshrc .zshrc-generic
 link gitconfig .gitconfig-generic
 link gitignore-generic .gitignore
@@ -108,6 +108,12 @@ xinit .xinitrc
 rm -rf "$HOME/.xinitrc-generic" "$HOME/.xsession-generic"
 
 
+if [ -L "$HOME/.vimrc" ]
+then
+  rm "$HOME/.vimrc"
+  echo "source $HOME/.vimrc-generic" > "$HOME/.vimrc"
+fi
+
 echo "Setting up lesskey..."
 lesskey "$HOME/.lesskey"
 
@@ -123,6 +129,10 @@ if ! [ -e autoload/pathogen.vim ]; then
 fi
 mkdir -p bundle
 cd bundle
+
+rm -rf vim-fugitive
+rm -rf AsyncCommand
+
 if ! [ -e clang_complete ]; then
   echo "Cloning Clang Complete..."
   git clone https://github.com/Rip-Rip/clang_complete.git
@@ -162,22 +172,15 @@ if ! [ -e syntastic ]; then
   git clone https://github.com/scrooloose/syntastic.git
 fi
 
-if ! [ -e vim-fugitive ]; then
-  echo "Cloning Fugitive..."
-  git clone https://github.com/tpope/vim-fugitive.git
-fi
-
 if ! [ -e DoxygenToolkit.vim ]; then
   echo "Downloading DoxygenToolkit..."
   wget http://www.vim.org/scripts/download_script.php?src_id=14064 -O DoxygenToolkit.vim
 fi
 
-if ! [ -e AsyncCommand ]; then
-  echo "Downloading AsyncCommand..."
-  git clone https://github.com/pydave/AsyncCommand.git
-fi
-
 cd ..
+
+rm -rf plugin/supertab.vim
+
 if ! [ -e plugin/LanguageTool.vim ]; then
   echo "Cloning LanguageTool..."
   git clone https://github.com/vim-scripts/LanguageTool.git language
@@ -185,13 +188,6 @@ if ! [ -e plugin/LanguageTool.vim ]; then
   mv language/plugin/LanguageTool.vim plugin
   mv language/doc/LanguageTool.txt doc
   rm -r language
-fi
-
-if ! [ -e plugin/supertab.vim ]; then
-  echo "Cloning Supertab..."
-  wget http://www.vim.org/scripts/download_script.php?src_id=21752 -O /tmp/supertab.vmb
-  vim /tmp/supertab.vmb +":source % | quit!"
-  rm /tmp/supertab.vmb
 fi
 
 
