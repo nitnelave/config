@@ -156,7 +156,7 @@ if ! [ -e vim-surround ]; then
   git clone https://github.com/tpope/vim-surround.git
 fi
 
-if ! [ -f rust.vim ]; then
+if ! [ -e rust.vim ]; then
   echo "Cloning Vim-Rust..."
   git clone --depth=1 https://github.com/rust-lang/rust.vim.git rust.vim
 fi
