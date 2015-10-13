@@ -445,6 +445,14 @@ set complete+=k
 
 " Ctrl-P
 
+let g:ctrlp_tabpage_position = 'ca'
+let g:ctrlp_root_markers = ['.vimrc']
+let g:ctrlp_max_depth = 10
+let g:ctrlp_open_new_file = 'v'
+let g:ctrlp_open_multiple_files = 'vj'
+
+noremap <C-e> <C-p>
+
 if executable('ag')
   " Use Ag over Grep
   set grepprg=ag\ --nogroup\ --nocolor
