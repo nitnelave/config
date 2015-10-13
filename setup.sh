@@ -177,6 +177,11 @@ if ! [ -e DoxygenToolkit.vim ]; then
   wget http://www.vim.org/scripts/download_script.php?src_id=14064 -O DoxygenToolkit.vim
 fi
 
+if ! [ -e ctrlp.vim ]; then
+  echo "Downloading ctrlp..."
+  git clone https://github.com/kien/ctrlp.vim.git ctrlp.vim
+fi
+
 cd ..
 
 rm -rf plugin/supertab.vim
