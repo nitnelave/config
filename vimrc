@@ -249,6 +249,9 @@ autocmd BufReadPost quickfix nnoremap <CR> <CR>
 nnoremap <CR> o<Esc>
 nnoremap <Space> i<Space><Esc>
 
+
+nnoremap <C-R> "_diwP
+
 autocmd BufWritePre * if &ft!="markdown"|:%s/\v\s+$//e|endif
 autocmd BufWritePre .{article,letter,followup} :%s/\v^--$/-- /e
 autocmd BufWritePre /tmp/mutt-* :%s/\v^--$/-- /e
