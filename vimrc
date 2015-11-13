@@ -180,13 +180,16 @@ cab reload source ~/.vimrc
 
 no Z z=1<CR>]s
 
-if !isdirectory($HOME + "/.vim/undo")
-  call mkdir($HOME + "/.vim/undo", "p")
+let vimDir = '$HOME/.vim'
+let &runtimepath.=','.vimDir
+if has('persistent_undo')
+  let myUndoDir = expand(vimDir . '/undo')
+  silent call system('mkdir -p ' . myUndoDir)
+  let &undodir = myUndoDir
+  set undofile
+  set undolevels=1000
+  set undoreload=100000
 endif
-set undofile
-set undodir=$HOME/.vim/undo
-set undolevels=1000
-set undoreload=100000
 
 autocmd BufNewFile,BufRead *.{c,cc,h,hh,hxx,hpp,cpp,md,fr,en,txt} : set tw=79
 autocmd BufNewFile,BufRead *.{java} : set tw=119
