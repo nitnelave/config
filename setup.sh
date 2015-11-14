@@ -133,9 +133,9 @@ cd bundle
 rm -rf vim-fugitive
 rm -rf AsyncCommand
 
-if ! [ -e clang_complete ]; then
-  echo "Cloning Clang Complete..."
-  git clone https://github.com/Rip-Rip/clang_complete.git
+if [ -e clang_complete ]; then
+  echo "Removing Clang Complete..."
+  rm -rf clang_complete
 fi
 
 if ! [ -e project ]; then

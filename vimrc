@@ -4,10 +4,6 @@ if !exists('g:pathogen_disabled')
   let g:pathogen_disabled = []
 endif
 
-if !has('python')
-  call add(g:pathogen_disabled, 'clang_complete')
-endif
-
 execute pathogen#infect()
 
 " Disable vi compatibility mode
@@ -425,11 +421,6 @@ let g:DoxygenToolkit_classTag		= "@class "
 let g:DoxygenToolkit_cinoptions	= "c0,C1"
 
 source ~/.vim/plugin/RainbowParenthesis.vim
-
-" Clang_complete
-
-let g:clang_user_options='|| exit 0'
-let g:clang_close_preview=1
 
 function! g:AccentsToLatex()
   execute "'<,'>s/é/\\\\'e/e"
