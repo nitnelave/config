@@ -287,21 +287,7 @@ autocmd BufNewFile *.{c,cc} call <SID>insert_include()
 set list
 set listchars=tab:>-,trail:.
 
-function! NumberToggle()
-  if(&relativenumber == 1)
-    set number
-  else
-    set relativenumber
-  endif
-endfunc
-
-nnoremap <C-l> :call NumberToggle()<cr>
-
-set relativenumber
-
-autocmd BufLeave,InsertEnter * : set norelativenumber
-autocmd BufLeave,InsertEnter * : set number
-autocmd BufEnter,InsertLeave * : set relativenumber
+set number
 
 function! s:insert_python()
   execute "normal! i#! /usr/bin/env python\n\n"
