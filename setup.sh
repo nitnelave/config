@@ -182,6 +182,11 @@ if ! [ -e ctrlp.vim ]; then
   git clone https://github.com/kien/ctrlp.vim.git ctrlp.vim
 fi
 
+if ! [ -e vim-localvimrc ]; then
+  echo "Downloading local-vimrc..."
+  git clone https://github.com/embear/vim-localvimrc.git
+fi
+
 cd ..
 
 rm -rf plugin/supertab.vim
