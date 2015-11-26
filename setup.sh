@@ -130,8 +130,15 @@ fi
 mkdir -p bundle
 cd bundle
 
-rm -rf vim-fugitive
-rm -rf AsyncCommand
+if [ -e vim-fugitive ]; then
+  echo "Removing vim-fugitive"
+  rm -rf vim-fugitive
+fi
+
+if [ -e AsyncCommand ]; then
+  echo "Removing AsyncCommand..."
+  rm -rf AsyncCommand
+fi
 
 if [ -e clang_complete ]; then
   echo "Removing Clang Complete..."
@@ -189,7 +196,16 @@ fi
 
 cd ..
 
-rm -rf plugin/supertab.vim
+if [ -e plugin/supertab.vim ]; then
+  echo "Removing supertab..."
+  rm -rf plugin/supertab.vim
+fi
+
+if [ -e plugin/remoteOpen.vim ]; then
+  echo "Removing remoteOpen..."
+  rm -rf plugin/remoteOpen.vim
+fi
+
 
 if ! [ -e plugin/LanguageTool.vim ]; then
   echo "Cloning LanguageTool..."
