@@ -33,4 +33,4 @@ set complete=lhS
 colorscheme vimPgray
 
 autocmd LocationChange .*                             js modes.passAllKeys = false
-autocmd LocationChange tolmer\\.fr:2210                    js modes.passAllKeys = true
+autocmd LocationChange ipython\\.tolmer\\.fr          js modes.passAllKeys = true
