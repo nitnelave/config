@@ -265,14 +265,7 @@ set foldopen=hor,insert,jump,search,undo,quickfix,block,tag
 set foldlevel=99
 set nofoldenable
 
-function! s:insert_gates()
-  let gatename = substitute(substitute(toupper(expand("%:t")), "\\.", "_", "g"), "-", "", "g") . "_"
-  execute "normal! i#ifndef " . gatename
-  execute "normal! o# define " . gatename . "\n\n\n"
-  execute "normal! Go#endif /* !" . gatename . " */"
-  normal! kk
-endfunction
-autocmd BufNewFile *.{h,hh,hpp} call <SID>insert_gates()
+autocmd BufNewFile *.{h,hh,hpp} execute "normal! i#pragma once \n\n"
 
 function! s:insert_shebang()
   execute "normal! i#! /bin/sh\n\n"
@@ -280,7 +273,9 @@ endfunction
 autocmd BufNewFile *.sh call <SID>insert_shebang()
 
 function! s:insert_include()
-  execute "normal! i#include \"" . substitute(substitute(expand("%:t"), "\\.cc$", ".hh", ""), "\\.c$", ".h", "") . "\"\n\n"
+  if expand("%:t") != "test.cc" && expand("%:t") != "main.cc"
+      execute "normal! i#include \"" . substitute(substitute(expand("%:t"), "\\.cc$", ".hh", ""), "\\.c$", ".h", "") . "\"\n\n"
+  endif
 endfunction
 autocmd BufNewFile *.{c,cc} call <SID>insert_include()
 
