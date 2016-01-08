@@ -258,12 +258,6 @@ autocmd BufWritePre /tmp/mutt-* :%s/\v^--$/-- /e
 "highlight over80 ctermbg=red
 "autocmd BufReadPre *.{c,cc,h,hh,cpp,hxx} match over80 /\%80v.\+/
 
-set foldmethod=syntax
-set foldnestmax=1
-set foldminlines=4
-set foldopen=hor,insert,jump,search,undo,quickfix,block,tag
-set foldlevel=99
-set nofoldenable
 
 autocmd BufNewFile *.{h,hh,hpp} execute "normal! i#pragma once \n\n"
 
@@ -322,6 +316,8 @@ function! g:FromPDF()
 endfunction
 
 cab fpdf call g:FromPDF()
+
+set nofoldenable
 
 let g:languagetool_jar='$HOME/.vim/LanguageTool/languagetool-commandline.jar'
 
