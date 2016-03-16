@@ -397,7 +397,9 @@ let g:DoxygenToolkit_blockTag		= "@name "
 let g:DoxygenToolkit_classTag		= "@class "
 let g:DoxygenToolkit_cinoptions	= "c0,C1"
 
-source ~/.vim/plugin/RainbowParenthesis.vim
+if filereadable("~/.vim/plugin/RainbowParenthesis.vim")
+  source ~/.vim/plugin/RainbowParenthesis.vim
+endif
 
 function! g:AccentsToLatex()
   execute "'<,'>s/é/\\\\'e/e"

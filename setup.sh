@@ -23,6 +23,7 @@ echo "Linking to config files..."
 
 link vimrc .vimrc-generic
 link zshrc .zshrc-generic
+link bashrc .bashrc-generic
 link gitconfig .gitconfig-generic
 link gitignore-generic .gitignore
 
@@ -86,6 +87,8 @@ echo "Copying defaults..."
 copy gitconfig .gitconfig
 copy jnewsrc .jnewsrc
 copy zshrc .zshrc
+copy bashrc .bashrc
+copy vimrc .vimrc
 
 if ! [ -e "$HOME/.xstart" ]; then
   echo ". ./.xstart-generic" > "$HOME/.xstart"
