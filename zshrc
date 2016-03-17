@@ -1,4 +1,4 @@
-eval `dircolors ~/.dircolors`
+eval `dircolors -b ~/.dircolors`
 zstyle -e ':completion:*:default' list-colors 'reply=("${PREFIX:+=(#bi)($PREFIX:t)(?)*==02=01}:${(s.:.)LS_COLORS}")'
 
 # Path to your oh-my-zsh configuration.
