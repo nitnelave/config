@@ -54,6 +54,8 @@ link "vim/RainbowParenthesis.vim" ".vim/plugin/RainbowParenthesis.vim"
 link lesskey .lesskey
 link ssh_config .ssh/config
 
+link vim/ftplugin .vim/ftplugin
+
 
 if ! [ -e "$HOME/.weechat/irc.conf" ] || [ ! -h "$HOME/.weechat/irc.conf" ]; then
   mkdir -p "$HOME/.weechat"
