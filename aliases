@@ -1,0 +1,37 @@
+# Git
+
+alias g="git"
+alias gi="git"
+alias gut="git"
+alias ga="git add"
+alias gci="git commit"
+alias gco="git checkout"
+alias gs="git status"
+alias gst="git status"
+
+
+alias screen="$SCRIPTS/screen.sh"
+alias z="$LOCK"
+
+# Maven
+alias mvn-javadoc="mvn clean javadoc:javadoc scm-publish:publish-scm"
+alias mvn-release="mvn release:clean && mvn release:prepare && mvn release:perform"
+alias mvn-snapshot="mvn clean deploy"
+
+# misc commands
+alias gdb="gdb -q"
+alias ls="ls -phG"
+alias cortune=$HOME/projects/config/cowsay.sh
+alias mkdir="mkdir -pv"
+alias irc="ssh -t nitnelave@server.tolmer.fr \"zsh -c 'tmux attach -t irc'\""
+alias s="ls"
+alias no="ls"
+alias suspend="sudo pm-suspend"
+alias tax="tar xf"
+alias v=vim
+alias vim="stty stop '' -ixoff ; vim"
+alias grep="grep --color=auto"
+
+alias ipython-slides="ipython nbconvert --to slides --post serve"
+
+alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'

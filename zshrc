@@ -170,71 +170,8 @@ setprompt
 ttyctl -f
 
 
-# Compilers
-alias clang++w="clang++ -Wextra -Wall -pedantic -std=c++11 -Werror"
-alias clang++ws="clang++ -Wall -Wextra -std=c++11 -pedantic -Wfloat-equal -Wundef -Wshadow -Wpointer-arith -Wcast-qual -Wcast-align -Wmissing-declarations -Wunreachable-code"
-alias clangw="clang -Wextra -Wall -pedantic -std=c99 -Werror"
-alias clangws="clang -Wall -Wextra -std=c99 -pedantic -Wfloat-equal -Wundef -Wshadow -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Waggregate-return -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations -Wnested-externs -Wunreachable-code"
-alias g++w="g++ -Wextra -Wall -pedantic -std=c++11 -Werror"
-alias g++ws="g++ -Wall -Wextra -std=c++11 -pedantic -Wfloat-equal -Wundef -Wshadow -Wpointer-arith -Wcast-qual -Wcast-align -Wmissing-declarations -Wunreachable-code"
-alias gccw="gcc -Wextra -Wall -pedantic -std=c99 -Werror"
-alias gccws="gcc -Wall -Wextra -std=c99 -pedantic -Wfloat-equal -Wundef -Wshadow -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Waggregate-return -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations -Wnested-externs -Wunreachable-code"
-
-# Git
-alias gi="git"
-alias gits="git"
-alias gmerge="$SCRIPTS/gmerge.sh"
-alias gt="git"
-alias gu="git"
-alias gut="git"
-
-
-# Templates
-alias create_makefile="$SCRIPTS/createmakefile.sh"
-alias create_makefile_rec="$SCRIPTS/createmakefilerecursive.sh"
-alias create_test="$SCRIPTS/create_test.py"
-alias create_testsuite="cp $HOME/scripts/templates/testsuite.py ."
-alias gitignore="cp $HOME/scripts/templates/.gitignore ."
-alias pom-xml="cp $HOME/scripts/templates/pom.xml ."
-
-
-# Scripts
-alias headers="$SCRIPTS/headers.sh"
-alias implement="$SCRIPTS/implement.sh"
-alias mkd=". $SCRIPTS/mkd.sh"
-alias cvalgrind="$SCRIPTS/valgrind-color.sh"
-alias moulinette="$SCRIPTS/moulinette.py"
-alias screen="$SCRIPTS/screen.sh"
-alias z="$LOCK"
-
-# Maven
-alias mvn-javadoc="mvn clean javadoc:javadoc scm-publish:publish-scm"
-alias mvn-release="mvn release:clean && mvn release:prepare && mvn release:perform"
-alias mvn-snapshot="mvn clean deploy"
-
-# misc commands
-alias gdb="gdb -q"
-alias eclipse="eclipse > /dev/null 2>&1 &"
-alias ls="ls -phG"
-alias cortune=$HOME/projects/config/cowsay.sh
-alias mkdir="mkdir -pv"
-alias irc="ssh -t nitnelave@server.tolmer.fr \"zsh -c 'tmux attach -t irc'\""
+source ~/.aliases
 alias reload="source ~/.zshrc"
-alias s="ls"
-alias no="ls"
-alias suspend="sudo pm-suspend"
-alias tax="tar xf"
-alias train="while true; do; clear; sl; sleep 34; sl -l; sleep 26; done;"
-alias v=vim
-alias vs="vim --servername VIM"
-alias va="vim --servername VIM --remote-tab"
-alias vim="stty stop '' -ixoff ; vim"
-alias grep="grep --color=auto"
-
-alias ipython-slides="ipython nbconvert --to slides --post serve"
-alias bratislava="ssh -t vtolmer@ssh.lrde.epita.fr \"ssh -t bratislava zsh\""
-alias node7="ssh -t vtolmer@ssh.lrde.epita.fr \"ssh -t node7 zsh\""
-alias ssh-tunnel="ssh vtolmer@ssh.lrde.epita.fr -L 8888:localhost:8888 -t 'ssh node7 -L 8888:localhost:8888 -t zsh'"
 
 if [ -f "$HOME/.local/bin/thefuck" ]
 then

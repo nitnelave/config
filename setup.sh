@@ -24,6 +24,7 @@ echo "Linking to config files..."
 link vimrc .vimrc-generic
 link zshrc .zshrc-generic
 link bashrc .bashrc-generic
+link aliases .aliases
 link gitconfig .gitconfig-generic
 link gitignore-generic .gitignore
 
