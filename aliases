@@ -9,6 +9,9 @@ alias gco="git checkout"
 alias gs="git status"
 alias gst="git status"
 
+alias ll="ls -l"
+alias la="ls -a -l"
+
 
 alias screen="$SCRIPTS/screen.sh"
 alias z="$LOCK"
