@@ -1,6 +1,6 @@
 [ -z "$PS1" ] && return
 
-eval `dircolors ~/.dircolors`
+eval `dircolors ~/.dircolors 2>/dev/null`
 
 
 # History
