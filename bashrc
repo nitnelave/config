@@ -93,10 +93,12 @@ setprompt
 # Git
 alias g="git"
 alias gi="git"
-alias gits="git"
-alias gt="git"
-alias gu="git"
 alias gut="git"
+alias ga="git add"
+alias gci="git commit"
+alias gco="git checkout"
+alias gs="git status"
+alias gst="git status"
 
 # Maven
 alias mvn-javadoc="mvn clean javadoc:javadoc scm-publish:publish-scm"
@@ -105,20 +107,16 @@ alias mvn-snapshot="mvn clean deploy"
 
 # misc commands
 alias gdb="gdb -q"
-alias eclipse="eclipse > /dev/null 2>&1 &"
 alias ls="ls -phG"
 alias cortune=$HOME/projects/config/cowsay.sh
 alias mkdir="mkdir -pv"
 alias irc="ssh -t nitnelave@server.tolmer.fr \"zsh -c 'tmux attach -t irc'\""
-alias reload="source ~/.zshrc"
+alias reload="source ~/.bashrc"
 alias s="ls"
 alias no="ls"
 alias suspend="sudo pm-suspend"
 alias tax="tar xf"
-alias train="while true; do; clear; sl; sleep 34; sl -l; sleep 26; done;"
 alias v=vim
-alias vs="vim --servername VIM"
-alias va="vim --servername VIM --remote-tab"
 alias vim="stty stop '' -ixoff ; vim"
 alias grep="grep --color=auto"
 
