@@ -1,12 +1,20 @@
 #! /bin/sh
 
+if [ $# -ge 1 ] && [ $1 = "-f" ]
+then
+  FORCE=1
+fi
+
 echo "Loading config folder in ${CONFIG=`dirname $(pwd)/$0`}"
 
 SCRIPTS=${SCRIPTS:-$HOME/scripts}
 
 link () {
+  [ "$FORCE" = "1" ] && rm -rf "$HOME/$2"
   if [ ! -e "$HOME/$2" ] && [ -e "$CONFIG/$1" ]; then
-    ln -s "$CONFIG/$1" "$HOME/$2" && echo "$HOME/$2 --> $CONFIG/$1"
+    mkdir -p `dirname "$HOME/$2"` \
+      && ln -s "$CONFIG/$1" "$HOME/$2" \
+      && echo "$HOME/$2 --> $CONFIG/$1"
   fi
 }
 
@@ -17,6 +25,8 @@ if [ ! -e $SCRIPTS ]; then
 fi
 
 echo "Linking config files..."
+
+[ "$FORCE" = "1" ] && echo "Force mode enabled, recreating links"
 
 link vimrc .vimrc-generic
 link zshrc .zshrc-generic
