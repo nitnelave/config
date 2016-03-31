@@ -149,12 +149,14 @@ if [ -e clang_complete ]; then
   rm -rf clang_complete
 fi
 
-if ! [ -e project ]; then
-  echo "Downloading Project..."
-  wget http://www.vim.org/scripts/download_script.php?src_id=6273 -O project.tar
-  mkdir project
-  (cd project && tar xf ../project.tar)
-  rm project.tar
+if [ -e project ]; then
+  echo "Removing Project..."
+  rm -rf project
+fi
+
+if [ -e DoxygenToolkit.vim ]; then
+  echo "Removing DoxygenToolkit..."
+  rm DoxygenToolkit.vim
 fi
 
 if ! [ -e snipmate ]; then
@@ -181,11 +183,6 @@ fi
 if ! [ -e syntastic ]; then
   echo "Cloning Syntastic..."
   git clone https://github.com/scrooloose/syntastic.git
-fi
-
-if ! [ -e DoxygenToolkit.vim ]; then
-  echo "Downloading DoxygenToolkit..."
-  wget http://www.vim.org/scripts/download_script.php?src_id=14064 -O DoxygenToolkit.vim
 fi
 
 if ! [ -e ctrlp.vim ]; then
@@ -223,30 +220,30 @@ fi
 
 if ! [ -e ftplugin/tex_LatexBox.vim ]; then
   echo "Cloning LatexBox..."
-  wget http://www.vim.org/scripts/download_script.php?src_id=16732 -O /tmp/latex.vmb
-  vim /tmp/latex.vmb +":source % | quit!"
-  rm /tmp/latex.vmb
-  wget -O /tmp/latexSuite.tar.gz http://www.vim.org/scripts/download_script.php?src_id=2535
-  tar xf /tmp/latexSuite.tar.gz
-  mkdir -p $HOME/.vim/dictionaries
-  cp /tmp/ftplugin/latex-suite/dictionaries/dictionary $HOME/.vim/dictionaries/
+  wget http://www.vim.org/scripts/download_script.php?src_id=16732 -O /tmp/latex.vmb \
+   && vim /tmp/latex.vmb +":source % | quit!" \
+   && rm /tmp/latex.vmb \
+   && wget -O /tmp/latexSuite.tar.gz http://www.vim.org/scripts/download_script.php?src_id=2535 \
+   && tar xf /tmp/latexSuite.tar.gz \
+   && mkdir -p $HOME/.vim/dictionaries \
+   && cp /tmp/ftplugin/latex-suite/dictionaries/dictionary $HOME/.vim/dictionaries/
 fi
 
 if ! [ -e ~/.vimperator/colors/vimPgray.vimp ]; then
   mkdir -p ~/.vimperator/colors
-  wget -O ~/.vimperator/colors/vimPgray.vimp   https://raw.githubusercontent.com/livibetter/dotfiles/master/vimperator/colors/vimPgray.vimp
+  wget -O ~/.vimperator/colors/vimPgray.vimp https://raw.githubusercontent.com/livibetter/dotfiles/master/vimperator/colors/vimPgray.vimp
 fi
 
 if ! [ -e ftdetect/markdown.vim ]; then
   echo "Cloning Markdown..."
-  wget http://www.vim.org/scripts/download_script.php?src_id=15150 -O /tmp/markdown.vba.gz
-  (cd /tmp && gzip -d markdown.vba.gz)
-  vim /tmp/markdown.vba +":source % | quit!"
-  patch ~/.vim/syntax/markdown.vim < "$CONFIG/markdown.diff"
+  wget http://www.vim.org/scripts/download_script.php?src_id=15150 -O /tmp/markdown.vba.gz \
+   && (cd /tmp && gzip -d markdown.vba.gz) \
+   && vim /tmp/markdown.vba +":source % | quit!" \
+   && patch ~/.vim/syntax/markdown.vim < "$CONFIG/markdown.diff"
 fi
 
-if ! [ -f "$HOME/.local/bin/thefuck" ]; then
-  pip3 install --user thefuck
+if [ -f "$HOME/.local/bin/thefuck" ]; then
+  pip3 remove --user thefuck
 fi
 
 echo "Configuration successful!"
