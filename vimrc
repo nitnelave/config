@@ -154,6 +154,13 @@ no N 8<Up>
 " Move window
 no H <C-w><C-r>
 
+" For extra capital letter
+command W w
+command Q q
+command Qa qa
+command Wq wq
+command WQ wq
+
 nmap <F11> :!find . -iname '*.c' -o -iname '*.cpp' -o -iname '*.h' -o -iname '*.hpp' > cscope.files<CR>
   \:!cscope -b -i cscope.files -f cscope.out<CR>
   \:cs reset<CR>
