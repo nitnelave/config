@@ -180,6 +180,6 @@ then
 fi
 
 # funny message
-if which cowsay >/dev/null && which fortune >/dev/null; then
+if which cowsay >/dev/null 2>/dev/null && which fortune >/dev/null 2>/dev/null; then
   cortune
 fi

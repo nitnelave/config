@@ -5,21 +5,18 @@ echo "Loading config folder in ${CONFIG=`dirname $(pwd)/$0`}"
 SCRIPTS=${SCRIPTS:-$HOME/scripts}
 
 link () {
-  if ! [ -e "$HOME/$2" ]; then
-    ln -s "$CONFIG/$1" "$HOME/$2"
-    echo "$HOME/$2 --> $CONFIG/$1"
+  if [ ! -e "$HOME/$2" ] && [ -e "$CONFIG/$1" ]; then
+    ln -s "$CONFIG/$1" "$HOME/$2" && echo "$HOME/$2 --> $CONFIG/$1"
   fi
 }
 
-echo "Cloning Scripts repo"
-
 if [ ! -e $SCRIPTS ]; then
-  mkdir -p $SCRIPTS
   echo "Cloning scripts..."
-  (cd $HOME && git clone git@bitbucket.org:nitnelave/scripts.git scripts)
+  mkdir -p "$SCRIPTS"
+  git clone git@bitbucket.org:nitnelave/scripts.git "$SCRIPTS"
 fi
 
-echo "Linking to config files..."
+echo "Linking config files..."
 
 link vimrc .vimrc-generic
 link zshrc .zshrc-generic
@@ -63,7 +60,7 @@ if ! [ -e "$HOME/.xprofile" ]; then
 fi
 
 mkdir -p $HOME/.gnupg
-if ! [ -e "$HOME/.gnupg/pubring.gpg" ]; then
+if ! [ -e "$HOME/.gnupg/pubring.gpg" ] && [ -e "$SCRIPTS/gpg" ]; then
   for i in `ls $SCRIPTS/gpg`; do
     ln -s $SCRIPTS/gpg/$i $HOME/.gnupg/$i
   done
@@ -71,10 +68,7 @@ if ! [ -e "$HOME/.gnupg/pubring.gpg" ]; then
 fi
 
 mkdir -p $HOME/.m2
-if ! [ -e "$HOME/.m2/settings.xml" ]; then
-  ln -s "$SCRIPTS/m2/settings.xml" "$HOME/.m2/settings.xml"
-  echo "$HOME/.m2/settings.xml --> $HOME/scripts/m2/settings.xml"
-fi
+link m2/settings.xml .m2/settings.xml
 
 copy () {
   if ! [ -e $HOME/$2 ]; then
