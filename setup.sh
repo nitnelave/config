@@ -249,7 +249,7 @@ if ! [ -e ftdetect/markdown.vim ]; then
 fi
 
 if [ -f "$HOME/.local/bin/thefuck" ]; then
-  pip3 remove --user thefuck
+  pip3 uninstall -y thefuck || sudo pip3 uninstall -y thefuck
 fi
 
 echo "Configuration successful!"
