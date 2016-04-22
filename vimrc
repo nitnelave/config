@@ -330,6 +330,7 @@ let g:languagetool_jar='$HOME/.vim/LanguageTool/languagetool-commandline.jar'
 
 autocmd BufNewFile,BufRead *.en : set spell spelllang=en_us
 autocmd BufNewFile,BufRead *.fr : set spell spelllang=fr
+autocmd BufNewFile,BufRead *tolmer.fr : set nospell
 
 " Syntastic
 
