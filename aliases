@@ -38,3 +38,13 @@ alias grep="grep --color=auto"
 alias ipython-slides="ipython nbconvert --to slides --post serve"
 
 alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
+
+
+dex ()
+{
+  if [ $# -lt 1 ]; then
+    echo "Usage: dex <container>"
+    return 1
+  fi
+  docker exec -it $1 bash
+}
