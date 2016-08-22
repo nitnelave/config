@@ -455,5 +455,23 @@ endif
 
 " Localvimrc
 
-let g:localvimrc_sandbox=0
-let g:localvimrc_ask=0
+let g:localvimrc_sandbox = 0
+let g:localvimrc_ask = 0
+
+" YouCompleteMe
+
+let g:ycm_confirm_extra_conf = 0
+let g:ycm_server_keep_logfiles = 1
+let g:ycm_seed_identifiers_with_syntax = 1
+let g:ycm_add_preview_to_completeopt = 1
+let g:ycm_autoclose_preview_window_after_completion = 1
+let g:ycm_filepath_completion_use_working_dir = 1
+let g:ycm_key_list_previous_completion = ['<S-TAB>', '<Up>', '<C-PageUp>']
+let g:ycm_global_ycm_extra_conf = '~/.ycm_extra_conf.py'
+if has("patch-7.4.314")
+    set shortmess += c
+endif
+
+" Ultisnips
+
+let g:UltiSnipsExpandTrigger="<C-i>"

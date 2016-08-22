@@ -163,11 +163,23 @@ clone_plugin () {
 
 clone_plugin vim-surround https://github.com/tpope/vim-surround.git
 
-clone_plugin rust.vim "--depth=1 https://github.com/rust-lang/rust.vim.git rust.vim"
+clone_plugin rust.vim --depth=1 https://github.com/rust-lang/rust.vim.git rust.vim
 
 clone_plugin vim-repeat https://github.com/tpope/vim-repeat.git
 
 clone_plugin vim-localvimrc https://github.com/embear/vim-localvimrc.git
+
+clone_plugin ultisnips https://github.com/SirVer/ultisnips.git
+
+if ! [ -e YouCompleteMe ]; then
+    echo "Cloning YouCompleteMe"
+    git clone https://github.com/Valloric/YouCompleteMe.git
+    YCM_FLAGS=--clang-complete
+    if $(which cargo >/dev/null 2>/dev/null); then
+        YCM_FLAGS=$YCM_FLAGS --racer-completer
+    fi
+    (cd YouCompleteMe && ./install.py $YCM_FLAGS )
+fi
 
 cd ..
 
