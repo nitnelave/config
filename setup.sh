@@ -128,8 +128,49 @@ echo "Setting up lesskey..."
 lesskey "$HOME/.lesskey"
 
 echo "Cloning Vim plugins..."
-mkdir -p $HOME/.vim
-cd $HOME/.vim
+mkdir -p $HOME/.vim/bundle
+cd $HOME/.vim/bundle
+
+remove_plugin () {
+    if [ -e $1 ]; then
+      echo "Removing $1"
+      rm -rf $1
+    fi
+}
+
+for plugin in vim-fugitive \
+              AsyncCommand \
+              clang_complete \
+              project \
+              DoxygenToolkit \
+              snipmate \
+              syntastic \
+              ctrlp.vim \
+              ../plugin/supertab.vim \
+              ../plugin/remoteOpen.vim
+do
+    remove_plugin $plugin
+done
+
+clone_plugin () {
+    if ! [ -e $1 ]; then
+      echo "Cloning $1 ..."
+      shift
+      git clone $@
+    fi
+}
+
+
+clone_plugin vim-surround https://github.com/tpope/vim-surround.git
+
+clone_plugin rust.vim "--depth=1 https://github.com/rust-lang/rust.vim.git rust.vim"
+
+clone_plugin vim-repeat https://github.com/tpope/vim-repeat.git
+
+clone_plugin vim-localvimrc https://github.com/embear/vim-localvimrc.git
+
+cd ..
+
 if ! [ -e autoload/pathogen.vim ]; then
   echo "Cloning Pathogen..."
   git clone https://github.com/tpope/vim-pathogen.git
@@ -137,82 +178,6 @@ if ! [ -e autoload/pathogen.vim ]; then
   rm -r vim-pathogen
   rm CONTRIBUTING.markdown README.markdown
 fi
-mkdir -p bundle
-cd bundle
-
-if [ -e vim-fugitive ]; then
-  echo "Removing vim-fugitive"
-  rm -rf vim-fugitive
-fi
-
-if [ -e AsyncCommand ]; then
-  echo "Removing AsyncCommand..."
-  rm -rf AsyncCommand
-fi
-
-if [ -e clang_complete ]; then
-  echo "Removing Clang Complete..."
-  rm -rf clang_complete
-fi
-
-if [ -e project ]; then
-  echo "Removing Project..."
-  rm -rf project
-fi
-
-if [ -e DoxygenToolkit.vim ]; then
-  echo "Removing DoxygenToolkit..."
-  rm DoxygenToolkit.vim
-fi
-
-if ! [ -e snipmate ]; then
-  echo "Cloning Snipmate..."
-  git clone https://github.com/msanders/snipmate.vim.git snipmate
-fi
-
-if ! [ -e vim-surround ]; then
-  echo "Cloning Vim-surround..."
-  git clone https://github.com/tpope/vim-surround.git
-fi
-
-if ! [ -e rust.vim ]; then
-  echo "Cloning Vim-Rust..."
-  git clone --depth=1 https://github.com/rust-lang/rust.vim.git rust.vim
-fi
-
-
-if ! [ -e vim-repeat ]; then
-  echo "Cloning Vim-repeat..."
-  git clone https://github.com/tpope/vim-repeat.git
-fi
-
-if ! [ -e syntastic ]; then
-  echo "Cloning Syntastic..."
-  git clone https://github.com/scrooloose/syntastic.git
-fi
-
-if ! [ -e ctrlp.vim ]; then
-  echo "Downloading ctrlp..."
-  git clone https://github.com/kien/ctrlp.vim.git ctrlp.vim
-fi
-
-if ! [ -e vim-localvimrc ]; then
-  echo "Downloading local-vimrc..."
-  git clone https://github.com/embear/vim-localvimrc.git
-fi
-
-cd ..
-
-if [ -e plugin/supertab.vim ]; then
-  echo "Removing supertab..."
-  rm -rf plugin/supertab.vim
-fi
-
-if [ -e plugin/remoteOpen.vim ]; then
-  echo "Removing remoteOpen..."
-  rm -rf plugin/remoteOpen.vim
-fi
-
 
 if ! [ -e plugin/LanguageTool.vim ]; then
   echo "Cloning LanguageTool..."
@@ -235,10 +200,7 @@ if ! [ -e ftplugin/tex_LatexBox.vim ]; then
    && cp /tmp/ftplugin/latex-suite/dictionaries/dictionary $HOME/.vim/dictionaries/
 fi
 
-if ! [ -e ~/.vimperator/colors/vimPgray.vimp ]; then
-  mkdir -p ~/.vimperator/colors
-  wget -O ~/.vimperator/colors/vimPgray.vimp https://raw.githubusercontent.com/livibetter/dotfiles/master/vimperator/colors/vimPgray.vimp
-fi
+remove_plugin "~/.vimperator/colors/vimPgray.vimp"
 
 if ! [ -e ftdetect/markdown.vim ]; then
   echo "Cloning Markdown..."
