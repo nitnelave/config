@@ -170,6 +170,10 @@ $PR_NO_COLOUR '
 
 setprompt
 
+fpath=(~/.zsh/completion $fpath)
+
+autoload -Uz compinit && compinit -i
+
 ttyctl -f
 
 source ~/.aliases
