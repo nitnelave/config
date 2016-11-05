@@ -1,0 +1,50 @@
+// Left and right handed dvorak layouts
+// by sqweek <sqweek@gmail.com> 2006-01-30
+// Based on the corresponding layouts in the console-tools package.
+partial alphanumeric_keys
+xkb_symbols "local" {
+
+    name[Group1]= "English (Programmer Dvorak custom)";
+
+    include "us(dvp)"
+
+    // symbols row, left side
+    key <TLDE> { [ dollar, asciitilde, EuroSign ] };
+    key <AE01> { [ ampersand, 7 ] };
+    key <AE02> { [ bracketleft, 5 ] };
+    key <AE03> { [ braceleft, 3, uacute, Uacute ] };
+    key <AE04> { [ parenleft, 1 ] };
+    key <AE05> { [ equal, 9 ] };
+
+    // symbols row, right side
+    key <AE06> { [ asterisk, 0 ] };
+    key <AE07> { [ parenright, 2 ] };
+    key <AE08> { [ braceright, 4 ] };
+    key <AE09> { [ bracketright, 6 ] };
+    key <AE10> { [ plus, 8, degree ] };
+    key <AE11> { [ exclam, percent, exclamdown ] }; // reversed exclam
+    key <AE12> { [ numbersign, grave ] };
+    key <BKSP> { [ BackSpace, BackSpace ] };
+
+    key <AD01> { [ semicolon, colon, adiaeresis, Adiaeresis ] };
+    key <AD02> { [ comma, less, ediaeresis, Ediaeresis ] };
+    key <AD03> { [ period, greater, ecircumflex, Ecircumflex	] };
+    key <AD04> { [ p, P, udiaeresis, Udiaeresis ] };
+    key <AD05> { [ y, Y, idiaeresis, Idiaeresis ] };
+    key <AD08> { [ c, C, ccedilla, Ccedilla ] };
+    key <AD11> { [ slash, question, questiondown ] };
+
+    key <AC01> { [ a, A, agrave, Agrave ] };
+    key <AC02> { [ o, O, ocircumflex, Ocircumflex ] };
+    key <AC03> { [ e, E, eacute, Eacute ] };
+    key <AC04> { [ u, U, ugrave, Ugrave ] };
+    key <AC05> { [ i, I, icircumflex, Icircumflex ] };
+    key <AC09> { [ n, N, ntilde, Ntilde ] };
+
+    key <AB01> { [ apostrophe, quotedbl, acircumflex, Acircumflex ] };
+    key <AB02> { [ q, Q, odiaeresis, Odiaeresis ] };
+    key <AB03> { [ j, J, egrave, Egrave ] };
+    key <AB04> { [ k, K, ucircumflex, Ucircumflex ] };
+
+    include "level3(ralt_switch)"
+};
