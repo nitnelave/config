@@ -28,7 +28,7 @@ floating_modifier $mod
 bindsym $mod+Return exec $term
 
 
-bindsym $mod+w exec firefox
+bindsym $mod+w exec google-chrome
 
 # kill focused window
 bindsym $mod+Shift+semicolon kill
