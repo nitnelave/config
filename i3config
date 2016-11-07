@@ -145,8 +145,9 @@ new_window 1pixel
 
 assign [class="Iceweasel"] 4
 assign [class="Firefox"] 4
+assign [class="Google-chrome"] 4
 
-exec firefox
+exec google-chrome
 exec $term
 
 bindsym $mod+l exec i3lock -e -i ~/.i3/lock_screen.png && xset dpms force off
