@@ -466,7 +466,6 @@ let g:ycm_seed_identifiers_with_syntax = 1
 let g:ycm_add_preview_to_completeopt = 1
 let g:ycm_autoclose_preview_window_after_completion = 1
 let g:ycm_filepath_completion_use_working_dir = 1
-let g:ycm_key_list_previous_completion = ['<S-TAB>', '<Up>', '<C-PageUp>']
 if !exists('g:ycm_global_ycm_extra_conf')
   let g:ycm_global_ycm_extra_conf = '~/.ycm_extra_conf.py'
 endif
@@ -474,6 +473,12 @@ if has("patch-7.4.314")
     set shortmess+=c
 endif
 
-" Ultisnips
+" make YCM compatible with UltiSnips (using supertab)
+let g:ycm_key_list_select_completion = ['<C-n>', '<Down>']
+let g:ycm_key_list_previous_completion = ['<C-p>', '<Up>']
+let g:SuperTabDefaultCompletionType = '<C-n>'
 
-let g:UltiSnipsExpandTrigger="<C-i>"
+" better key bindings for UltiSnipsExpandTrigger
+let g:UltiSnipsExpandTrigger = "<tab>"
+let g:UltiSnipsJumpForwardTrigger = "<tab>"
+let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"

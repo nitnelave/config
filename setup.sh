@@ -146,7 +146,6 @@ for plugin in vim-fugitive \
               snipmate \
               syntastic \
               ctrlp.vim \
-              ../plugin/supertab.vim \
               ../plugin/remoteOpen.vim
 do
     remove_plugin $plugin
@@ -160,6 +159,7 @@ clone_plugin () {
     fi
 }
 
+clone_plugin supertab https://github.com/ervandew/supertab.git
 
 clone_plugin vim-surround https://github.com/tpope/vim-surround.git
 
@@ -170,6 +170,8 @@ clone_plugin vim-repeat https://github.com/tpope/vim-repeat.git
 clone_plugin vim-localvimrc https://github.com/embear/vim-localvimrc.git
 
 clone_plugin ultisnips https://github.com/SirVer/ultisnips.git
+
+clone_plugin vim-snippets https://github.com/honza/vim-snippets.git
 
 if ! [ -e YouCompleteMe ]; then
     echo "Cloning YouCompleteMe"
