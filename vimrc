@@ -266,7 +266,9 @@ autocmd BufWritePre /tmp/mutt-* :%s/\v^--$/-- /e
 "autocmd BufReadPre *.{c,cc,h,hh,cpp,hxx} match over80 /\%80v.\+/
 
 
+augroup Guards
 autocmd BufNewFile *.{h,hh,hpp} execute "normal! i#pragma once \n\n"
+augroup END
 
 function! s:insert_shebang()
   execute "normal! i#! /bin/sh\n\n"
