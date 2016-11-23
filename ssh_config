@@ -7,3 +7,7 @@ Host *
 Host server
     HostName 144.76.57.52
     User nitnelave
+
+Host workstation
+    HostName vtolmer.zrh.corp.google.com
+    User vtolmer
