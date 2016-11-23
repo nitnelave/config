@@ -97,6 +97,12 @@ copy zshrc .zshrc
 copy bashrc .bashrc
 copy vimrc .vimrc
 
+if ! [ -e $HOME/.urxvt/ext/font-size ]; then
+  echo "Getting urxvt configuration"
+  mkdir -p $HOME/.urxvt/ext
+  wget https://raw.githubusercontent.com/majutsushi/urxvt-font-size/master/font-size -O $HOME/.urxvt/ext/font-size
+fi
+
 if ! [ -e "$HOME/.xstart" ]; then
   echo ". ./.xstart-generic" > "$HOME/.xstart"
 fi

@@ -11,8 +11,20 @@ urxvt*background: #101010
 
 urxvt*url-launcher: firefox
 Uxxvt.matcher.button:   0
-URxvt.perl-ext-common:  default,matcher
+
+URxvt.iso14755: false
+URxvt.iso14755_52: false
+URxvt.perl-ext-common:  default,matcher,font-size
 URxvt.colorUL: #1E90FF
+
+URxvt.keysym.C-Up:     perl:font-size:increase
+URxvt.keysym.C-Down:   perl:font-size:decrease
+URxvt.keysym.C-S-Up:   perl:font-size:incsave
+URxvt.keysym.C-S-Down: perl:font-size:desave
+URxvt.keysym.C-equal:  perl:font-size:reset
+URxvt.keysym.C-slash:  perl:font-size:show
+
+URxvt.font-size.step: 2
 
 ! Normal
 ! color0    black
