@@ -1,0 +1,17 @@
+[interfaces]
+gnome=false
+kde=false
+freedesktop=false
+
+[lock]
+cmd=/usr/bin/i3lock -c 000000
+onidle=true
+idletime=5
+idleunit=min
+onlidclose=true
+onsleep=true
+check_fullscreen=true
+check_fullscreen_path=/home/vtolmer/projects/config/scripts/check_video.sh
+
+[unlock]
+allow=true

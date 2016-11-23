@@ -43,6 +43,7 @@ link Xdefaults .Xdefaults
 link oh-my-zsh .oh-my-zsh
 link lesskey .lesskey
 link ssh_config .ssh/config
+link autolockd .autolockd
 
 link vim/ftplugin .vim/ftplugin
 link vim/cheat40.txt .vim/cheat40.txt
