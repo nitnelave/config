@@ -20,11 +20,13 @@ URxvt.colorUL: #1E90FF
 URxvt.keysym.C-Up:     perl:font-size:increase
 URxvt.keysym.C-Down:   perl:font-size:decrease
 URxvt.keysym.C-S-Up:   perl:font-size:incsave
-URxvt.keysym.C-S-Down: perl:font-size:desave
+URxvt.keysym.C-S-Down: perl:font-size:decsave
 URxvt.keysym.C-equal:  perl:font-size:reset
 URxvt.keysym.C-slash:  perl:font-size:show
 
-URxvt.font-size.step: 2
+URxvt.font-size.step: 1
+
+URxvt.font:     xft:bitstream vera sans mono:size=16:antialias=true
 
 ! Normal
 ! color0    black
