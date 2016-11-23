@@ -47,6 +47,7 @@ link oh-my-zsh .oh-my-zsh
 link "vim/RainbowParenthesis.vim" ".vim/plugin/RainbowParenthesis.vim"
 link lesskey .lesskey
 link ssh_config .ssh/config
+link autolockd .autolockd
 
 link vim/ftplugin .vim/ftplugin
 link vim/ycm_extra_conf.py .vim/.ycm_extra_conf.py
