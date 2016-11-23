@@ -173,11 +173,6 @@ ttyctl -f
 source ~/.aliases
 alias reload="source ~/.zshrc"
 
-if [ -f "$HOME/.local/bin/thefuck" ]
-then
-  export PATH="$PATH:$HOME/.local/bin/"
-  eval `~/.local/bin/thefuck --alias`
-fi
 export PATH=$PATH:~/projects/config/bin
 
 # funny message
