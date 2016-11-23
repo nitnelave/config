@@ -12,5 +12,5 @@ display () {
   done
 }
 
-SCREENS=`xrandr | grep -E " connected (primary )?[1-9]+" | sed -e "s/\([A-Z0-9]\+\) connected.*/\1/"`
+SCREENS=`xrandr | grep -E " connected (primary )?" | sed -e "s/\([A-Z0-9]\+\) connected.*/\1/"`
 display $SCREENS
