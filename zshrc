@@ -178,6 +178,7 @@ then
   export PATH="$PATH:$HOME/.local/bin/"
   eval `~/.local/bin/thefuck --alias`
 fi
+export PATH=$PATH:~/projects/config/bin
 
 # funny message
 if which cowsay >/dev/null 2>/dev/null && which fortune >/dev/null 2>/dev/null; then

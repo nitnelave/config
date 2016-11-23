@@ -18,12 +18,6 @@ link () {
   fi
 }
 
-if [ ! -e $SCRIPTS ]; then
-  echo "Cloning scripts..."
-  mkdir -p "$SCRIPTS"
-  git clone git@bitbucket.org:nitnelave/scripts.git "$SCRIPTS"
-fi
-
 echo "Linking config files..."
 
 [ "$FORCE" = "1" ] && echo "Force mode enabled, recreating links"
