@@ -19,3 +19,7 @@ Host bratislava
 Host lrde
     HostName ssh.lrde.epita.fr
     User vtolmer
+
+Host workstation
+    HostName vtolmer.zrh.corp.google.com
+    User vtolmer
