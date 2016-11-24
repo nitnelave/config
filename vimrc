@@ -20,11 +20,10 @@ set autowrite
 
 set nobackup
 
-" Hide buffers instead of closing them
-set hidden
+" Don't hide buffers instead of closing them
+set nohidden
 
 " Set the time (in milliseconds) spent idle until various actions occur
-" In this configuration, it is particularly useful for the tagbar plugin
 set updatetime=500
 
 " Make backspace behave as expected
@@ -136,6 +135,8 @@ cnoremap %s %s/\v
 " Toggle paste mode
 noremap <leader>pp :setlocal paste!<cr>
 
+xnoremap p "_dP
+
 " Dvorak mappings
 " Move between rows in wrapped lines
 no t gj
@@ -161,16 +162,6 @@ command Qa qa
 command Wq wq
 command WQ wq
 
-nmap <F11> :!find . -iname '*.c' -o -iname '*.cpp' -o -iname '*.h' -o -iname '*.hpp' > cscope.files<CR>
-  \:!cscope -b -i cscope.files -f cscope.out<CR>
-  \:cs reset<CR>
-
-noremap cs cl
-
-" VCSN
-
-map <c-y> 0df:dwi* <Esc>A: Here.<Esc>t0
-vmap <c-y> :normal <c-y><CR>
 
 " Yank from cursor to end of line, to be consistent with C and D
 nnoremap Y y$
@@ -249,21 +240,12 @@ noremap <C-T> :call MoveToPrevTab()<CR>
 noremap <C-N> :call MoveToNextTab()<CR>
 cab tn tabnew
 
-" Enter remap
-autocmd CmdwinEnter * nnoremap <CR> <CR>
-autocmd BufReadPost quickfix nnoremap <CR> <CR>
-nnoremap <CR> o<Esc>
 nnoremap <Space> i<Space><Esc>
 
-
-nnoremap <C-R> "_diwP
 
 autocmd BufWritePre * if &ft!="markdown"|:%s/\v\s+$//e|endif
 autocmd BufWritePre .{article,letter,followup} :%s/\v^--$/-- /e
 autocmd BufWritePre /tmp/mutt-* :%s/\v^--$/-- /e
-
-"highlight over80 ctermbg=red
-"autocmd BufReadPre *.{c,cc,h,hh,cpp,hxx} match over80 /\%80v.\+/
 
 
 augroup Guards
@@ -274,13 +256,6 @@ function! s:insert_shebang()
   execute "normal! i#! /bin/sh\n\n"
 endfunction
 autocmd BufNewFile *.sh call <SID>insert_shebang()
-
-function! s:insert_include()
-  if expand("%:t") != "test.cc" && expand("%:t") != "main.cc"
-      execute "normal! i#include \"" . substitute(substitute(expand("%:t"), "\\.cc$", ".hh", ""), "\\.c$", ".h", "") . "\"\n\n"
-  endif
-endfunction
-autocmd BufNewFile *.{c,cc} call <SID>insert_include()
 
 set list
 set listchars=tab:>-,trail:.
@@ -328,84 +303,13 @@ cab fpdf call g:FromPDF()
 
 set nofoldenable
 
-let g:languagetool_jar='$HOME/.vim/LanguageTool/languagetool-commandline.jar'
-
 autocmd BufNewFile,BufRead *.en : set spell spelllang=en_us
 autocmd BufNewFile,BufRead *.fr : set spell spelllang=fr
 autocmd BufNewFile,BufRead *tolmer.fr : set nospell
 
-" Syntastic
-
-highlight SyntasticErrorSign guifg=white ctermbg=black
-highlight SyntasticError gui=underline ctermbg=black
-highlight SyntasticErrorLine gui=underline ctermbg=black
-let g:syntastic_check_on_open = 0
-let g:syntastic_aggregate_errors = 1
-let g:syntastic_auto_loc_list = 1
-" let g:syntastic_stl_format = '[%E{Err(%e): %fe}%B{, }%W{Warn(%w): %fw}]'
-let g:syntastic_mode_map = { 'mode': 'passive',
-      \ 'active_filetypes': [],
-      \ 'passive_filetypes': [] }
-
-
-let g:syntastic_cpp_check_header = 1
-let g:syntastic_cpp_remove_include_errors = 0
-let g:syntastic_cpp_config_file = ".syntastic_config"
-let g:syntastic_cpp_compiler = 'g++'
-let g:syntastic_cpp_compiler_options = ' -std=c++11'
-let g:syntastic_cpp_checkers = [ 'gcc', 'moulinette' ]
-
-let g:syntastic_c_check_header = 1
-let g:syntastic_c_remove_include_errors = 1
-let g:syntastic_c_config_file = ".syntastic_config"
-let g:syntastic_c_compiler = 'gcc'
-let g:syntastic_c_checkers = [ 'gcc', 'moulinette' ]
-
 noremap <C-W> :lnext<CR>
 noremap <C-C> :lprev<CR>
 
-command! Moulinette let b:moulinette_ignore=0
-command! NoMoulinette let b:moulinette_ignore=1
-cab mou Moulinette
-cab nomou NoMoulinette
-let b:moulinette_ignore=1
-
-command! Complete let b:complete_ignore=0
-command! NoComplete let b:complete_ignore=1
-cab comp Complete
-cab nocomp NoComplete
-
-
-" Project
-
-let g:proj_flags = "cgist"
-
-let g:proj_window_width = 40
-
-" Fugitive
-
-cab gci Gcommit
-cab gdi Gdiff
-cab gbl Gblame
-cab grm Gremove
-cab git Git
-cab ged Gedit
-cab gsp Gsplit
-cab gvs Gvsplit
-
-" Doxygen toolkit
-
-let g:DoxygenToolkit_startCommentTag	= "/**"
-let g:DoxygenToolkit_interCommentTag	= "** "
-let g:DoxygenToolkit_briefTag_pre	= "@brief "
-let g:DoxygenToolkit_paramTag_pre	= "@param "
-let g:DoxygenToolkit_returnTag	= "@return "
-let g:DoxygenToolkit_fileTag		= "@file "
-let g:DoxygenToolkit_authorTag	= "@author "
-let g:DoxygenToolkit_dateTag		= "@date "
-let g:DoxygenToolkit_blockTag		= "@name "
-let g:DoxygenToolkit_classTag		= "@class "
-let g:DoxygenToolkit_cinoptions	= "c0,C1"
 
 if filereadable("~/.vim/plugin/RainbowParenthesis.vim")
   source ~/.vim/plugin/RainbowParenthesis.vim
@@ -428,8 +332,6 @@ function! g:AccentsToLatex()
 endfunction
 
 cab accents call g:AccentsToLatex()
-
-au BufRead /tmp/mutt-* set tw=72
 
 " LatexBox
 
