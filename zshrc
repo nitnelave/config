@@ -55,7 +55,9 @@ bindkey "^[[B" history-search-forward
 bindkey "^N" up-line-or-beginning-search
 bindkey "^T" down-line-or-beginning-search
 bindkey "^_" beginning-of-line
+bindkey "^a" beginning-of-line
 bindkey "^[^_" end-of-line
+bindkey "^e" end-of-line
 bindkey "^H" backward-word
 bindkey "^S" forward-word
 bindkey "^?" backward-delete-char
