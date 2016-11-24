@@ -401,6 +401,8 @@ let g:ctrlp_prompt_mappings = {
       \ 'PrtCurLeft()':         ['<left>', '<c-^>'],
       \ 'AcceptSelection("h")': ['<c-x>', '<c-cr>'],
       \ 'AcceptSelection("t")': [],
+      \ 'PrtDeleteWord()':      ['<c-g>'],
+      \ 'PrtExit()':            ['<esc>'],
       \ }
 
 
