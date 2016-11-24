@@ -370,12 +370,23 @@ let g:ycm_seed_identifiers_with_syntax = 1
 let g:ycm_add_preview_to_completeopt = 1
 let g:ycm_autoclose_preview_window_after_completion = 1
 let g:ycm_filepath_completion_use_working_dir = 1
+let g:ycm_always_populate_location_list = 1
 if !exists('g:ycm_global_ycm_extra_conf')
   let g:ycm_global_ycm_extra_conf = '~/.ycm_extra_conf.py'
 endif
 if has("patch-7.4.314")
     set shortmess+=c
 endif
+
+nnoremap <F5> :YcmForceCompileAndDiagnostics<CR>
+nnoremap <C-y>f :call YcmCompleter Fixit
+nnoremap <C-y>h :call YcmCompleter GoToInclude
+nnoremap <C-y>g :call YcmCompleter GoTo
+nnoremap <C-y>r :call YcmCompleter GoToReferences
+nnoremap <C-y>i :call YcmCompleter GoToImplementationElseDeclaration
+nnoremap <C-y>t :call YcmCompleter GetType
+nnoremap <C-y>n :call YcmCompleter RefactorRename
+nnoremap <C-y>n :call YcmCompleter GetDoc
 
 " make YCM compatible with UltiSnips (using supertab)
 let g:ycm_key_list_select_completion = ['<C-n>', '<Down>']
