@@ -339,24 +339,6 @@ let g:LatexBox_latexmk_options = "-pvc -pdfps"
 au FileType * exec("setlocal dictionary+=".$HOME."/.vim/dictionaries/".expand('<amatch>'))
 set complete+=k
 
-" Ctrl-P
-
-let g:ctrlp_tabpage_position = 'ca'
-let g:ctrlp_root_markers = ['.vimrc']
-let g:ctrlp_max_depth = 10
-let g:ctrlp_open_new_file = 'v'
-let g:ctrlp_open_multiple_files = 'vj'
-
-noremap <C-e> <C-p>
-
-if executable('ag')
-  " Use Ag over Grep
-  set grepprg=ag\ --nogroup\ --nocolor
-
-  " Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
-  let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
-endif
-
 " Localvimrc
 
 let g:localvimrc_sandbox = 0
@@ -397,3 +379,43 @@ let g:SuperTabDefaultCompletionType = '<C-n>'
 let g:UltiSnipsExpandTrigger = "<tab>"
 let g:UltiSnipsJumpForwardTrigger = "<tab>"
 let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
+
+" Ctrl-P
+let g:ctrlp_working_path_mode = 0
+let g:ctrlp_default_input = 1
+let g:ctrlp_tabpage_position = 'ca'
+let g:ctrlp_root_markers = ['.vimrc']
+let g:ctrlp_open_new_file = 'v'
+let g:ctrlp_open_multiple_files = 'vj'
+let g:ctrlp_clear_cache_on_exit = 0
+let g:ctrlp_switch_buffer = 'EV'
+let g:ctrlp_match_func = { 'match': 'pymatcher#PyMatch' }
+
+let g:ctrlp_prompt_mappings = {
+      \ 'PrtSelectMove("j")':   ['<c-t>', '<down>'],
+      \ 'PrtSelectMove("k")':   ['<c-n>', '<up>'],
+      \ 'PrtCurStart()':        ['<c-a>', '<Home>', '<kHome>'],
+      \ 'PrtCurEnd()':          ['<c-e>', '<End>', '<kEnd>'],
+      \ 'PrtHistory(-1)':       ['<c-c>'],
+      \ 'PrtHistory(1)':        ['<c-w>'],
+      \ 'PrtCurLeft()':         ['<left>', '<c-^>'],
+      \ 'AcceptSelection("h")': ['<c-x>', '<c-cr>'],
+      \ 'AcceptSelection("t")': [],
+      \ }
+
+
+if executable('ag')
+  " Use Ag over Grep
+  set grepprg=ag\ --nogroup\ --nocolor
+
+  " Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
+  let g:ctrlp_user_command = 'ag %s -i --nocolor --nogroup --hidden
+        \ --ignore .git
+        \ --ignore .svn
+        \ --ignore .hg
+        \ --ignore .DS_Store
+        \ --ignore "**/*.pyc"
+        \ --ignore .git5_specs
+        \ --ignore review
+        \ -g ""'
+endif

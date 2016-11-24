@@ -145,7 +145,6 @@ for plugin in vim-fugitive \
               DoxygenToolkit \
               snipmate \
               syntastic \
-              ctrlp.vim \
               ../plugin/remoteOpen.vim
 do
     remove_plugin $plugin
@@ -172,6 +171,10 @@ clone_plugin vim-localvimrc https://github.com/embear/vim-localvimrc.git
 clone_plugin ultisnips https://github.com/SirVer/ultisnips.git
 
 clone_plugin vim-snippets https://github.com/honza/vim-snippets.git
+
+clone_plugin ctrlp.vim https://github.com/ctrlpvim/ctrlp.vim.git
+
+clone_plugin ctrlp-py-matcher https://github.com/FelikZ/ctrlp-py-matcher
 
 if ! [ -e YouCompleteMe ]; then
     echo "Cloning YouCompleteMe"
