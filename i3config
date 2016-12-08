@@ -171,6 +171,11 @@ bindsym XF86AudioMicMute exec pactl set-source-mute @DEFAULT_SOURCE@ toggle && k
 bindsym XF86MonBrightnessDown exec --no-startup-id /usr/bin/xbacklight -dec 10
 bindsym XF86MonBrightnessUp exec --no-startup-id /usr/bin/xbacklight -inc 10
 
+# Media
+bindsym XF86AudioPlay exec clementine -t
+bindsym XF86AudioPause exec clementine -t
+bindsym XF86AudioNext exec clementine -f
+bindsym XF86AudioPrev exec clementine -r
 
 
 workspace_auto_back_and_forth yes
