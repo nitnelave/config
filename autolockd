@@ -4,7 +4,7 @@ kde=false
 freedesktop=false
 
 [lock]
-cmd=/usr/bin/i3lock -c 000000
+cmd=/usr/bin/i3lock -i ~/.i3/lock_screen.png
 onidle=true
 idletime=5
 idleunit=min
