@@ -1,9 +1,7 @@
 source $HOME/.zshrc-generic
 alias shutdown="sudo shutdown -hP now"
 alias suspend="gnome-screensaver-command -l"
-alias aquarium=asciiquarium
 alias ls="ls -phG --color"
-alias jogsoul="$SCRIPTS/jogsoul.pl"
 
 xmodmap $HOME/.Xmodmap
 
