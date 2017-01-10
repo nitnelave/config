@@ -150,7 +150,7 @@ assign [class="Google-chrome"] 4
 exec google-chrome
 exec $term
 
-bindsym $mod+l exec i3lock -c 000000 && xset dpms force off
+bindsym $mod+l exec i3lock -c 000000 -i ~/.i3/lock_screen.png && xset dpms force off
 
 exec --no-startup-id ~/projects/config/locker &
 
