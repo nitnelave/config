@@ -22,6 +22,7 @@
 	cont = rebase --continue
         graph = log --graph --pretty=oneline
         all = log --graph --pretty=oneline --all
+        lm = "!git lga | head -n $(git lga | grep -n refs/heads/master | cut -d : -f 1) | less"
 
 
 [core]
