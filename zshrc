@@ -167,10 +167,7 @@ $PR_NO_COLOUR '
 
 setprompt
 
-
-
 ttyctl -f
-
 
 source ~/.aliases
 alias reload="source ~/.zshrc"
