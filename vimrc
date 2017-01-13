@@ -360,6 +360,8 @@ endfunction
 
 cab accents call g:AccentsToLatex()
 
+vnoremap f :ClangFormat<CR>
+
 " LatexBox
 
 let g:LatexBox_latexmk_options = "-pvc -pdfps"
