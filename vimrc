@@ -156,11 +156,11 @@ no N 8<Up>
 no H <C-w><C-r>
 
 " For extra capital letter
-command W w
-command Q q
-command Qa qa
-command Wq wq
-command WQ wq
+command! W w
+command! Q q
+command! Qa qa
+command! Wq wq
+command! WQ wq
 
 
 " Yank from cursor to end of line, to be consistent with C and D
