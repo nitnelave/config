@@ -1,13 +1,13 @@
 # Git
 
 alias g="git"
-alias gi="git"
-alias gut="git"
-alias ga="git add"
-alias gci="git commit"
-alias gco="git checkout"
-alias gs="git status"
-alias gst="git status"
+alias gi="g"
+alias gut="g"
+alias ga="g add"
+alias gci="g commit"
+alias gco="g checkout"
+alias gs="g status"
+alias gst="g status"
 
 alias ll="ls -l"
 alias la="ls -a -l"
