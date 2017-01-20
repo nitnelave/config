@@ -68,3 +68,4 @@ urxvt*color15:    #e2e2e2
 
 urxvt*scollbar: false
 urxvt*saveLines: 5000
+urxvt*urgentOnBell:       true
