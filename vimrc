@@ -383,7 +383,7 @@ let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
 " Ctrl-P
 let g:ctrlp_working_path_mode = 0
 let g:ctrlp_default_input = 1
-let g:ctrlp_tabpage_position = 'ca'
+let g:ctrlp_tabpage_position = 'wac'
 let g:ctrlp_root_markers = ['.vimrc']
 let g:ctrlp_open_new_file = 'v'
 let g:ctrlp_open_multiple_files = 'vj'
