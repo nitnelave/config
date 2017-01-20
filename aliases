@@ -1,6 +1,6 @@
 # Git
 
-alias g="git5.sh"
+alias g="git"
 alias gi="g"
 alias gut="g"
 alias ga="g add"

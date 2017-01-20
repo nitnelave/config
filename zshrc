@@ -31,9 +31,6 @@ setopt +o nomatch
 
 source $ZSH/oh-my-zsh.sh
 
-# Make 'g' completion same as git
-compdef _git git5.sh=git
-
 # Completion
 zstyle ':completion:*' insert-unambiguous true
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
