@@ -44,6 +44,9 @@ chmox ()
   chmod +x "$@"
 }
 
+alias turffy='turing && spiffy'
+alias spitur='spiffy && turing'
+
 dex ()
 {
   if [ $# -lt 1 ]; then
