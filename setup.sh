@@ -176,6 +176,8 @@ clone_plugin ctrlp.vim https://github.com/ctrlpvim/ctrlp.vim.git
 
 clone_plugin ctrlp-py-matcher https://github.com/FelikZ/ctrlp-py-matcher
 
+clone_plugin vim-paste-easy https://github.com/roxma/vim-paste-easy.git
+
 if ! [ -e YouCompleteMe ]; then
     echo "Cloning YouCompleteMe"
     git clone https://github.com/Valloric/YouCompleteMe.git
