@@ -41,6 +41,9 @@ alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo
 
 alias turing='(export CL=$(g5 status 2>/dev/null | grep -E "CL [0-9]{9}" | sed -E "s/.*CL ([0-9]{9}).*/\1/") && cd /google/src/cloud/vtolmer/furball/google3 && quality/genie/gina/eval/turing/turing.sh --cl $CL)'
 
+alias turffy='turing && spiffy'
+alias spitur='spiffy && turing'
+
 dex ()
 {
   if [ $# -lt 1 ]; then
