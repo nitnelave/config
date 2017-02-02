@@ -23,3 +23,6 @@ Host lrde
 Host workstation
     HostName vtolmer.zrh.corp.google.com
     User vtolmer
+
+Match host *.corp.google.com
+  ProxyCommand corp-ssh-helper %h %p
