@@ -10,11 +10,11 @@ xkb_symbols "local" {
 
     // symbols row, left side
     key <TLDE> { [ dollar, asciitilde, EuroSign ] };
-    key <AE01> { [ ampersand, 7 ] };
-    key <AE02> { [ bracketleft, 5 ] };
-    key <AE03> { [ braceleft, 3, uacute, Uacute ] };
-    key <AE04> { [ parenleft, 1 ] };
-    key <AE05> { [ equal, 9 ] };
+    key <AE01> { [ ampersand, 7, aacute, Aacute ] };
+    key <AE02> { [ bracketleft, 5, oacute, Oacute ] };
+    key <AE03> { [ braceleft, 3 ] };
+    key <AE04> { [ parenleft, 1, uacute, Uacute ] };
+    key <AE05> { [ equal, 9, iacute, Iacute ] };
 
     // symbols row, right side
     key <AE06> { [ asterisk, 0 ] };
