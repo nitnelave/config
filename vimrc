@@ -307,10 +307,6 @@ autocmd BufNewFile,BufRead *.en : set spell spelllang=en_us
 autocmd BufNewFile,BufRead *.fr : set spell spelllang=fr
 autocmd BufNewFile,BufRead *tolmer.fr : set nospell
 
-noremap <C-W> :lnext<CR>
-noremap <C-C> :lprev<CR>
-
-
 if filereadable("~/.vim/plugin/RainbowParenthesis.vim")
   source ~/.vim/plugin/RainbowParenthesis.vim
 endif
