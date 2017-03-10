@@ -2,14 +2,15 @@
         t = status
         st = status
         ri = rebase --interactive --autosquash
-	d = difftool
-	co = checkout
-	br = branch
+        d = difftool
+        co = checkout
+        br = branch
         df = diff
         dc = diff --cached
-	ci = commit
+        ds = diff --stat
+        ci = commit
         ca = commit --amend
-	pop = stash pop
+        pop = stash pop
         poop = stash pop
         punch = push
         prune-all = !git remote | xargs -n 1 git remote prune
@@ -19,7 +20,7 @@
         aliases = !git config --get-regexp 'alias.*' | colrm 1 6 | sed 's/[ ]/ = /'
         lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
         lga = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative --all
-	cont = rebase --continue
+        cont = rebase --continue
         graph = log --graph --pretty=oneline
         all = log --graph --pretty=oneline --all
         lm = "!git lga | head -n $(git lga | grep -n refs/heads/master | cut -d : -f 1) | less"
@@ -27,36 +28,36 @@
 
 [core]
         excludesfile = ~/.gitignore
-	editor = vim
+        editor = vim
 [user]
-	name = Valentin Tolmer
-	email = valentin.tolmer@gmail.com
+        name = Valentin Tolmer
+        email = valentin.tolmer@gmail.com
 
 [sendemail]
         smtpserver = imap.googlemail.com
-	smtpuser = nitnelave1@gmail.com
+        smtpuser = nitnelave1@gmail.com
         smtpencryption = tls
         smtpserverport  = 587
-	confirm = auto
+        confirm = auto
 [sendemail "akim"]
-	to = akim@lrde.epita.fr
-	from = Valentin Tolmer <nitnelave1@gmail.com>
+        to = akim@lrde.epita.fr
+        from = Valentin Tolmer <nitnelave1@gmail.com>
 [sendemail "bison"]
         to = bison-patches@gnu.org
         from = Valentin Tolmer <nitnelave1@gmail.com>
 [merge]
-	summary = true
+        summary = true
 [diff]
-	tool = vimdiff
+        tool = vimdiff
 [difftool]
-	prompt = false
+        prompt = false
 [color]
-	ui = true
+        ui = true
 [log]
-	decorate = full
+        decorate = full
 [help]
-	autocorrect = 1
+        autocorrect = 1
 [push]
-	default = current
+        default = current
 [pull]
-	rebase = true
+        rebase = true
