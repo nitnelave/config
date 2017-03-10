@@ -26,6 +26,9 @@ COMPLETION_WAITING_DOTS="true"
 # Example format: plugins=(rails git textmate ruby lighthouse)
 plugins=(git git-extras ssh-agent docker)
 
+# If a glob has no match, leave as-is
+setopt +o nomatch
+
 source $ZSH/oh-my-zsh.sh
 
 # Completion
@@ -103,8 +106,8 @@ function precmd {
   fi
 
   # Put the colors back
-  ZSH_THEME_GIT_PROMPT_PREFIX="(on %{$fg[white]%}"
-  ZSH_THEME_GIT_PROMPT_SUFFIX=")%{$reset_color%}"
+  ZSH_THEME_GIT_PROMPT_PREFIX="$fg[blue]($fg[magenta]on %{$fg[white]%}"
+  ZSH_THEME_GIT_PROMPT_SUFFIX="$fg[blue])%{$reset_color%}"
   ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[red]%}!"
   ZSH_THEME_GIT_PROMPT_UNTRACKED="%{$fg[green]%}?"
 }
@@ -157,7 +160,7 @@ $PR_CYAN$PR_SHIFT_IN$PR_ULCORNER$PR_BLUE$PR_HBAR$PR_SHIFT_OUT(\
 $PR_GREEN%$PR_PWDLEN<...<%~%<<$PR_BLUE)$PR_SHIFT_IN\
 $PR_HBAR$PR_HBAR${(e)PR_FILLBAR}$PR_BLUE$PR_HBAR$PR_SHIFT_OUT\
 $PR_MAGENTA$(git_prompt_info)\
-$PR_BLUE$PR_SHIFT_IN$PR_HBAR$PR_CYAN$PR_URCORNER$PR_SHIFT_OUT\
+$PR_BLUE$PR_SHIFT_IN$PR_HBAR$PR_CYAN$PR_URCORNER$PR_SHIFT_OUT$VISUAL_BELL\
 
 $PR_CYAN$PR_SHIFT_IN$PR_LLCORNER'"$HOST_NAME"'$PR_BLUE$PR_HBAR$PR_SHIFT_OUT\
 %(?..[$PR_LIGHT_RED%?$PR_BLUE])\
