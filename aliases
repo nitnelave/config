@@ -8,6 +8,7 @@ alias gci="g commit"
 alias gco="g checkout"
 alias gs="g status"
 alias gst="g status"
+alias gex="g export"
 
 alias ll="ls -l"
 alias la="ls -a -l"
@@ -39,10 +40,11 @@ alias ipython-slides="ipython nbconvert --to slides --post serve"
 
 alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 
-alias turing='(export CL=$(g5 status 2>/dev/null | grep -E "CL [0-9]{9}" | sed -E "s/.*CL ([0-9]{9}).*/\1/") && cd /google/src/cloud/vtolmer/furball/google3 && quality/genie/gina/eval/turing/turing.sh --cl $CL)'
+alias turing='(export CL=$(g5 status 2>/dev/null | grep -E "CL [0-9]{9}" | sed -E "s/.*CL ([0-9]{9}).*/\1/") && cd /google/src/cloud/vtolmer/furball/google3 && assistant/tools/turing/turing.sh --cl $CL)'
 
 alias turffy='turing && spiffy'
 alias spitur='spiffy && turing'
+alias fu=fileutil
 
 dex ()
 {
