@@ -360,7 +360,8 @@ endfunction
 
 cab accents call g:AccentsToLatex()
 
-vnoremap f :ClangFormat<CR>
+vnoremap f :FormatLines<CR>
+noremap ff :FormatLines<CR>
 
 " LatexBox
 
