@@ -8,6 +8,7 @@ alias gci="g commit"
 alias gco="g checkout"
 alias gs="g status"
 alias gst="g status"
+alias gex="g export"
 
 alias ll="ls -l"
 alias la="ls -a -l"
@@ -46,6 +47,7 @@ chmox ()
 
 alias turffy='turing && spiffy'
 alias spitur='spiffy && turing'
+alias fu=fileutil
 
 dex ()
 {
