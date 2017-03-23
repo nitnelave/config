@@ -28,7 +28,7 @@ xkb_symbols "local" {
 
     key <AD01> { [ semicolon, colon, adiaeresis, Adiaeresis ] };
     key <AD02> { [ comma, less, ediaeresis, Ediaeresis ] };
-    key <AD03> { [ period, greater, ecircumflex, Ecircumflex	] };
+    key <AD03> { [ period, greater, egrave, Egrave	] };
     key <AD04> { [ p, P, udiaeresis, Udiaeresis ] };
     key <AD05> { [ y, Y, idiaeresis, Idiaeresis ] };
     key <AD08> { [ c, C, ccedilla, Ccedilla ] };
@@ -43,7 +43,7 @@ xkb_symbols "local" {
 
     key <AB01> { [ apostrophe, quotedbl, acircumflex, Acircumflex ] };
     key <AB02> { [ q, Q, odiaeresis, Odiaeresis ] };
-    key <AB03> { [ j, J, egrave, Egrave ] };
+    key <AB03> { [ j, J, ecircumflex, Ecircumflex ] };
     key <AB04> { [ k, K, ucircumflex, Ucircumflex ] };
 
     include "level3(ralt_switch)"
