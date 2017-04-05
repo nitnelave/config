@@ -45,6 +45,8 @@ alias turing='(export CL=$(g5 status 2>/dev/null | grep -E "CL [0-9]{9}" | sed -
 alias turffy='turing && spiffy'
 alias spitur='spiffy && turing'
 alias fu=fileutil
+alias bb="bl build"
+alias bt="bl test"
 
 dex ()
 {

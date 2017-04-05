@@ -1,0 +1,34 @@
+#! /bin/sh
+
+# blaze command
+MODE="$1"
+shift 1
+
+# enable color and curses, since it goes to the screen
+CMD="/usr/bin/blaze $MODE --color=yes --curses=yes $@"
+
+LOG_FILE=/tmp/bl_log
+
+run_cmd ()
+{
+  # get a fail if anything fails
+  set -o pipefail
+  $CMD |& tee $LOG_FILE
+  RET=$?
+  set +o pipefail
+}
+
+run_cmd
+
+if [ $RET -lt 5 -a $RET -ne 2 ]; then
+  # Check if it complained about build_cleaner
+  BUILD_CLEANER_CMD=$(grep -E -o "^build_cleaner //.*:[-a-zA-Z0-9_]*" "$LOG_FILE")
+  if [ $? -eq 0 ]; then
+    # Run the command
+    /usr/bin/$BUILD_CLEANER_CMD
+    # Rerun the build
+    run_cmd
+  fi
+fi
+
+exit $RET
