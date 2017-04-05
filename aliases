@@ -31,8 +31,8 @@ alias s="ls"
 alias no="ls"
 alias suspend="sudo pm-suspend"
 alias tax="tar xf"
-alias v=vim
-alias vim="stty stop '' -ixoff ; vim"
+alias v="vim -p"
+alias vim="stty stop '' -ixoff ; vim -p"
 alias grep="grep --color=auto"
 
 alias ipython-slides="ipython nbconvert --to slides --post serve"
