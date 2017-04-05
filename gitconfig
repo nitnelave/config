@@ -24,6 +24,8 @@
         graph = log --graph --pretty=oneline
         all = log --graph --pretty=oneline --all
         lm = "!git lga | head -n $(git lga | grep -n refs/heads/master | cut -d : -f 1) | less"
+        open-edited = "!f() { git diff --name-only master ; }; if [ $(git merge-base HEAD master) == $(git rev-parse --verify master) ]; then stty stop '' -ixoff ; vim -p `f`; else echo Not based on master; fi"
+        modified-files = "!f() { git diff --name-only master ; }; if [ $(git merge-base HEAD master) == $(git rev-parse --verify master) ]; then f; else echo Not based on master; fi"
 
 
 [core]
