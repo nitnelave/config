@@ -101,10 +101,10 @@ set gdefault
 set tabstop=8
 
 " The number of spaces inserted when you press tab
-set softtabstop=4
+set softtabstop=2
 
 " The number of spaces inserted/removed when using < or >
-set shiftwidth=4
+set shiftwidth=2
 
 " Insert spaces instead of tabs
 set expandtab
@@ -117,7 +117,7 @@ set smarttab
 set autoindent
 
 " This one is complicated. See :help cinoptions-values for details
-set cinoptions=(0,u0,U0,t0,g0,N-s,>s
+set cinoptions=(0,u0,U0,t0,g1,h1,N-s,>s
 
 set comments=s0:/*,mb:**,ex:*/,://	" Comments
 " Set "," as map leader
