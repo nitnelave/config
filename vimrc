@@ -425,3 +425,7 @@ if executable('ag')
         \ --ignore review
         \ -g ""'
 endif
+
+" Rust.vim
+
+let g:rustfmt_autosave = 1
