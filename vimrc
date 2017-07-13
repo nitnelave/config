@@ -384,7 +384,7 @@ nnoremap ,b :CtrlPBuffer<CR>
 let g:ctrlp_working_path_mode = 'raw'
 let g:ctrlp_default_input = 1
 let g:ctrlp_tabpage_position = 'al'
-let g:ctrlp_root_markers = ['.vimrc', 'google3']
+let g:ctrlp_root_markers = ['.vimrc', 'google3', '.git']
 let g:ctrlp_open_new_file = 'v'
 let g:ctrlp_open_multiple_files = 'vj'
 let g:ctrlp_clear_cache_on_exit = 0
