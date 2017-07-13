@@ -49,6 +49,7 @@ link lesskey .lesskey
 link ssh_config .ssh/config
 
 link vim/ftplugin .vim/ftplugin
+link vim/ycm_extra_conf.py .vim/.ycm_extra_conf.py
 
 
 if ! [ -e "$HOME/.weechat/irc.conf" ] || [ ! -h "$HOME/.weechat/irc.conf" ]; then
@@ -182,12 +183,14 @@ clone_plugin file-line https://github.com/bogado/file-line.git
 
 if ! [ -e YouCompleteMe ]; then
     echo "Cloning YouCompleteMe"
-    git clone https://github.com/Valloric/YouCompleteMe.git
+    git clone --recursive https://github.com/Valloric/YouCompleteMe.git
     YCM_FLAGS=--clang-complete
     if $(which cargo >/dev/null 2>/dev/null); then
-        YCM_FLAGS=$YCM_FLAGS --racer-completer
+        YCM_FLAGS="$YCM_FLAGS --racer-completer"
+        clone_plugin YouCompleteMe/rust --depth=1 https://github.com/rust-lang/rust.git YouCompleteMe/rust
     fi
     (cd YouCompleteMe && ./install.py $YCM_FLAGS )
+    pip install python_levenshtein
 fi
 
 cd ..

@@ -342,16 +342,18 @@ let g:localvimrc_ask = 0
 
 " YouCompleteMe
 
-let g:ycm_confirm_extra_conf = 0
+let g:ycm_confirm_extra_conf = 1
 let g:ycm_server_keep_logfiles = 1
 let g:ycm_seed_identifiers_with_syntax = 1
 let g:ycm_add_preview_to_completeopt = 1
 let g:ycm_autoclose_preview_window_after_completion = 1
 let g:ycm_filepath_completion_use_working_dir = 1
+let g:ycm_key_list_previous_completion = ['<S-TAB>', '<Up>', '<C-PageUp>']
+let g:ycm_rust_src_path = '~/.vim/bundle/YouCompleteMe/rust'
 let g:ycm_always_populate_location_list = 1
 let g:ycm_autoclose_preview_window_after_insertion = 1
 if !exists('g:ycm_global_ycm_extra_conf')
-  let g:ycm_global_ycm_extra_conf = '~/.ycm_extra_conf.py'
+  let g:ycm_global_ycm_extra_conf = '/home/nitnelave/.vim/.ycm_extra_conf.py'
 endif
 if has("patch-7.4.314")
     set shortmess+=c
