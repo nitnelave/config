@@ -115,6 +115,7 @@ xinit () {
 
 xinit .xsession
 xinit .xinitrc
+xinit .xsessionrc
 
 rm -rf "$HOME/.xinitrc-generic" "$HOME/.xsession-generic"
 
