@@ -58,6 +58,7 @@ alias turffy='turing && spiffy'
 alias spitur='spiffy && turing'
 alias fu=fileutil
 alias bb="bl build"
+alias br="bl run"
 alias bt="bl test"
 
 dex ()
