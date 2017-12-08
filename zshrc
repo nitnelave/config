@@ -75,7 +75,63 @@ export LESS_TERMCAP_so=$'\E[38;1;246m'    # begin standout-mode - info box
 export LESS_TERMCAP_ue=$'\E[0m'           # end underline
 export LESS_TERMCAP_us=$'\E[032;1;146m' # begin underline
 
+export EDITOR=vim
 
+
+
+typeset -g _START_TIMER
+typeset -g _END_TIMER
+
+print_hours () {
+  N=$1
+  H=$((N / 3600))
+  N=$((N - H * 3600))
+  echo -n "${H}h, "
+  print_minutes $N
+}
+
+print_minutes () {
+  N=$1
+  M=$((N / 60))
+  N=$((N - M * 60))
+  echo -n "${M}m, "
+  print_seconds $N
+}
+
+print_seconds () {
+  echo -n "${N}s"
+}
+
+print_formatted_time () {
+  echo -n "Execution took "
+  N=$1
+  if [ $N -gt 3600 ]
+  then
+    print_hours $N
+  else
+    print_minutes $N
+  fi
+  echo ""
+}
+
+_start_timer () {
+  _START_TIMER=$(date +%s)
+  _END_TIMER=$_START_TIMER
+}
+
+_stop_timer () {
+  _END_TIMER=$(date +%s)
+  DIFF=$((_END_TIMER - _START_TIMER))
+  # between 2 min and 1 day
+  if [ $DIFF -gt 120 -a $DIFF -lt 8640000 ]
+  then
+    print_formatted_time $DIFF
+  fi
+  _START_TIMER=$_END_TIMER
+}
+
+add-zsh-hook preexec _start_timer
+add-zsh-hook precmd _stop_timer
 
 # Prompt
 function precmd {
