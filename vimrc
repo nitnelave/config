@@ -144,7 +144,8 @@ set autoindent
 " This one is complicated. See :help cinoptions-values for details
 set cinoptions=(0,u0,U0,t0,g1,h1,N-s,>s
 
-set comments=s0:/*,mb:**,ex:*/,://	" Comments
+set comments=s0:/*,mb:**,ex:*/,:// " Comments
+autocmd Filetype c,cpp set comments^=:///\ ,://\ ,fb:-
 " Set "," as map leader
 let mapleader = ","
 
