@@ -10,6 +10,15 @@ alias gs="g status"
 alias gst="g status"
 alias gex="g export"
 
+# Mercurial
+alias h=hg
+alias ha="hg add"
+alias hci="hg commit"
+alias hco="hg checkout"
+alias hs="hg status"
+alias hst="hg status"
+alias hex="hg uploadchain"
+
 alias ll="ls -l"
 alias la="ls -a -l"
 

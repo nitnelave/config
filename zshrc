@@ -24,7 +24,7 @@ COMPLETION_WAITING_DOTS="true"
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(git git-extras ssh-agent docker docker-compose zsh-syntax-highlighting)
+plugins=(git git-extras ssh-agent zsh-syntax-highlighting mercurial)
 
 # If a glob has no match, leave as-is
 setopt +o nomatch
@@ -136,6 +136,44 @@ add-zsh-hook preexec _start_timer
 add-zsh-hook precmd _stop_timer
 
 # Prompt
+
+ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg[magenta]%}(on %{$fg[white]%}"
+ZSH_THEME_GIT_PROMPT_SUFFIX="%{$fg[magenta]%})%{$reset_color%}"
+ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[red]%}!"
+ZSH_THEME_GIT_PROMPT_UNTRACKED="%{$fg[green]%}?"
+ZSH_THEME_GIT_PROMPT_CLEAN=""
+
+function my_in_hg() {
+  [[ -d .hg ]] || $(hg summary > /dev/null 2>&1)
+}
+
+function my_hg_get_branch_name {
+  local bookmark=$(cat $(hg root)/.hg/bookmarks.current 2>/dev/null)
+  if [ "$bookmark" == "" ]
+  then
+    echo $(hg id -t)
+  else
+    echo $bookmark
+  fi
+}
+
+function my_hg_dirty_choose {
+  hg status 2> /dev/null | command grep -Eq '^\s*[ACDIM!?L]'
+  if [ $pipestatus[-1] -eq 0 ]; then
+    # Grep exits with 0 when "One or more lines were selected", return "dirty".
+    echo $ZSH_THEME_GIT_PROMPT_DIRTY
+  else
+    # Otherwise, no lines were found, or an error occurred. Return clean.
+    echo $ZSH_THEME_GIT_PROMPT_CLEAN
+  fi
+}
+
+function my_hg_prompt_info {
+  _DISPLAY=$(my_hg_get_branch_name)
+  echo "$ZSH_PROMPT_BASE_COLOR$ZSH_THEME_GIT_PROMPT_PREFIX$ZSH_THEME_REPO_NAME_COLOR$_DISPLAY$(my_hg_dirty_choose)$ZSH_THEME_GIT_PROMPT_SUFFIX$ZSH_PROMPT_BASE_COLOR"
+  unset _DISPLAY
+}
+
 function precmd {
   local TERMWIDTH
   (( TERMWIDTH = ${COLUMNS} - 1 ))
@@ -143,18 +181,13 @@ function precmd {
   PR_FILLBAR=""
   PR_PWDLEN=""
 
-  # Remove colors from the git output to count the characters
-  ZSH_THEME_GIT_PROMPT_PREFIX="(on "
-  ZSH_THEME_GIT_PROMPT_SUFFIX=")"
-  ZSH_THEME_GIT_PROMPT_DIRTY="!"
-  ZSH_THEME_GIT_PROMPT_UNTRACKED="?"
-
   # Measure the different parts of the prompt
   local pwdsize=${#${(%):-%~}}
-  local gittext="$(git_prompt_info)-"
-  local gitsize=${"#${gittext}"}
+  VCS_TEXT="$(my_in_hg && my_hg_prompt_info || git_prompt_info)"
 
   local PADDING=7
+  local clean_vcs_text=$(echo $VCS_TEXT | sed -r "s/(\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[mGK])|(%[{}])//g")
+  local gitsize=$((${"#${clean_vcs_text}"} + 1))
 
   # Truncate the path if it's too long.
   if [[ "$gitsize + $pwdsize + $PADDING" -gt $TERMWIDTH ]]; then
@@ -162,12 +195,6 @@ function precmd {
   else
     PR_FILLBAR="\${(l.(($TERMWIDTH - ($pwdsize + $gitsize + $PADDING)))..${PR_HBAR}.)}"
   fi
-
-  # Put the colors back
-  ZSH_THEME_GIT_PROMPT_PREFIX="$fg[blue]($fg[magenta]on %{$fg[white]%}"
-  ZSH_THEME_GIT_PROMPT_SUFFIX="$fg[blue])%{$reset_color%}"
-  ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[red]%}!"
-  ZSH_THEME_GIT_PROMPT_UNTRACKED="%{$fg[green]%}?"
 }
 
 setprompt () {
@@ -204,12 +231,6 @@ setprompt () {
 
     VISUAL_BELL=$(echo -e '\a')
 
-    ZSH_THEME_GIT_PROMPT_PREFIX="(on %{$fg[white]%}"
-    ZSH_THEME_GIT_PROMPT_SUFFIX=")%{$reset_color%}"
-    ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[red]%}!"
-    ZSH_THEME_GIT_PROMPT_UNTRACKED="%{$fg[green]%}?"
-    ZSH_THEME_GIT_PROMPT_CLEAN=""
-
     if [[ -z "$DISPLAY" ]] ; then HOST_NAME='($PR_GREEN$PR_SHIFT_OUT%m$PR_SHIFT_IN$PR_CYAN)'; else unset HOST_NAME; fi
 ###
     # Finally, the prompt.
@@ -218,7 +239,7 @@ setprompt () {
 $PR_CYAN$PR_SHIFT_IN$PR_ULCORNER$PR_BLUE$PR_HBAR$PR_SHIFT_OUT(\
 $PR_GREEN%$PR_PWDLEN<...<%~%<<$PR_BLUE)$PR_SHIFT_IN\
 $PR_HBAR$PR_HBAR${(e)PR_FILLBAR}$PR_BLUE$PR_HBAR$PR_SHIFT_OUT\
-$PR_MAGENTA$(git_prompt_info)\
+${VCS_TEXT}\
 $PR_BLUE$PR_SHIFT_IN$PR_HBAR$PR_CYAN$PR_URCORNER$PR_SHIFT_OUT$VISUAL_BELL\
 
 $PR_CYAN$PR_SHIFT_IN$PR_LLCORNER'"$HOST_NAME"'$PR_BLUE$PR_HBAR$PR_SHIFT_OUT\
