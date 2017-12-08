@@ -28,7 +28,7 @@ floating_modifier $mod
 bindsym $mod+Return exec $term
 
 
-bindsym $mod+w exec google-chrome
+bindsym $mod+w exec chrome
 
 # kill focused window
 bindsym $mod+Shift+semicolon kill
@@ -147,7 +147,7 @@ assign [class="Iceweasel"] 4
 assign [class="Firefox"] 4
 assign [class="Google-chrome"] 4
 
-exec google-chrome
+exec chrome
 exec $term
 
 bindsym $mod+l exec i3lock -e -i ~/.i3/lock_screen.png && xset dpms force off
