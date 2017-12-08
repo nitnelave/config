@@ -9,6 +9,11 @@ CMD="/usr/bin/blaze $MODE --color=yes --curses=yes $@"
 
 LOG_FILE=/tmp/bl_log
 
+if [ $MODE = "log" ]; then
+  less $LOG_FILE
+  exit $?
+fi
+
 run_cmd ()
 {
   # get a fail if anything fails
