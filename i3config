@@ -28,7 +28,7 @@ floating_modifier $mod
 bindsym $mod+Return exec $term
 
 
-bindsym $mod+w exec google-chrome
+bindsym $mod+w exec chrome
 
 # kill focused window
 bindsym $mod+Shift+semicolon kill
@@ -147,7 +147,7 @@ assign [class="Iceweasel"] 4
 assign [class="Firefox"] 4
 assign [class="Google-chrome"] 4
 
-exec google-chrome
+exec chrome
 exec $term
 
 bindsym $mod+l exec i3lock -c 000000 -i ~/.i3/lock_screen.png && xset dpms force off
@@ -158,7 +158,7 @@ exec --no-startup-id ~/projects/config/locker &
 # Audio bindings
 
 bindsym XF86AudioRaiseVolume exec pactl set-sink-volume @DEFAULT_SINK@ +5% && killall -SIGUSR1 i3status
-bindsym XF86AudioLowerVolume exec pactl set-sink-volume @DEFAULT_SINK@ -- -5% && killall -SIGUSR1 i3status
+bindsym XF86AudioLowerVolume exec pactl set-sink-volume @DEFAULT_SINK@ -5% && killall -SIGUSR1 i3status
 bindsym XF86AudioMute exec pactl set-sink-mute @DEFAULT_SINK@ toggle && killall -SIGUSR1 i3status
 
 # Microphone mute
