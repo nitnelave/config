@@ -10,6 +10,7 @@
         ds = diff --stat
         ci = commit
         ca = commit --amend
+        can = commit --amend --no-edit
         pop = stash pop
         poop = stash pop
         punch = push
@@ -26,8 +27,22 @@
         graph = log --graph --pretty=oneline
         all = log --graph --pretty=oneline --all
         lm = "!git lga | head -n $(git lga | grep -n $(git rev-parse --short master) | cut -d : -f 1) | less"
-        open-edited = "!f() { git diff --name-only master ; }; if [ $(git merge-base HEAD master) == $(git rev-parse --verify master) ]; then stty stop '' -ixoff ; vim -p `f`; else echo Not based on master; fi"
-        modified-files = "!f() { git diff --name-only master ; }; if [ $(git merge-base HEAD master) == $(git rev-parse --verify master) ]; then f; else echo Not based on master; fi"
+        modified-files = "!f() { \
+            LOCAL_ROOT=${GIT_PREFIX#$(pwd)}; \
+            cd ${GIT_PREFIX:-.} ; \
+            if [ $(git merge-base HEAD master) == $(git rev-parse --verify master) ]; then \
+              git diff --name-only master -- ${1:-.} | sed s:^$LOCAL_ROOT:: ; \
+            else \
+              echo Not based on master; \
+              return 1; \
+            fi }; f"
+        open-edited = "!f() { \
+            cd ${GIT_PREFIX:-.} ; \
+            FILES=$(git modified-files $1); \
+            if [ $? -eq 1 ]; then return 1; fi; \
+            stty stop '' -ixoff ; vim -p $FILES; \
+            }; f"
+        open-modified = open-edited
 
         #Google exclusive
         export = "!([ $(git rev-parse --abbrev-ref HEAD) != master ] || (echo 'Do not export master' && false)) && git fix && /google/data/ro/projects/shelltoys/g5.sar export -g --merge"
