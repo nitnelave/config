@@ -129,6 +129,10 @@ nnoremap ? ?\v
 
 nnoremap U <C-R>
 
+" Ctrl-Backspace deletes a word.
+inoremap <C-H> <C-W>
+
+
 " 'very magic' regexp substitutions
 cnoremap %s %s/\v
 
