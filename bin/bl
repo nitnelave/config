@@ -1,39 +1,84 @@
 #! /bin/sh
 
+if [ $# -eq 0 ]
+then
+  echo "Usage: bl <build|test|run> [OPTIONS] TARGET [OPTIONS]"
+  exit 1
+fi
+
 # blaze command
 MODE="$1"
-shift 1
+shift
+
+args=$@
+
+TARGET=
+for arg in $@
+do
+  if echo "$arg" | grep -Eq "^[-a-zA-Z0-9/_]*:[-a-zA-Z0-9_]*$"
+  then
+    TARGET=$arg
+    break
+  fi
+done
+
+if [ -z "$TARGET" ]
+then
+  # Look for a file target
+  args=
+  for arg in "$@";
+  do
+    arg=$(echo $arg | sed -e 's,^\([^-].*\)\(^\|/\)\([^./:]\+\)\.[^./]*$,\1:\3,')
+    if [ -z "$TARGET" ] && echo "$arg" | grep -Eq "^[-a-zA-Z0-9/_]*:[-a-zA-Z0-9_]*$"
+    then
+      TARGET=$arg
+    fi
+    args="$args $arg"
+  done
+fi
 
 # enable color and curses, since it goes to the screen
-CMD="/usr/bin/blaze $MODE --color=yes --curses=yes $@"
+CMD="${BLAZE_BIN:-/usr/bin/blaze} $MODE --color=yes --curses=yes $args"
 
 LOG_FILE=/tmp/bl_log
 
-if [ $MODE = "log" ]; then
+if [ "$MODE" = "log" ]; then
   less $LOG_FILE
   exit $?
 fi
+
+echo "Running: " $CMD
 
 run_cmd ()
 {
   # get a fail if anything fails
   set -o pipefail
-  $CMD |& tee $LOG_FILE
+  nice -n 15 $CMD |& tee $LOG_FILE
   RET=$?
   set +o pipefail
 }
 
 run_cmd
 
-if [ $RET -lt 5 -a $RET -ne 2 ]; then
-  # Check if it complained about build_cleaner
-  BUILD_CLEANER_CMD=$(grep -E -o "^build_cleaner //.*:[-a-zA-Z0-9_]*" "$LOG_FILE")
-  if [ $? -eq 0 ]; then
-    # Run the command
-    /usr/bin/$BUILD_CLEANER_CMD
-    # Rerun the build
-    run_cmd
-  fi
+# Check if it complained about build_cleaner
+BUILD_CLEANER_CMD=$(grep -E -o "^build_cleaner //.*:[-a-zA-Z0-9_]*" "$LOG_FILE")
+if [ $? -eq 0 ]; then
+  # Run the command
+  /usr/bin/$BUILD_CLEANER_CMD
+  # Rerun the build
+  run_cmd
+fi
+# Check if it complained about a file not found.
+if grep -E "fatal error:.*\.h. file not found" "$LOG_FILE" > /dev/null || grep -E "is not visible from target" "$LOG_FILE" > /dev/null
+then
+  /usr/bin/build_cleaner $TARGET
+  run_cmd
+fi
+# Check if the tests failed
+if grep -E "_test.*FAILED.{0,4} in [0-9.]*s" "$LOG_FILE" >/dev/null; then
+  TEST_LOG=$(grep -E -o "/usr/local/google/[^ ]*/test.log" "$LOG_FILE" | head -n 1)
+  echo -ne '\007'
+  less +/FAILED $TEST_LOG
 fi
 
 exit $RET

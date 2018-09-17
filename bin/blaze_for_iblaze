@@ -1,0 +1,6 @@
+#! /bin/sh
+
+/usr/local/google/home/vtolmer/projects/config/bin/bl $@
+
+# Visual bell
+echo -ne '\007'
