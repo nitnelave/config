@@ -60,6 +60,12 @@ alias fu=fileutil
 alias bb="bl build"
 alias br="bl run"
 alias bt="bl test"
+IBLAZE="$(which iblaze) -iblaze_blaze_binary=$HOME/projects/config/bin/blaze_for_iblaze"
+alias ibb="$IBLAZE build"
+alias ibr="$IBLAZE run"
+alias ibt="$IBLAZE test"
+
+alias chmox="chmod +x"
 
 dex ()
 {
@@ -83,3 +89,12 @@ and ()
 {
   [ $? -eq 0 ] && "$@"
 }
+build-mpm ()
+{
+  (
+    cd /google/src/files/205373024/depot/google3
+    rabbit --verifiable mpm --stamp -c opt --symlink_prefix=/tmp/output/blaze- $@
+  )
+}
+
+alias build-mpm-live="build-mpm --mpm_build_arg='--label=live'"
