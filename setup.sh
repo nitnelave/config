@@ -239,4 +239,11 @@ if [ -f "$HOME/.local/bin/thefuck" ]; then
   pip3 uninstall -y thefuck || sudo pip3 uninstall -y thefuck
 fi
 
+if [ ! -d "$HOME/.fzf" ]; then
+  git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
+  $HOME/.fzf/install
+else
+  (cd $HOME/.fzf && git pull && ./install)
+fi
+
 echo "Configuration successful!"
