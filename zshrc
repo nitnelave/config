@@ -181,6 +181,35 @@ alias reload="source ~/.zshrc"
 
 export PATH=$PATH:~/projects/config/bin
 
+# Setup fzf
+# ---------
+if [[ ! "$PATH" == *$HOME/.fzf/bin* ]]; then
+  export PATH="$PATH:/usr/local/google/home/vtolmer/.fzf/bin"
+fi
+
+FZF_DEFAULT_COMMAND='ag -g ""'
+
+_fzf_compgen_path() {
+  echo "$1"
+  command ag -g "$1"
+}
+
+# Auto-completion
+# ---------------
+[[ $- == *i* ]] && source "$HOME/.fzf/shell/completion.zsh" 2> /dev/null
+
+fzf-history-widget-accept() {
+  fzf-history-widget
+  zle accept-line
+}
+zle     -N     fzf-history-widget-accept
+bindkey '^X^R' fzf-history-widget-accept
+
+# Key bindings
+# ------------
+#source "$HOME/.fzf/shell/key-bindings.zsh"
+
+
 # funny message
 if which cowsay >/dev/null 2>/dev/null && which fortune >/dev/null 2>/dev/null; then
   cortune
