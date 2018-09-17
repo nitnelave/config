@@ -182,6 +182,8 @@ clone_plugin vim-paste-easy https://github.com/roxma/vim-paste-easy.git
 
 clone_plugin file-line https://github.com/bogado/file-line.git
 
+clone_plugin gitsessions https://github.com/wting/gitsessions.vim
+
 if ! [ -e YouCompleteMe ]; then
     echo "Cloning YouCompleteMe"
     git clone --recursive https://github.com/Valloric/YouCompleteMe.git
