@@ -242,10 +242,16 @@ if [ -f "$HOME/.local/bin/thefuck" ]; then
 fi
 
 if [ ! -d "$HOME/.fzf" ]; then
-  git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
-  $HOME/.fzf/install
+  git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf \
+   && $HOME/.fzf/install
 else
   (cd $HOME/.fzf && git pull && ./install)
+fi
+
+if [ ! -d "$HOME/.um-repo" ]; then
+  git clone --depth 1 https://github.com/sinclairtarget/um.git ~/.um-repo \
+    && mkdir -p ~/.bin
+    && ln -s ~/.bin/um ~/.um-repo/bin/um
 fi
 
 echo "Configuration successful!"
