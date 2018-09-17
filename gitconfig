@@ -3,6 +3,7 @@
         st = status
         ri = rebase --interactive --autosquash
         d = difftool
+        dm = diff master
         co = checkout
         br = branch
         df = diff
@@ -22,7 +23,15 @@
         alias = "!sh -c '[ $# = 2 ] && git config --global alias.\"$1\" \"$2\" && exit 0 || echo \"usage: git alias <new alias> <original command>\" >&2 && exit 1' -"
         aliases = !git config --get-regexp 'alias.*' | colrm 1 6 | sed 's/[ ]/ = /'
         lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
-        lga = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative --all
+        lg = "!f() { \
+          LOG_OPTIONS=\"--graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative\"; \
+          ARGS=\"$@\"; \
+          if [ -z \"$ARGS\" ]; then \
+            ARGS=master..; \
+          fi; \
+          eval git log $LOG_OPTIONS $ARGS; \
+          }; f"
+        lga = "!git lg --all $@"
         cont = rebase --continue
         graph = log --graph --pretty=oneline
         all = log --graph --pretty=oneline --all
@@ -42,7 +51,7 @@
             if [ $? -eq 1 ]; then return 1; fi; \
             stty stop '' -ixoff ; vim -p $FILES; \
             }; f"
-        open-modified = open-edited
+        open-modified = !git open-edited
 
         #Google exclusive
         export = "!([ $(git rev-parse --abbrev-ref HEAD) != master ] || (echo 'Do not export master' && false)) && git fix && /google/data/ro/projects/shelltoys/g5.sar export -g --merge"
