@@ -193,10 +193,8 @@ autocmd BufNewFile,BufRead *.{c,cc,h,hh,hxx,hpp,cpp,md,fr,en,txt} : set tw=79
 autocmd BufNewFile,BufRead *.{java} : set tw=119
 
 " tab settings
-noremap <silent> <C-H> :tabprevious<CR>
-noremap <silent> <C-S> :tabnext<CR>
-inoremap <silent> <C-H> <Esc>:tabprevious<CR>
-inoremap <silent> <C-S> <Esc>:tabnext<CR>
+nnoremap <silent> <C-H> :tabprevious<CR>
+nnoremap <silent> <C-S> :tabnext<CR>
 function! MoveToPrevTab()
   "there is only one window
   if tabpagenr('$') == 1 && winnr('$') == 1
