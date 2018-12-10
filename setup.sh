@@ -129,128 +129,27 @@ fi
 echo "Setting up lesskey..."
 lesskey "$HOME/.lesskey"
 
-echo "Cloning Vim plugins..."
-mkdir -p $HOME/.vim/bundle
-cd $HOME/.vim/bundle
-
-remove_plugin () {
-    if [ -e $1 ]; then
-      echo "Removing $1"
-      rm -rf $1
-    fi
-}
-
-for plugin in vim-fugitive \
-              AsyncCommand \
-              clang_complete \
-              project \
-              DoxygenToolkit \
-              snipmate \
-              syntastic \
-              ../plugin/remoteOpen.vim
-do
-    remove_plugin $plugin
-done
-
-clone_plugin () {
-    if ! [ -e $1 ]; then
-      echo "Cloning $1 ..."
-      shift
-      git clone $@
-    fi
-}
-
-clone_plugin supertab https://github.com/ervandew/supertab.git
-
-clone_plugin vim-surround https://github.com/tpope/vim-surround.git
-
-clone_plugin rust.vim --depth=1 https://github.com/rust-lang/rust.vim.git rust.vim
-
-clone_plugin vim-repeat https://github.com/tpope/vim-repeat.git
-
-clone_plugin vim-localvimrc https://github.com/embear/vim-localvimrc.git
-
-clone_plugin ultisnips https://github.com/SirVer/ultisnips.git
-
-clone_plugin vim-snippets https://github.com/honza/vim-snippets.git
-
-clone_plugin ctrlp.vim https://github.com/ctrlpvim/ctrlp.vim.git
-
-clone_plugin ctrlp-py-matcher https://github.com/FelikZ/ctrlp-py-matcher
-
-clone_plugin vim-paste-easy https://github.com/roxma/vim-paste-easy.git
-
-clone_plugin file-line https://github.com/bogado/file-line.git
-
-clone_plugin gitsessions https://github.com/wting/gitsessions.vim
-
-if ! [ -e YouCompleteMe ]; then
-    echo "Cloning YouCompleteMe"
-    git clone --recursive https://github.com/Valloric/YouCompleteMe.git
-    YCM_FLAGS=--clang-complete
-    if $(which cargo >/dev/null 2>/dev/null); then
-        YCM_FLAGS="$YCM_FLAGS --racer-completer"
-        clone_plugin YouCompleteMe/rust --depth=1 https://github.com/rust-lang/rust.git YouCompleteMe/rust
-    fi
-    (cd YouCompleteMe && ./install.py $YCM_FLAGS )
-    pip install python_levenshtein
+if [ ! -e ~/.nvim/dein ]; then
+  echo "Setting up Dein..."
+  mkdir -p ~/.nvim
+  curl https://raw.githubusercontent.com/Shougo/dein.vim/master/bin/installer.sh > /tmp/installer.sh
+  sh /tmp/installer.sh ~/.nvim/dein
 fi
 
-cd ..
-
-if ! [ -e autoload/pathogen.vim ]; then
-  echo "Cloning Pathogen..."
-  git clone https://github.com/tpope/vim-pathogen.git
-  mv vim-pathogen/* .
-  rm -r vim-pathogen
-  rm CONTRIBUTING.markdown README.markdown
-fi
-
-if ! [ -e plugin/LanguageTool.vim ]; then
-  echo "Cloning LanguageTool..."
-  git clone https://github.com/vim-scripts/LanguageTool.git language
-  mkdir -p plugin doc
-  mv language/plugin/LanguageTool.vim plugin
-  mv language/doc/LanguageTool.txt doc
-  rm -r language
-fi
-
-
-if ! [ -e ftplugin/tex_LatexBox.vim ]; then
-  echo "Cloning LatexBox..."
-  wget http://www.vim.org/scripts/download_script.php?src_id=16732 -O /tmp/latex.vmb \
-   && vim /tmp/latex.vmb +":source % | quit!" \
-   && rm /tmp/latex.vmb \
-   && wget -O /tmp/latexSuite.tar.gz http://www.vim.org/scripts/download_script.php?src_id=2535 \
-   && tar xf /tmp/latexSuite.tar.gz \
-   && mkdir -p $HOME/.vim/dictionaries \
-   && cp /tmp/ftplugin/latex-suite/dictionaries/dictionary $HOME/.vim/dictionaries/
-fi
-
-remove_plugin "~/.vimperator/colors/vimPgray.vimp"
-
-if ! [ -e ftdetect/markdown.vim ]; then
-  echo "Cloning Markdown..."
-  wget http://www.vim.org/scripts/download_script.php?src_id=15150 -O /tmp/markdown.vba.gz \
-   && (cd /tmp && gzip -d markdown.vba.gz) \
-   && vim /tmp/markdown.vba +":source % | quit!" \
-   && patch ~/.vim/syntax/markdown.vim < "$CONFIG/markdown.diff"
-fi
+echo "Installing misc tools"
 
 if [ -f "$HOME/.local/bin/thefuck" ]; then
   pip3 uninstall -y thefuck || sudo pip3 uninstall -y thefuck
 fi
 
-if [ ! -d "$HOME/.fzf" ]; then
+if [ ! -e "$HOME/.fzf" ]; then
   git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf \
    && $HOME/.fzf/install
-else
-  (cd $HOME/.fzf && git pull && ./install)
 fi
 
-if [ ! -d "$HOME/.um-repo" ]; then
+if [ ! -e "$HOME/.um-repo" ]; then
   git clone --depth 1 https://github.com/sinclairtarget/um.git ~/.um-repo \
-    && mkdir -p ~/.bin
+    && mkdir -p ~/.bin \
     && ln -s ~/.bin/um ~/.um-repo/bin/um
 fi
 
