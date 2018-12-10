@@ -14,7 +14,9 @@
         poop = stash pop
         punch = push
         prune-all = !git remote | xargs -n 1 git remote prune
-        edit-unmerged = "!f() { git diff --name-status --diff-filter=U | cut -f2 ; }; stty stop '' -ixoff ; vim -p `f`"
+        rem = rebase master
+        rim = rebase --interactive master
+        edit-unmerged = "!f() { git diff --name-status --diff-filter=U | cut -f2 ; }; stty stop '' -ixoff ; nvim -p `f`"
         add-unmerged = "!f() { git diff --name-status --diff-filter=U | cut -f2 ; }; git add `f`"
         alias = "!sh -c '[ $# = 2 ] && git config --global alias.\"$1\" \"$2\" && exit 0 || echo \"usage: git alias <new alias> <original command>\" >&2 && exit 1' -"
         aliases = !git config --get-regexp 'alias.*' | colrm 1 6 | sed 's/[ ]/ = /'
@@ -27,10 +29,39 @@
         open-edited = "!f() { git diff --name-only master ; }; if [ $(git merge-base HEAD master) == $(git rev-parse --verify master) ]; then stty stop '' -ixoff ; vim -p `f`; else echo Not based on master; fi"
         modified-files = "!f() { git diff --name-only master ; }; if [ $(git merge-base HEAD master) == $(git rev-parse --verify master) ]; then f; else echo Not based on master; fi"
 
+        #Google exclusive
+        export = "!([ $(git rev-parse --abbrev-ref HEAD) != master ] || (echo 'Do not export master' && false)) && git fix && /google/data/ro/projects/shelltoys/g5.sar export -g --merge"
+        ex = "!([ $(git rev-parse --abbrev-ref HEAD) != master ] || (echo 'Do not export master' && false)) && git fix && /google/data/ro/projects/shelltoys/g5.sar export -g --merge"
+        patch = !/google/data/ro/projects/shelltoys/g5.sar patch
+        mail = !/google/data/ro/projects/shelltoys/g5.sar mail
+        submit = !/google/data/ro/projects/shelltoys/g5.sar submit
+        lint = !/google/data/ro/projects/shelltoys/g5.sar lint
+        drop = !/google/data/ro/projects/shelltoys/g5.sar drop
+        revert = !/google/data/ro/projects/shelltoys/g5.sar revert
+        hint = !/google/data/ro/projects/shelltoys/g5.sar hint
+        fix = !/google/data/ro/projects/shelltoys/g5.sar fix
+        cleanup = !/google/data/ro/projects/shelltoys/g5.sar cleanup
+        findreviewers = !/google/data/ro/projects/shelltoys/g5.sar findreviewers
+        sync = !(export BRANCH=$(git rev-parse --abbrev-ref HEAD)\
+                 && git stash save git5-sync \
+                 && git checkout master \
+                 && /google/data/ro/projects/shelltoys/g5.sar sync \
+                 && git checkout "$BRANCH" \
+                 && git rebase master \
+                 && if echo "$(git stash list | head -n 1)" | grep git5-sync 2>&1 >/dev/null \n then git stash pop \n fi)
+        track = "!f() { export BRANCH=$(git rev-parse --abbrev-ref HEAD)\
+                  && git stash save git5-track \
+                  && git checkout master \
+                  && /google/data/ro/projects/shelltoys/g5.sar track \"$@\" \
+                  && git checkout "$BRANCH" \
+                  && git rebase master \
+                  && (if echo "$(git stash list | head -n 1)" | grep git5-track 2>&1 >/dev/null; then git stash pop; fi)}; f"
+        acanex = "!git add . && git commit --amend --no-edit && git fix && /google/data/ro/projects/shelltoys/g5.sar export -g"
+
 
 [core]
         excludesfile = ~/.gitignore
-        editor = vim
+        editor = nvim
 [user]
         name = Valentin Tolmer
         email = valentin.tolmer@gmail.com
