@@ -482,3 +482,19 @@ nnoremap <C-_> :<C-u>LspHover<CR>
 
 " Colorscheme
 color desert
+
+" GitGutter (git diff in vim)
+let g:gitgutter_map_keys = 0
+nmap <leader>gt <Plug>GitGutterNextHunk
+nmap <leader>gn <Plug>GitGutterPrevHunk
+nmap <Leader>ga <Plug>GitGutterStageHunk
+nmap <Leader>gr <Plug>GitGutterUndoHunk
+nmap <Leader>gp <Plug>GitGutterPreviewHunk
+" Ignore whitespace in the diff.
+let g:gitgutter_diff_args = '-w'
+" Diff against the index (unstaged).
+nmap <Leader>gi :silent let g:gitgutter_diff_base = ''<CR>:silent GitGutter<CR>
+" Diff against HEAD.
+nmap <Leader>gh :silent let g:gitgutter_diff_base = 'HEAD'<CR>:silent GitGutter<CR>
+" Diff against master.
+nmap <Leader>gm :silent let g:gitgutter_diff_base = 'master'<CR>:silent GitGutter<CR>
