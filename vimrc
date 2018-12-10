@@ -30,6 +30,9 @@ if dein#load_state('~/.cache/dein')
   call dein#add('airblade/vim-gitgutter')
   call dein#add('leafgarland/typescript-vim')
 
+  " Git integration
+  call dein#add('tpope/vim-fugitive')
+
   call dein#end()
   call dein#save_state()
 endif
@@ -141,6 +144,12 @@ set autoindent
 " This one is complicated. See :help cinoptions-values for details
 set cinoptions=(0,u0,U0,t0,g1,h1,N-s,>s
 
+" In diff mode, open the buffers vertically, and ignore whitespace changes.
+set diffopt=iwhite,vertical
+
+" Highlight merge conflict markers.
+match ErrorMsg '^\(<\|=\|>\)\{7\}\([^=].\+\)\?$'
+
 set comments=s0:/*,mb:**,ex:*/,:// " Comments
 autocmd Filetype c,cpp set comments^=:///\ ,://\ ,fb:-
 " Set "," as map leader
@@ -191,7 +200,6 @@ command! WQ wq
 
 " Yank from cursor to end of line, to be consistent with C and D
 nnoremap Y y$
-
 
 " map ; to :
 noremap ; :

@@ -80,6 +80,7 @@
         from = Valentin Tolmer <nitnelave1@gmail.com>
 [merge]
         summary = true
+        tool = vimdiff
 [diff]
         tool = vimdiff
 [difftool]
