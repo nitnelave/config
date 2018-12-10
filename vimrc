@@ -92,9 +92,6 @@ let g:load_doxygen_syntax=1
 " Use a slightly darker background color to differentiate with the status line
 let g:jellybeans_background_color_256='232'
 
-" Feel free to switch to another colorscheme
-colorscheme desert
-
 " Allow mouse use in vim
 set mouse=a
 
@@ -177,13 +174,12 @@ no L N
 " end of line
 no - $
 no _ ^
-" change window
-no S <C-w><C-w>
 " Fast move up/down
 no T 8<Down>
 no N 8<Up>
-" Move window
-no H <C-w><C-r>
+" Switch between splits
+no S <C-w>w
+no H <C-w>r
 
 " For extra capital letter
 command! W w
@@ -264,9 +260,8 @@ function! MoveToNextTab()
   "opening current buffer in new window
   exe "b".l:cur_buf
 endfunc
-noremap <C-T> :call MoveToPrevTab()<CR>
-noremap <C-N> :call MoveToNextTab()<CR>
-cab tn tabnew
+noremap <C-T> :silent call MoveToPrevTab()<CR>
+noremap <C-N> :silent call MoveToNextTab()<CR>
 
 nnoremap <Space> i<Space><Esc>
 
@@ -381,7 +376,7 @@ let g:ycm_rust_src_path = '~/.vim/bundle/YouCompleteMe/rust'
 let g:ycm_always_populate_location_list = 1
 let g:ycm_autoclose_preview_window_after_insertion = 1
 if !exists('g:ycm_global_ycm_extra_conf')
-  let g:ycm_global_ycm_extra_conf = '/home/nitnelave/.vim/.ycm_extra_conf.py'
+  let g:ycm_global_ycm_extra_conf = "$HOME/.vim/.ycm_extra_conf.py"
 endif
 if has("patch-7.4.314")
     set shortmess+=c
@@ -408,7 +403,7 @@ let g:UltiSnipsJumpForwardTrigger = "<tab>"
 let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
 
 " Ctrl-P
-nnoremap ,b :CtrlPBuffer<CR>
+nnoremap <leader>b :CtrlPBuffer<CR>
 let g:ctrlp_working_path_mode = 'raw'
 let g:ctrlp_default_input = 1
 let g:ctrlp_tabpage_position = 'al'
@@ -420,7 +415,6 @@ let g:ctrlp_switch_buffer = 'EV'
 let g:ctrlp_match_func = { 'match': 'pymatcher#PyMatch' }
 let g:ctrlp_clear_cache_on_exit = 0
 let g:ctrlp_default_input = ''
-
 
 
 let g:ctrlp_prompt_mappings = {
@@ -457,3 +451,6 @@ endif
 " Rust.vim
 
 let g:rustfmt_autosave = 1
+
+" Colorscheme
+color desert
