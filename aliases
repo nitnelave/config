@@ -31,7 +31,7 @@ alias s="ls"
 alias no="ls"
 alias suspend="sudo pm-suspend"
 alias tax="tar xf"
-alias v="vim -p"
+alias v="nvim -p"
 alias vim="stty stop '' -ixoff ; vim -p"
 alias grep="grep --color=auto"
 

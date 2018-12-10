@@ -1,13 +1,38 @@
 autocmd!
 
-if !exists('g:pathogen_disabled')
-  let g:pathogen_disabled = []
-endif
-
-execute pathogen#infect()
-
 " Disable vi compatibility mode
 set nocompatible
+
+set runtimepath+=~/.nvim/dein/repos/github.com/Shougo/dein.vim
+
+if dein#load_state('~/.cache/dein')
+  call dein#begin('~/.cache/dein')
+
+  "call dein#add('Shougo/deoplete.nvim')
+  call dein#add('ervandew/supertab')
+  call dein#add('rust-lang/rust')
+  call dein#add('tpope/vim-surround')
+  call dein#add('tpope/vim-repeat')
+  call dein#add('embear/vim-localvimrc')
+  call dein#add('SirVer/ultisnips')
+  call dein#add('honza/vim-snippets')
+  call dein#add('ctrlpvim/ctrlp.vim')
+  call dein#add('FelikZ/ctrlp-py-matcher')
+  call dein#add('roxma/vim-paste-easy')
+  " Open vim at a specific line.
+  call dein#add('bogado/file-line')
+  call dein#add('wting/gitsessions.vim')
+  "call dein#add('neomake/neomake')
+  " Language Server -- definition, references
+  call dein#add('prabirshrestha/vim-lsp')
+  call dein#add('prabirshrestha/async.vim')
+  " Diffed lines in vim.
+  call dein#add('airblade/vim-gitgutter')
+  call dein#add('leafgarland/typescript-vim')
+
+  call dein#end()
+  call dein#save_state()
+endif
 
 " Enable filetype detection for plugins and indentation options
 filetype plugin indent on
