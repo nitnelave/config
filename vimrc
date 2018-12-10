@@ -469,5 +469,16 @@ endif
 
 let g:rustfmt_autosave = 1
 
+" LSP
+
+au User lsp_setup call lsp#register_server({
+    \ 'name': 'Kythe Language Server',
+    \ 'cmd': {server_info->['/google/bin/releases/grok/tools/kythe_languageserver', '--google3']},
+    \ 'whitelist': ['python', 'go', 'java', 'cpp', 'proto'],
+    \})
+nnoremap <C-]> :<C-u>LspDefinition<CR>
+nnoremap <C-[> :<C-u>LspReferences<CR>
+nnoremap <C-_> :<C-u>LspHover<CR>
+
 " Colorscheme
 color desert
