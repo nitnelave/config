@@ -382,6 +382,12 @@ if has("patch-7.4.314")
     set shortmess+=c
 endif
 
+autocmd FileType typescript nnoremap <buffer> <C-]> :YcmCompleter GoToDefinition<CR>
+if !exists("g:ycm_semantic_triggers")
+   let g:ycm_semantic_triggers = {}
+endif
+let g:ycm_semantic_triggers['typescript'] = ['.']
+
 nnoremap <F5> :YcmForceCompileAndDiagnostics<CR>
 nnoremap <C-f> :YcmCompleter FixIt<CR>
 nnoremap <C-y>f :YcmCompleter FixIt<CR>
