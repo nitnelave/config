@@ -6,18 +6,47 @@ then
   exit 1
 fi
 
+last_modified_git_file ()
+{
+  echo $(git status | \
+    grep -E "(modified|added|untracked):" | \
+    sed -E "s/.*?: *([^\s]*)/\1/" | \
+    xargs stat -c "%Y %N" | \
+    sort -rn | \
+    head -1 | \
+    cut -f2- -d" ")
+}
+
+file_to_target ()
+{
+  echo $1 | sed -e 's/\/\([^/]*\)\.proto\(\.h\)\?$/:\1_proto/' | sed -e "s,^\s*'\?\([^-].*\)/\([^/:]\+\)\.[^./]*,\1:\2,"
+}
+
+is_valid_target ()
+{
+  echo "$1" | grep -Eq "^[-a-zA-Z0-9/_]*:[-a-zA-Z0-9_.]*$"
+}
+
 # blaze command
 MODE="$1"
 shift
 
+COLOR="--color=yes --curses=yes "
+if [ $# > 1 -a "$1" = "--nocolor" ]
+then
+  COLOR=""
+  shift
+fi
+
 args=$@
 
 TARGET=
-for arg in $@
+for arg in $args
 do
-  if echo "$arg" | grep -Eq "^[-a-zA-Z0-9/_]*:[-a-zA-Z0-9_]*$"
+  if is_valid_target "$arg"
   then
     TARGET=$arg
+    echo "Found target $TARGET"
     break
   fi
 done
@@ -28,17 +57,47 @@ then
   args=
   for arg in "$@";
   do
-    arg=$(echo $arg | sed -e 's,^\([^-].*\)\(^\|/\)\([^./:]\+\)\.[^./]*$,\1:\3,')
-    if [ -z "$TARGET" ] && echo "$arg" | grep -Eq "^[-a-zA-Z0-9/_]*:[-a-zA-Z0-9_]*$"
+    target=$(file_to_target $arg)
+    if [ -z "$TARGET" ] && is_valid_target $target
     then
-      TARGET=$arg
+      TARGET=$target
+      echo "Found file $arg, converting to target $target"
     fi
-    args="$args $arg"
+    args="$args $target"
   done
 fi
 
+# Still no target, we ask git what was the last edited file.
+if [ -z "$TARGET" ]
+then
+  last_file=$(last_modified_git_file)
+  if ! is_valid_target $last_file
+  then
+    last_file=$(file_to_target $last_file)
+  fi
+  if is_valid_target $last_file
+  then
+    TARGET=$last_file
+    args="$args $TARGET"
+    echo "Getting target from git: $TARGET"
+  fi
+fi
+
+if [ -z "$TARGET" ]
+then
+  echo "No target found, aborting"
+  exit 2
+fi
+
+if [ "$MODE" = "test" ] && ! (echo "$TARGET" | grep test > /dev/null)
+then
+  args=$(echo $args | sed "s~$TARGET~${TARGET}_test~")
+  TARGET="${TARGET}_test"
+  echo "Asking for tests, so converting target to $TARGET"
+fi
+
 # enable color and curses, since it goes to the screen
-CMD="${BLAZE_BIN:-/usr/bin/blaze} $MODE --color=yes --curses=yes $args"
+CMD="${BLAZE_BIN:-/usr/bin/blaze} $MODE $COLOR $args"
 
 LOG_FILE=/tmp/bl_log
 
@@ -58,21 +117,70 @@ run_cmd ()
   set +o pipefail
 }
 
+run_build_cleaner_cmd ()
+{
+  BUILD_ClEANER_WITH_ARGS="$*"
+  $BUILD_ClEANER_WITH_ARGS | tee | grep -q "update_visibility"
+  if [ 0 -eq $? ]
+  then
+    while true
+    do
+      read -p "Update the visibility? (Y/n)" SHOULD_UPDATE
+      case $SHOULD_UPDATE in
+        [yY]*|"")
+          $BUILD_ClEANER_WITH_ARGS --update_visibility
+          break;
+          ;;
+        [nN]*)
+          break;
+          ;;
+        *)
+      esac
+    done
+  fi
+}
+
 run_cmd
+
+# Check if it complained that the target is not defined
+grep -q "no such target" "$LOG_FILE"
+if [ 0 -eq $? ]
+then
+  while true
+  do
+    read -p "No target found. Try to create one? (y/N)" SHOULD_CREATE_TARGET
+    case $SHOULD_CREATE_TARGET in
+      [yY]*)
+        BUILD_FILE=$(echo $TARGET | sed -e 's/:.*$/\/BUILD/')
+        /usr/bin/build_cleaner --action_spec=add_missing_rules $BUILD_FILE
+        run_cmd
+        break;
+        ;;
+      [nN]*|"")
+        break;
+        ;;
+      *)
+    esac
+  done
+fi
+
 
 # Check if it complained about build_cleaner
 BUILD_CLEANER_CMD=$(grep -E -o "^build_cleaner //.*:[-a-zA-Z0-9_]*" "$LOG_FILE")
 if [ $? -eq 0 ]; then
-  # Run the command
-  /usr/bin/$BUILD_CLEANER_CMD
-  # Rerun the build
-  run_cmd
+  # Run the command, then re-run the build.
+  run_build_cleaner_cmd /usr/bin/$BUILD_CLEANER_CMD && run_cmd
 fi
 # Check if it complained about a file not found.
 if grep -E "fatal error:.*\.h. file not found" "$LOG_FILE" > /dev/null || grep -E "is not visible from target" "$LOG_FILE" > /dev/null
 then
-  /usr/bin/build_cleaner $TARGET
-  run_cmd
+  run_build_cleaner_cmd /usr/bin/build_cleaner $TARGET && run_cmd
+fi
+# Check if it complained about a file not found.
+TAZE_CMD=$(grep -E -o "taze //.*" "$LOG_FILE")
+if [ $? -eq 0 ]
+then
+  /usr/bin/$TAZE_CMD && run_cmd
 fi
 # Check if the tests failed
 if grep -E "_test.*FAILED.{0,4} in [0-9.]*s" "$LOG_FILE" >/dev/null; then

@@ -99,6 +99,8 @@ build-mpm ()
 
 alias build-mpm-live="build-mpm --mpm_build_arg='--label=live'"
 
+alias reproducible_build="rabbit --verifiable build --stamp -c opt $@"
+
 function g3open() {
   xdg-open "$(/google/data/ro/users/fr/freighttrain/bin/g3url 2> /dev/null "$1")"
 }
