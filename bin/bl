@@ -32,7 +32,7 @@ MODE="$1"
 shift
 
 COLOR="--color=yes --curses=yes "
-if [ $# > 1 -a "$1" = "--nocolor" ]
+if [ $# -gt 1 -a "$1" = "--nocolor" ]
 then
   COLOR=""
   shift
