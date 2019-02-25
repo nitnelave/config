@@ -1,10 +1,10 @@
 [interfaces]
-gnome=false
+gnome=true
 kde=false
 freedesktop=false
 
 [lock]
-cmd=/usr/bin/i3lock -i ~/.i3/lock_screen.png
+cmd=/usr/bin/i3lock -e -i ~/.i3/lock_screen.png
 onidle=true
 idletime=5
 idleunit=min
