@@ -8,7 +8,6 @@ set runtimepath+=~/.nvim/dein/repos/github.com/Shougo/dein.vim
 if dein#load_state('~/.cache/dein')
   call dein#begin('~/.cache/dein')
 
-  "call dein#add('Shougo/deoplete.nvim')
   call dein#add('ervandew/supertab')
   call dein#add('rust-lang/rust')
   call dein#add('tpope/vim-surround')
