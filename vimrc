@@ -502,3 +502,23 @@ nmap <Leader>gi :silent let g:gitgutter_diff_base = ''<CR>:silent GitGutter<CR>
 nmap <Leader>gh :silent let g:gitgutter_diff_base = 'HEAD'<CR>:silent GitGutter<CR>
 " Diff against master.
 nmap <Leader>gm :silent let g:gitgutter_diff_base = 'master'<CR>:silent GitGutter<CR>
+
+let g:netrw_banner = 0
+let g:netrw_liststyle = 3
+augroup netrw_mapping
+    autocmd!
+    autocmd filetype netrw call NetrwMapping()
+augroup END
+
+function! NetrwMapping()
+    nnoremap <buffer> t j
+    nnoremap <buffer> n k
+    nnoremap <buffer> T 8j
+    nnoremap <buffer> N 8k
+    nnoremap <buffer>l n
+    nnoremap <buffer>L N
+    nnoremap <buffer>- $
+    nnoremap <buffer>_ ^
+    nnoremap <buffer>S <C-w>w
+    nnoremap <buffer>H <C-w>r
+endfunction
