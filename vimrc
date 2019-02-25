@@ -19,6 +19,7 @@ if dein#load_state('~/.cache/dein')
   call dein#add('ctrlpvim/ctrlp.vim')
   call dein#add('FelikZ/ctrlp-py-matcher')
   call dein#add('roxma/vim-paste-easy')
+  call dein#add('leafgarland/typescript-vim')
   " Open vim at a specific line.
   call dein#add('bogado/file-line')
   call dein#add('wting/gitsessions.vim')
@@ -28,7 +29,6 @@ if dein#load_state('~/.cache/dein')
   call dein#add('prabirshrestha/async.vim')
   " Diffed lines in vim.
   call dein#add('airblade/vim-gitgutter')
-  call dein#add('leafgarland/typescript-vim')
 
   " Git integration
   call dein#add('tpope/vim-fugitive')
@@ -398,6 +398,10 @@ if !exists("g:ycm_semantic_triggers")
    let g:ycm_semantic_triggers = {}
 endif
 let g:ycm_semantic_triggers['typescript'] = ['.']
+let g:ycm_filter_diagnostics = { "typescript": {
+  \   "regex": [".*experimentalDecorators.*", ".*cannot find module.*"],
+  \   "level": "error",
+  \ }}
 
 nnoremap <F5> :YcmForceCompileAndDiagnostics<CR>
 nnoremap <C-f> :YcmCompleter FixIt<CR>
