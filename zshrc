@@ -257,7 +257,11 @@ autoload -Uz compinit && compinit -i
 ttyctl -f
 
 source ~/.aliases
-alias reload="source ~/.zshrc"
+reload ()
+{
+  source ~/.zshrc
+}
+
 
 export PATH=$PATH:~/projects/config/bin
 
