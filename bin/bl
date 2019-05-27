@@ -120,7 +120,7 @@ run_cmd ()
 run_build_cleaner_cmd ()
 {
   BUILD_ClEANER_WITH_ARGS="$*"
-  $BUILD_ClEANER_WITH_ARGS | tee | grep -q "update_visibility"
+  $BUILD_ClEANER_WITH_ARGS | tee -a $LOG_FILE && grep -q "update_visibility" $LOG_FILE
   if [ 0 -eq $? ]
   then
     while true
