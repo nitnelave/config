@@ -1,72 +1,256 @@
 # Git
 
-alias g="git"
-alias gi="g"
-alias gut="g"
-alias ga="g add"
-alias gci="g commit"
-alias gco="g checkout"
-alias gs="g status"
-alias gst="g status"
-alias gex="g export"
+unalias g
+g ()
+{
+  git "$@"
+}
+
+gi ()
+{
+  g "$@"
+}
+
+gut ()
+{
+  g "$@"
+}
+
+unalias ga
+ga ()
+{
+  g add "$@"
+}
+
+gci ()
+{
+  g commit "$@"
+}
+
+unalias gco
+gco ()
+{
+  g checkout "$@"
+}
+
+gs ()
+{
+  g status "$@"
+}
+
+unalias gst
+gst ()
+{
+  g status "$@"
+}
+
+gex ()
+{
+  g export "$@"
+}
+
 
 # Mercurial
 alias h=hg
-alias ha="hg add"
-alias hci="hg commit"
-alias hco="hg checkout"
-alias hs="hg status"
-alias hst="hg status"
-alias hex="hg uploadchain"
+ha ()
+{
+  hg add "$@"
+}
 
-alias ll="ls -l"
-alias la="ls -a -l"
+hci ()
+{
+  hg commit "$@"
+}
+
+hco ()
+{
+  hg checkout "$@"
+}
+
+hs ()
+{
+  hg status "$@"
+}
+
+hst ()
+{
+  hg status "$@"
+}
+
+hex ()
+{
+  hg uploadchain "$@"
+}
 
 
-alias screen="$SCRIPTS/screen.sh"
-alias z="$LOCK"
+unalias ll
+ll ()
+{
+  ls -l "$@"
+}
+
+unalias la
+la ()
+{
+  ls -a -l "$@"
+}
+
+
+
+screen ()
+{
+  $SCRIPTS/screen.sh "$@"
+}
+
+z ()
+{
+  $LOCK "$@"
+}
+
 
 # Maven
-alias mvn-javadoc="mvn clean javadoc:javadoc scm-publish:publish-scm"
-alias mvn-release="mvn release:clean && mvn release:prepare && mvn release:perform"
-alias mvn-snapshot="mvn clean deploy"
+mvn-javadoc ()
+{
+  mvn clean javadoc:javadoc scm-publish:publish-scm "$@"
+}
+
+mvn-release ()
+{
+  mvn release:clean && mvn release:prepare && mvn release:perform
+}
+
+mvn-snapshot ()
+{
+  mvn clean deploy "$@"
+}
+
 
 # misc commands
-alias gdb="gdb -q"
-alias ls="ls -phG"
+gdb ()
+{
+  /bin/gdb -q "$@"
+}
+
+unalias ls 2>/dev/null
+ls ()
+{
+  /bin/ls -phG --color "$@"
+}
+
 alias cortune=$HOME/projects/config/cowsay.sh
-alias mkdir="mkdir -pv"
-alias irc="ssh -t nitnelave@server.tolmer.fr \"zsh -c 'tmux attach -t irc'\""
-alias s="ls"
-alias no="ls"
-alias suspend="sudo pm-suspend"
-alias tax="tar xf"
-alias v="nvim -p"
-alias vim="stty stop '' -ixoff ; vim -p"
-alias grep="grep --color=auto"
+mkdir ()
+{
+  /bin/mkdir -pv "$@"
+}
 
-alias ipython-slides="ipython nbconvert --to slides --post serve"
+irc ()
+{
+  ssh -t nitnelave@server.tolmer.fr "zsh -c 'tmux attach -t irc'"
+}
 
-alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
+s ()
+{
+  ls "$@"
+}
 
 chmox ()
 {
   chmod +x "$@"
 }
 
+no ()
+{
+  ls "$@"
+}
+
+suspend ()
+{
+  sudo pm-suspend "$@"
+}
+
+tax ()
+{
+  tar xf "$@"
+}
+
+v ()
+{
+  nvim -p "$@"
+}
+
+vim ()
+{
+  stty stop '' -ixoff ; vim -p "$@"
+}
+
+grep ()
+{
+  /bin/grep --color=auto "$@"
+}
+
+
+ipython-slides ()
+{
+  ipython nbconvert --to slides --post serve "$@"
+}
+
+
+alert ()
+{
+  /usr/bin/notify-send --urgency=low -i \
+    "$([ $? = 0 ] && echo terminal || echo error)" \
+    "$(history|tail -n1|sed -e 's/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//')"
+}
+
 alias turffy='turing && spiffy'
 alias spitur='spiffy && turing'
-alias fu=fileutil
-alias bb="bl build"
-alias br="bl run"
-alias bt="bl test"
-alias bc="build_cleaner"
-IBLAZE="$(which iblaze) -iblaze_blaze_binary=$HOME/projects/config/bin/blaze_for_iblaze"
-alias ibb="$IBLAZE build"
-alias ibr="$IBLAZE run"
-alias ibt="$IBLAZE test"
+fu ()
+{
+  fileutil "$@"
+}
 
-alias chmox="chmod +x"
+bb ()
+{
+  bl build "$@"
+}
+
+br ()
+{
+  bl run "$@"
+}
+
+bt ()
+{
+  bl test "$@"
+}
+
+bc ()
+{
+  build_cleaner "$@"
+}
+
+IBLAZE="$(which iblaze) -iblaze_blaze_binary=$HOME/projects/config/bin/blaze_for_iblaze"
+ibb ()
+{
+  $IBLAZE build "$@"
+}
+
+ibr ()
+{
+  $IBLAZE run "$@"
+}
+
+ibt ()
+{
+  $IBLAZE test "$@"
+}
+
+
+chmox ()
+{
+  chmod +x "$@"
+}
+
 
 dex ()
 {
@@ -91,17 +275,28 @@ and ()
   [ $? -eq 0 ] && "$@"
 }
 build-mpm ()
+(
+  cd /google/src/files/205373024/depot/google3
+  rabbit --verifiable mpm --stamp -c opt --symlink_prefix=/tmp/output/blaze- "$@"
+)
+
+build-mpm-live ()
 {
-  (
-    cd /google/src/files/205373024/depot/google3
-    rabbit --verifiable mpm --stamp -c opt --symlink_prefix=/tmp/output/blaze- $@
-  )
+  build-mpm --mpm_build_arg='--label=live' "$@"
 }
 
-alias build-mpm-live="build-mpm --mpm_build_arg='--label=live'"
 
-alias reproducible_build="rabbit --verifiable build --stamp -c opt $@"
+reproducible_build ()
+{
+  rabbit --verifiable build --stamp -c opt $@
+}
+
 
 function g3open() {
   xdg-open "$(/google/data/ro/users/fr/freighttrain/bin/g3url 2> /dev/null "$1")"
+}
+
+and ()
+{
+  [ $? -eq 0 ] && "$@"
 }
