@@ -41,6 +41,7 @@ link xkb .xkb
 link idea/ideavimrc .ideavimrc
 link Xdefaults .Xdefaults
 link oh-my-zsh .oh-my-zsh
+link oh-my-zsh-custom .oh-my-zsh-custom
 link lesskey .lesskey
 link ssh_config .ssh/config
 link autolockd .autolockd
@@ -115,6 +116,10 @@ if [ ! -e "$HOME/.um-repo" ]; then
   git clone --depth 1 https://github.com/sinclairtarget/um.git ~/.um-repo \
     && mkdir -p ~/.bin \
     && ln -s ~/.bin/um ~/.um-repo/bin/um
+fi
+
+if [ ! -e "$HOME/.oh-my-zsh-custom/zsh-autosuggestions" ]; then
+  git clone --depth 1 https://github.com/zsh-users/zsh-autosuggestions.git ~/.oh-my-zsh-custom/zsh-autosuggestions
 fi
 
 echo "Configuration successful!"
