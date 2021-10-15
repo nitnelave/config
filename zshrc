@@ -24,7 +24,7 @@ COMPLETION_WAITING_DOTS="true"
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(git git-extras ssh-agent docker)
+plugins=(git git-extras ssh-agent docker docker-compose)
 
 # If a glob has no match, leave as-is
 setopt +o nomatch
