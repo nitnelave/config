@@ -3,39 +3,56 @@ autocmd!
 " Disable vi compatibility mode
 set nocompatible
 
-set runtimepath+=~/.nvim/dein/repos/github.com/Shougo/dein.vim
-
-if dein#load_state('~/.cache/dein')
-  call dein#begin('~/.cache/dein')
-
-  "call dein#add('Shougo/deoplete.nvim')
-  call dein#add('ervandew/supertab')
-  call dein#add('rust-lang/rust')
-  call dein#add('tpope/vim-surround')
-  call dein#add('tpope/vim-repeat')
-  call dein#add('embear/vim-localvimrc')
-  call dein#add('SirVer/ultisnips')
-  call dein#add('honza/vim-snippets')
-  call dein#add('ctrlpvim/ctrlp.vim')
-  call dein#add('FelikZ/ctrlp-py-matcher')
-  call dein#add('roxma/vim-paste-easy')
-  " Open vim at a specific line.
-  call dein#add('bogado/file-line')
-  call dein#add('wting/gitsessions.vim')
-  "call dein#add('neomake/neomake')
-  " Language Server -- definition, references
-  call dein#add('prabirshrestha/vim-lsp')
-  call dein#add('prabirshrestha/async.vim')
-  " Diffed lines in vim.
-  call dein#add('airblade/vim-gitgutter')
-  call dein#add('leafgarland/typescript-vim')
-
-  " Git integration
-  call dein#add('tpope/vim-fugitive')
-
-  call dein#end()
-  call dein#save_state()
+if empty(glob('~/.vim/autoload/plug.vim'))
+  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
+
+" Disable ALE LSP since we use Coc.
+let g:ale_disable_lsp = 1
+
+call plug#begin('~/.vim/plugged')
+  Plug 'ervandew/supertab'
+  Plug 'rust-lang/rust.vim'
+  Plug 'tpope/vim-surround'
+  Plug 'tpope/vim-repeat'
+  Plug 'embear/vim-localvimrc'
+  Plug 'SirVer/ultisnips'
+  "Plug 'honza/vim-snippets'
+  Plug 'ctrlpvim/ctrlp.vim'
+  Plug 'FelikZ/ctrlp-py-matcher'
+  Plug 'roxma/vim-paste-easy'
+  Plug 'leafgarland/typescript-vim'
+  " Open vim at a specific line.
+  Plug 'bogado/file-line'
+  Plug 'junegunn/fzf.vim'
+  " Language Server -- definition, references
+  " Plug 'natebosch/vim-lsc'
+  "Plug 'prabirshrestha/vim-lsp'
+  "Plug 'prabirshrestha/async.vim'
+  "Plug 'prabirshrestha/asyncomplete.vim'
+  "Plug 'prabirshrestha/asyncomplete-lsp.vim'
+  "Plug 'thomasfaingnaert/vim-lsp-snippets'
+  "Plug 'thomasfaingnaert/vim-lsp-ultisnips'
+  " Diffed lines in vim.
+  Plug 'mhinz/vim-signify'
+
+  Plug 'dense-analysis/ale'
+  Plug 'neoclide/coc.nvim', {'branch': 'release'}
+
+  " Swap function arguments with <, and >,
+  " New text objects a, and i,
+  Plug 'PeterRincker/vim-argumentative'
+
+  Plug 'jceb/vim-orgmode'
+
+  Plug 'tpope/vim-abolish'
+
+  Plug 'kamykn/spelunker.vim'
+
+  Plug 'cespare/vim-toml'
+call plug#end()
 
 " Enable filetype detection for plugins and indentation options
 filetype plugin indent on
@@ -373,42 +390,42 @@ let g:localvimrc_ask = 0
 
 " YouCompleteMe
 
-let g:ycm_confirm_extra_conf = 1
-let g:ycm_server_keep_logfiles = 1
-let g:ycm_seed_identifiers_with_syntax = 1
-let g:ycm_add_preview_to_completeopt = 1
-let g:ycm_autoclose_preview_window_after_completion = 1
-let g:ycm_filepath_completion_use_working_dir = 1
-let g:ycm_key_list_previous_completion = ['<S-TAB>', '<Up>', '<C-PageUp>']
-let g:ycm_rust_src_path = '~/.vim/bundle/YouCompleteMe/rust'
-let g:ycm_always_populate_location_list = 1
-let g:ycm_autoclose_preview_window_after_insertion = 1
-if !exists('g:ycm_global_ycm_extra_conf')
-  let g:ycm_global_ycm_extra_conf = "$HOME/.vim/.ycm_extra_conf.py"
-endif
-if has("patch-7.4.314")
-    set shortmess+=c
-endif
-
-autocmd FileType typescript nnoremap <buffer> <C-]> :YcmCompleter GoToDefinition<CR>
-if !exists("g:ycm_semantic_triggers")
-   let g:ycm_semantic_triggers = {}
-endif
-let g:ycm_semantic_triggers['typescript'] = ['.']
-
-nnoremap <F5> :YcmForceCompileAndDiagnostics<CR>
-nnoremap <C-f> :YcmCompleter FixIt<CR>
-nnoremap <C-y>f :YcmCompleter FixIt<CR>
-nnoremap <C-y>h :YcmCompleter GoToInclude<CR>
-nnoremap <C-y>g :YcmCompleter GoTo<CR>
-nnoremap <C-y>i :YcmCompleter GoToDefinition<CR>
-nnoremap <C-y>d :YcmCompleter GoToDeclaration<CR>
-nnoremap <C-y>t :YcmCompleter GetType<CR>
-nnoremap <C-y>n :YcmCompleter RefactorRename<CR>
-
-" make YCM compatible with UltiSnips (using supertab)
-let g:ycm_key_list_select_completion = ['<C-n>', '<Down>']
-let g:ycm_key_list_previous_completion = ['<C-p>', '<Up>']
+"let g:ycm_confirm_extra_conf = 1
+"let g:ycm_server_keep_logfiles = 1
+"let g:ycm_seed_identifiers_with_syntax = 1
+"let g:ycm_add_preview_to_completeopt = 1
+"let g:ycm_autoclose_preview_window_after_completion = 1
+"let g:ycm_filepath_completion_use_working_dir = 1
+"let g:ycm_key_list_previous_completion = ['<S-TAB>', '<Up>', '<C-PageUp>']
+"let g:ycm_rust_src_path = '~/.vim/bundle/YouCompleteMe/rust'
+"let g:ycm_always_populate_location_list = 1
+"let g:ycm_autoclose_preview_window_after_insertion = 1
+"if !exists('g:ycm_global_ycm_extra_conf')
+"  let g:ycm_global_ycm_extra_conf = "$HOME/.vim/.ycm_extra_conf.py"
+"endif
+"if has("patch-7.4.314")
+"    set shortmess+=c
+"endif
+"
+"autocmd FileType typescript nnoremap <buffer> <C-]> :YcmCompleter GoToDefinition<CR>
+"if !exists("g:ycm_semantic_triggers")
+"   let g:ycm_semantic_triggers = {}
+"endif
+"let g:ycm_semantic_triggers['typescript'] = ['.']
+"
+"nnoremap <F5> :YcmForceCompileAndDiagnostics<CR>
+"nnoremap <C-f> :YcmCompleter FixIt<CR>
+"nnoremap <C-y>f :YcmCompleter FixIt<CR>
+"nnoremap <C-y>h :YcmCompleter GoToInclude<CR>
+"nnoremap <C-y>g :YcmCompleter GoTo<CR>
+"nnoremap <C-y>i :YcmCompleter GoToDefinition<CR>
+"nnoremap <C-y>d :YcmCompleter GoToDeclaration<CR>
+"nnoremap <C-y>t :YcmCompleter GetType<CR>
+"nnoremap <C-y>n :YcmCompleter RefactorRename<CR>
+"
+"" make YCM compatible with UltiSnips (using supertab)
+"let g:ycm_key_list_select_completion = ['<C-n>', '<Down>']
+"let g:ycm_key_list_previous_completion = ['<C-p>', '<Up>']
 let g:SuperTabDefaultCompletionType = '<C-n>'
 
 " better key bindings for UltiSnipsExpandTrigger
@@ -465,6 +482,24 @@ endif
 " Rust.vim
 
 let g:rustfmt_autosave = 1
+autocmd Filetype rust nnoremap ff :RustFmt<CR>
+"autocmd Filetype rust vnoremap f :RustFmtRange
+
+" ALE
+
+nnoremap <C-]> :ALEGoToDefinition<CR>
+nnoremap <C-[> :ALEFindReferences<CR>
+nnoremap <leader>ai :ALEImport<CR>
+nnoremap <leader>f :ALEFixSuggest<CR>
+nnoremap <leader>r :ALERename<CR>
+nnoremap <leader>d :ALEDocumentation<CR>
+let g:ale_linters = {
+\  'rust': ['analyzer', 'rls'],
+\}
 
 " Colorscheme
 color desert
+
+highlight CocHintFloat ctermfg=Black
+highlight CocErrorSign ctermfg=Black
+highlight CocWarningFloat ctermfg=Black
