@@ -48,3 +48,12 @@ dex ()
   fi
   docker exec -it $1 bash
 }
+
+suv () {
+  sudo -E vim $*
+}
+
+dc () (
+  cd /home/nitnelave/docker
+  docker-compose $*
+)
