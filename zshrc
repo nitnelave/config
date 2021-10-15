@@ -44,6 +44,7 @@ HISTFILE=~/.histfile
 HISTSIZE=10000
 SAVEHIST=10000
 bindkey -v
+bindkey "^q" push-line
 
 unsetopt beep notify
 
