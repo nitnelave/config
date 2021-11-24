@@ -3,7 +3,12 @@
 unalias g
 g ()
 {
-  git "$@"
+  if [ -d '.hg' -o -d '../.hg' ]
+  then
+    hg "$@"
+  else
+    git "$@"
+  fi
 }
 
 gi ()
@@ -16,11 +21,7 @@ gut ()
   g "$@"
 }
 
-unalias ga
-ga ()
-{
-  g add "$@"
-}
+alias ga="git add"
 
 gci ()
 {
@@ -51,7 +52,16 @@ gex ()
 
 
 # Mercurial
-alias h=hg
+h () {
+  if [ -d '.git' -o -d '../.git' ]
+  then
+    git "$@"
+  else
+    hg "$@"
+  fi
+}
+compdef h='hg'
+
 ha ()
 {
   hg add "$@"
@@ -79,7 +89,7 @@ hst ()
 
 hex ()
 {
-  hg uploadchain "$@"
+  hg fix && hg uploadchain "$@"
 }
 
 
