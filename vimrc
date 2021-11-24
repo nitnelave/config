@@ -1,58 +1,92 @@
+" Clear autocmds
 autocmd!
 
-" Disable vi compatibility mode
-set nocompatible
-
+" Install automatically Plug, if not already there.
 if empty(glob('~/.vim/autoload/plug.vim'))
   silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
     \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
   autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 
-" Disable ALE LSP since we use Coc.
-let g:ale_disable_lsp = 1
-
 call plug#begin('~/.vim/plugged')
-  Plug 'ervandew/supertab'
-  Plug 'rust-lang/rust.vim'
+  " QOL plugins.
+
+  " Better delimiters.
   Plug 'tpope/vim-surround'
+  " Better dot repetition
   Plug 'tpope/vim-repeat'
+  " Load per-project vimrc
   Plug 'embear/vim-localvimrc'
-  Plug 'SirVer/ultisnips'
-  "Plug 'honza/vim-snippets'
-  Plug 'ctrlpvim/ctrlp.vim'
-  Plug 'FelikZ/ctrlp-py-matcher'
+  " Toggle paste mode automatically.
   Plug 'roxma/vim-paste-easy'
-  Plug 'leafgarland/typescript-vim'
   " Open vim at a specific line.
   Plug 'bogado/file-line'
-  Plug 'junegunn/fzf.vim'
-  " Language Server -- definition, references
-  " Plug 'natebosch/vim-lsc'
-  "Plug 'prabirshrestha/vim-lsp'
-  "Plug 'prabirshrestha/async.vim'
-  "Plug 'prabirshrestha/asyncomplete.vim'
-  "Plug 'prabirshrestha/asyncomplete-lsp.vim'
-  "Plug 'thomasfaingnaert/vim-lsp-snippets'
-  "Plug 'thomasfaingnaert/vim-lsp-ultisnips'
   " Diffed lines in vim.
   Plug 'mhinz/vim-signify'
-
-  Plug 'dense-analysis/ale'
-  Plug 'neoclide/coc.nvim', {'branch': 'release'}
-
   " Swap function arguments with <, and >,
   " New text objects a, and i,
   Plug 'PeterRincker/vim-argumentative'
-
-  Plug 'jceb/vim-orgmode'
-
+  " Replace with case.
   Plug 'tpope/vim-abolish'
-
+  " Spellcheck with CamlCase support.
   Plug 'kamykn/spelunker.vim'
 
+  " Language-specific support.
+
+  "Plug 'rust-lang/rust.vim'
+  Plug 'leafgarland/typescript-vim'
+  Plug 'jceb/vim-orgmode'
   Plug 'cespare/vim-toml'
+
+  " Tools
+
+  Plug 'ctrlpvim/ctrlp.vim'
+  Plug 'FelikZ/ctrlp-py-matcher'
+
+  Plug 'lifepillar/vim-cheat40'
+
+  " LSP & completion
+  " Collection of common configurations for the Nvim LSP client
+  Plug 'neovim/nvim-lspconfig'
+  " Nicer UI.
+  Plug 'tami5/lspsaga.nvim', { 'branch': 'nvim51' }
+
+  " Completion framework
+  Plug 'hrsh7th/nvim-cmp'
+
+  " LSP completion source for nvim-cmp
+  Plug 'hrsh7th/cmp-nvim-lsp'
+
+  " Snippet completion source for nvim-cmp
+  Plug 'hrsh7th/cmp-vsnip'
+
+  " Other usefull completion sources
+  Plug 'hrsh7th/cmp-path'
+  Plug 'hrsh7th/cmp-buffer'
+  Plug 'hrsh7th/cmp-cmdline'
+  Plug 'hrsh7th/cmp-git'
+
+  " To enable more of the features of rust-analyzer, such as inlay hints and more!
+  Plug 'simrat39/rust-tools.nvim'
+
+  " Snippet engine
+  Plug 'hrsh7th/vim-vsnip'
+  Plug 'hrsh7th/vim-vsnip-integ'
+  Plug 'rafamadriz/friendly-snippets'
+
+
+  " Fuzzy finder
+  " Optional
+  Plug 'nvim-lua/popup.nvim'
+  Plug 'nvim-lua/plenary.nvim'
+  Plug 'nvim-telescope/telescope.nvim'
+
+  " Tree sitter
+  Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+
 call plug#end()
+
+" General vim settings
 
 " Enable filetype detection for plugins and indentation options
 filetype plugin indent on
@@ -106,12 +140,6 @@ set t_vb=
 " Enables syntax highlighting
 syntax on
 
-" Enable Doxygen highlighting
-let g:load_doxygen_syntax=1
-
-" Use a slightly darker background color to differentiate with the status line
-let g:jellybeans_background_color_256='232'
-
 " Allow mouse use in vim
 set mouse=a
 
@@ -122,7 +150,8 @@ set showmatch
 set wrap
 
 " Preview window on completion
-set completeopt=menu,longest
+set completeopt=menuone,noinsert,noselect
+set shortmess+=c
 
 " Ignore case on search
 set ignorecase
@@ -132,6 +161,9 @@ set smartcase
 
 " Move cursor to the matched string
 set incsearch
+
+" Show the live results of a :s command
+set inccommand=nosplit
 
 " Don't highlight matched strings
 set nohlsearch
@@ -167,8 +199,91 @@ set diffopt=iwhite,vertical
 " Highlight merge conflict markers.
 match ErrorMsg '^\(<\|=\|>\)\{7\}\([^=].\+\)\?$'
 
+set nofoldenable
+
 set comments=s0:/*,mb:**,ex:*/,:// " Comments
+
+set list
+set listchars=tab:>-,trail:.
+
+set number
+set signcolumn=yes
+
+set breakindent showbreak=..
+set linebreak
+
+let vimDir = '$HOME/.vim'
+let &runtimepath.=','.vimDir
+if has('persistent_undo')
+  let myUndoDir = expand(vimDir . '/undo')
+  silent call system('mkdir -p ' . myUndoDir)
+  let &undodir = myUndoDir
+  set undofile
+  set undolevels=1000
+  set undoreload=100000
+endif
+
+let g:netrw_banner = 0
+let g:netrw_liststyle = 3
+augroup netrw_mapping
+  autocmd!
+  autocmd filetype netrw call NetrwMapping()
+augroup END
+
+function! NetrwMapping()
+  nunmap <buffer> Th
+  nunmap <buffer> Tb
+  nnoremap <buffer> t j
+  nnoremap <buffer> n k
+  nnoremap <buffer> T 8j
+  nnoremap <buffer> N 8k
+  nnoremap <buffer> l n
+  nnoremap <buffer> L N
+  nnoremap <buffer> - $
+  nnoremap <buffer> _ ^
+  nnoremap <buffer> S <C-w>w
+  nnoremap <buffer> H <C-w>r
+endfunction
+
+color desert
+
+" Spellcheck highlighting
+augroup my_colors
+  autocmd!
+  autocmd ColorScheme desert hi clear SpellBad
+  autocmd ColorScheme desert hi SpellBad cterm=underline ctermfg=red
+  autocmd ColorScheme desert hi SpelunkerSpellBad cterm=underline ctermfg=red
+  autocmd ColorScheme desert hi SpelunkerComplexOrCompoundWord cterm=underline ctermfg=NONE
+augroup END
+
+" Autocmd, per language
+
 autocmd Filetype c,cpp set comments^=:///\ ,://\ ,fb:-
+
+autocmd BufWritePre * if &ft!="markdown"|:%s/\v\s+$//e|endif
+autocmd BufWritePre .{article,letter,followup} :%s/\v^--$/-- /e
+autocmd BufWritePre /tmp/mutt-* :%s/\v^--$/-- /e
+
+
+augroup Guards
+autocmd BufNewFile *.{h,hh,hpp} execute "normal! i#pragma once \n\n"
+augroup END
+
+function! s:insert_shebang()
+  execute "normal! i#! /bin/sh\n\n"
+endfunction
+autocmd BufNewFile *.sh call <SID>insert_shebang()
+
+function! s:insert_python()
+  execute "normal! i#! /usr/bin/env python\n\n"
+  set softtabstop=4
+  set shiftwidth=4
+endfunction
+autocmd BufNewFile *.py call <SID>insert_python()
+
+
+" Mappings & commands
+
 " Set "," as map leader
 let mapleader = ","
 
@@ -184,11 +299,6 @@ inoremap <C-H> <C-W>
 
 " 'very magic' regexp substitutions
 cnoremap %s %s/\v
-
-" Toggle paste mode
-noremap <leader>pp :setlocal paste!<cr>
-
-xnoremap p "_dP
 
 " Dvorak mappings
 " Move between rows in wrapped lines
@@ -214,30 +324,16 @@ command! Qa qa
 command! Wq wq
 command! WQ wq
 
-
 " Yank from cursor to end of line, to be consistent with C and D
 nnoremap Y y$
+" Yank relative file path.
+nnoremap <silent> yf :let @"=@%<CR>
+
 
 " map ; to :
 noremap ; :
 
 cab reload source ~/.vimrc
-
-no Z z=1<CR>]s
-
-let vimDir = '$HOME/.vim'
-let &runtimepath.=','.vimDir
-if has('persistent_undo')
-  let myUndoDir = expand(vimDir . '/undo')
-  silent call system('mkdir -p ' . myUndoDir)
-  let &undodir = myUndoDir
-  set undofile
-  set undolevels=1000
-  set undoreload=100000
-endif
-
-autocmd BufNewFile,BufRead *.{c,cc,h,hh,hxx,hpp,cpp,md,fr,en,txt} : set tw=79
-autocmd BufNewFile,BufRead *.{java} : set tw=119
 
 " tab settings
 nnoremap <silent> <C-H> :tabprevious<CR>
@@ -290,75 +386,6 @@ noremap <C-N> :silent call MoveToNextTab()<CR>
 
 nnoremap <Space> i<Space><Esc>
 
-
-autocmd BufWritePre * if &ft!="markdown"|:%s/\v\s+$//e|endif
-autocmd BufWritePre .{article,letter,followup} :%s/\v^--$/-- /e
-autocmd BufWritePre /tmp/mutt-* :%s/\v^--$/-- /e
-
-
-augroup Guards
-autocmd BufNewFile *.{h,hh,hpp} execute "normal! i#pragma once \n\n"
-augroup END
-
-function! s:insert_shebang()
-  execute "normal! i#! /bin/sh\n\n"
-endfunction
-autocmd BufNewFile *.sh call <SID>insert_shebang()
-
-set list
-set listchars=tab:>-,trail:.
-
-set number
-
-function! s:insert_python()
-  execute "normal! i#! /usr/bin/env python\n\n"
-  set softtabstop=4
-  set shiftwidth=4
-endfunction
-autocmd BufNewFile *.py call <SID>insert_python()
-
-function! s:format_text()
-  execute "%s/\|-\>/└─>/ge"
-  execute "%s/\\v( *)  - /\\1└─> /ge"
-  execute "%s/-\>/=>/ge"
-  syntax off
-endfunction
-autocmd BufWritePre *.{fr,en} call <SID>format_text()
-autocmd BufEnter *.{fr,en} call <SID>format_text()
-
-
-function! g:FromPDF()
-  execute "%s/ ::/::/ge"
-  execute "%s/:: /::/ge"
-  execute "%s/ ;/;/ge"
-  execute "%s/ (/(/ge"
-  execute "%s/( /(/ge"
-  execute "%s/ )/)/ge"
-  execute "%s/) /)/ge"
-  execute "%s/< /</ge"
-  execute "%s/ >/>/ge"
-  execute "%s/> />/ge"
-  execute "%s/ ,/,/ge"
-  execute "%s/ :/:/ge"
-  execute "%s/operator /operator/ge"
-  execute "%s/)const/) const/ge"
-  execute "%s/\\\v \\\&/\\\&/ge"
-  execute "g/\\\v\\\s*[0-9]+$/d"
-  normal! gg=G
-endfunction
-
-cab fpdf call g:FromPDF()
-
-set nofoldenable
-
-autocmd BufNewFile,BufRead *.en : set spell spelllang=en_us
-autocmd BufNewFile,BufRead *.fr : set spell spelllang=fr
-autocmd BufNewFile,BufRead *tolmer.fr : set nospell
-
-if filereadable("~/.vim/plugin/RainbowParenthesis.vim")
-  source ~/.vim/plugin/RainbowParenthesis.vim
-endif
-
 function! g:AccentsToLatex()
   execute "'<,'>s/é/\\\\'e/e"
   execute "'<,'>s/è/\\\\`e/e"
@@ -377,75 +404,21 @@ endfunction
 
 cab accents call g:AccentsToLatex()
 
-" LatexBox
-
-let g:LatexBox_latexmk_options = "-pvc -pdfps"
-au FileType * exec("setlocal dictionary+=".$HOME."/.vim/dictionaries/".expand('<amatch>'))
-set complete+=k
+" Plugin configs
 
 " Localvimrc
 
 let g:localvimrc_sandbox = 0
 let g:localvimrc_ask = 0
 
-" YouCompleteMe
-
-"let g:ycm_confirm_extra_conf = 1
-"let g:ycm_server_keep_logfiles = 1
-"let g:ycm_seed_identifiers_with_syntax = 1
-"let g:ycm_add_preview_to_completeopt = 1
-"let g:ycm_autoclose_preview_window_after_completion = 1
-"let g:ycm_filepath_completion_use_working_dir = 1
-"let g:ycm_key_list_previous_completion = ['<S-TAB>', '<Up>', '<C-PageUp>']
-"let g:ycm_rust_src_path = '~/.vim/bundle/YouCompleteMe/rust'
-"let g:ycm_always_populate_location_list = 1
-"let g:ycm_autoclose_preview_window_after_insertion = 1
-"if !exists('g:ycm_global_ycm_extra_conf')
-"  let g:ycm_global_ycm_extra_conf = "$HOME/.vim/.ycm_extra_conf.py"
-"endif
-"if has("patch-7.4.314")
-"    set shortmess+=c
-"endif
-"
-"autocmd FileType typescript nnoremap <buffer> <C-]> :YcmCompleter GoToDefinition<CR>
-"if !exists("g:ycm_semantic_triggers")
-"   let g:ycm_semantic_triggers = {}
-"endif
-"let g:ycm_semantic_triggers['typescript'] = ['.']
-"
-"nnoremap <F5> :YcmForceCompileAndDiagnostics<CR>
-"nnoremap <C-f> :YcmCompleter FixIt<CR>
-"nnoremap <C-y>f :YcmCompleter FixIt<CR>
-"nnoremap <C-y>h :YcmCompleter GoToInclude<CR>
-"nnoremap <C-y>g :YcmCompleter GoTo<CR>
-"nnoremap <C-y>i :YcmCompleter GoToDefinition<CR>
-"nnoremap <C-y>d :YcmCompleter GoToDeclaration<CR>
-"nnoremap <C-y>t :YcmCompleter GetType<CR>
-"nnoremap <C-y>n :YcmCompleter RefactorRename<CR>
-"
-"" make YCM compatible with UltiSnips (using supertab)
-"let g:ycm_key_list_select_completion = ['<C-n>', '<Down>']
-"let g:ycm_key_list_previous_completion = ['<C-p>', '<Up>']
-let g:SuperTabDefaultCompletionType = '<C-n>'
-
-" better key bindings for UltiSnipsExpandTrigger
-let g:UltiSnipsExpandTrigger = "<tab>"
-let g:UltiSnipsJumpForwardTrigger = "<tab>"
-let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
-
 " Ctrl-P
-nnoremap <leader>b :CtrlPBuffer<CR>
+
+let g:ctrlp_cmd = 'CtrlPMixed'
 let g:ctrlp_working_path_mode = 'raw'
-let g:ctrlp_default_input = 1
-let g:ctrlp_tabpage_position = 'al'
-let g:ctrlp_root_markers = ['.vimrc', 'google3', '.git']
-let g:ctrlp_open_new_file = 'v'
-let g:ctrlp_open_multiple_files = 'vj'
-let g:ctrlp_clear_cache_on_exit = 0
+let g:ctrlp_root_markers = ['.vimrc', 'google3', '.git', '.hg']
+let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files -co --exclude-standard']
 let g:ctrlp_switch_buffer = 'EV'
-let g:ctrlp_match_func = { 'match': 'pymatcher#PyMatch' }
 let g:ctrlp_clear_cache_on_exit = 0
-let g:ctrlp_default_input = ''
 
 
 let g:ctrlp_prompt_mappings = {
@@ -458,10 +431,9 @@ let g:ctrlp_prompt_mappings = {
       \ 'PrtCurLeft()':         ['<left>', '<c-^>'],
       \ 'AcceptSelection("h")': ['<c-x>', '<c-cr>'],
       \ 'AcceptSelection("t")': [],
-      \ 'PrtDeleteWord()':      ['<c-g>'],
+      \ 'PrtDeleteWord()':      ['<c-H>'],
       \ 'PrtExit()':            ['<esc>'],
       \ }
-
 
 if executable('ag')
   " Use Ag over Grep
@@ -479,27 +451,219 @@ if executable('ag')
         \ -g ""'
 endif
 
-" Rust.vim
+" LSP
 
-let g:rustfmt_autosave = 1
-autocmd Filetype rust nnoremap ff :RustFmt<CR>
-"autocmd Filetype rust vnoremap f :RustFmtRange
+" Configure LSP through rust-tools.nvim plugin.
+" rust-tools will configure and enable certain LSP features for us.
+" See https://github.com/simrat39/rust-tools.nvim#configuration
+lua <<EOF
+local nvim_lsp = require'lspconfig'
 
-" ALE
+local opts = {
+    tools = { -- rust-tools options
+        autoSetHints = true,
+        hover_with_actions = true,
+        inlay_hints = {
+            show_parameter_hints = false,
+            parameter_hints_prefix = "",
+            other_hints_prefix = "",
+        },
+    },
 
-nnoremap <C-]> :ALEGoToDefinition<CR>
-nnoremap <C-[> :ALEFindReferences<CR>
-nnoremap <leader>ai :ALEImport<CR>
-nnoremap <leader>f :ALEFixSuggest<CR>
-nnoremap <leader>r :ALERename<CR>
-nnoremap <leader>d :ALEDocumentation<CR>
-let g:ale_linters = {
-\  'rust': ['analyzer', 'rls'],
-\}
+    -- all the opts to send to nvim-lspconfig
+    -- these override the defaults set by rust-tools.nvim
+    -- see https://github.com/neovim/nvim-lspconfig/blob/master/CONFIG.md#rust_analyzer
+    server = {
+        -- on_attach is a callback called when the language server attachs to the buffer
+        -- on_attach = on_attach,
+        settings = {
+            -- to enable rust-analyzer settings visit:
+            -- https://github.com/rust-analyzer/rust-analyzer/blob/master/docs/user/generated_config.adoc
+            ["rust-analyzer"] = {
+                -- enable clippy on save
+                checkOnSave = {
+                    command = "clippy"
+                },
+            }
+        }
+    },
+}
 
-" Colorscheme
-color desert
+require('rust-tools').setup(opts)
+require'lspconfig'.clangd.setup{}
+EOF
 
-highlight CocHintFloat ctermfg=Black
-highlight CocErrorSign ctermfg=Black
-highlight CocWarningFloat ctermfg=Black
+" Setup Completion
+" See https://github.com/hrsh7th/nvim-cmp#basic-configuration
+lua <<EOF
+local cmp = require'cmp'
+cmp.setup({
+  -- Enable LSP snippets
+  snippet = {
+    expand = function(args)
+        vim.fn["vsnip#anonymous"](args.body)
+    end,
+  },
+  mapping = {
+    ['<C-n>'] = cmp.mapping.select_prev_item(),
+    ['<C-t>'] = cmp.mapping.select_next_item(),
+    -- Add tab support
+    ['<S-Tab>'] = cmp.mapping.select_prev_item(),
+    ['<Tab>'] = cmp.mapping.select_next_item(),
+    ['<C-c>'] = cmp.mapping.scroll_docs(-4),
+    ['<C-w>'] = cmp.mapping.scroll_docs(4),
+    ['<C-Space>'] = cmp.mapping.complete(),
+    ['<C-e>'] = cmp.mapping.close(),
+    ['<CR>'] = cmp.mapping.confirm({
+      behavior = cmp.ConfirmBehavior.Insert,
+      select = true,
+    })
+  },
+
+  -- Installed sources
+  sources = {
+    { name = 'nvim_lsp' },
+    { name = 'vsnip' },
+    { name = 'path' },
+    { name = 'buffer' },
+    { name = "cmp_git" },
+    { name = "cmdline" },
+  },
+})
+
+require("cmp_git").setup({
+    -- defaults
+    filetypes = { "gitcommit" },
+    github = {
+        issues = {
+            filter = "all", -- assigned, created, mentioned, subscribed, all, repos
+            limit = 100,
+            state = "open", -- open, closed, all
+        },
+        mentions = {
+            limit = 100,
+        },
+    },
+    gitlab = {
+        issues = {
+            limit = 100,
+            state = "opened", -- opened, closed, all
+        },
+        mentions = {
+            limit = 100,
+        },
+        merge_requests = {
+            limit = 100,
+            state = "opened", -- opened, closed, locked, merged
+        },
+    },
+})
+EOF
+
+" LSP saga config
+lua <<EOF
+local saga = require 'lspsaga'
+saga.init_lsp_saga {
+  finder_action_keys = {
+    open = '<CR>',
+    vsplit = 's',
+    quit = 'q',
+    scroll_down = '<c-w>',
+    scroll_up = '<c-c>'
+  },
+  code_action_prompt = {
+    enable = false,
+  },
+}
+EOF
+
+" Code navigation shortcuts
+nnoremap <silent> <c-]> <cmd>lua vim.lsp.buf.definition()<CR>
+nnoremap <silent> gd    <cmd>lua vim.lsp.buf.definition()<CR>
+nnoremap <silent> gD    <cmd>lua vim.lsp.buf.implementation()<CR>
+nnoremap <silent> K <cmd>lua require('lspsaga.hover').render_hover_doc()<CR>
+" scroll down hover doc or scroll in definition preview
+nnoremap <silent> <C-w> <cmd>lua require('lspsaga.action').smart_scroll_with_saga(4)<CR>
+" scroll up hover doc
+nnoremap <silent> <C-c> <cmd>lua require('lspsaga.action').smart_scroll_with_saga(-4)<CR>
+nnoremap <silent> <c-k> <cmd>lua require('lspsaga.signaturehelp').signature_help()<CR>
+"nnoremap <silent> 1gD   <cmd>lua vim.lsp.buf.type_definition()<CR>
+nnoremap <silent> gr    <cmd>lua vim.lsp.buf.references()<CR>
+"nnoremap <silent> g0    <cmd>lua vim.lsp.buf.document_symbol()<CR>
+"nnoremap <silent> gW    <cmd>lua vim.lsp.buf.workspace_symbol()<CR>
+nnoremap <silent> gh    <cmd>lua require'lspsaga.provider'.lsp_finder()<CR>
+nnoremap <silent><leader>a    <cmd>lua require('lspsaga.codeaction').code_action()<CR>
+vnoremap <silent><leader>a :<C-U>lua require('lspsaga.codeaction').range_code_action()<CR>
+nnoremap <silent><leader>r <cmd>lua require('lspsaga.rename').rename()<CR>
+
+" Set updatetime for CursorHold
+" 300ms of no cursor movement to trigger CursorHold
+set updatetime=300
+" Show diagnostic popup on cursor hold
+autocmd CursorHold * :Lspsaga show_line_diagnostics
+
+nnoremap <silent><leader>d <cmd>Lspsaga show_line_diagnostics<CR>
+" Goto previous/next diagnostic warning/error
+nnoremap <silent> g[ <cmd>Lspsaga diagnostic_jump_next<CR>
+nnoremap <silent> g] <cmd>Lspsaga diagnostic_jump_prev<CR>
+
+" Show/hide float terminal
+nnoremap <silent> <leader>g <cmd>lua require('lspsaga.floaterm').open_float_terminal('lazygit')<CR>
+tnoremap <silent> <leader>g <C-\><C-n>:lua require('lspsaga.floaterm').close_float_terminal()<CR>
+
+autocmd BufWritePre *.rs lua vim.lsp.buf.formatting_sync(nil, 200)
+
+
+" VSnip
+
+imap <expr> <Tab>   vsnip#jumpable(1)   ? '<Plug>(vsnip-jump-next)'      : '<Tab>'
+smap <expr> <Tab>   vsnip#jumpable(1)   ? '<Plug>(vsnip-jump-next)'      : '<Tab>'
+imap <expr> <S-Tab> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)'      : '<S-Tab>'
+smap <expr> <S-Tab> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)'      : '<S-Tab>'
+
+
+" vim-cheat40
+let g:cheat40_use_default = 0
+
+
+" Treesitter
+
+lua <<EOF
+require'nvim-treesitter.configs'.setup {
+  ensure_installed = { "rust", "cpp", "c" },
+  ignore_install = { "javascript" }, -- List of parsers to ignore installing
+  highlight = {
+    enable = true,              -- false will disable the whole extension
+    disable = {},  -- list of language that will be disabled
+    -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
+    -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
+    -- Using this option may slow down your editor, and you may see some duplicate highlights.
+    -- Instead of true it can also be a list of languages
+    additional_vim_regex_highlighting = false,
+  },
+  incremental_selection = {
+    enable = true,
+    keymaps = {
+      node_incremental = "g]",
+      node_decremental = "g[",
+    },
+  },
+}
+EOF
+
+" Spelunker
+
+" Only check words currently displayed
+let g:spelunker_check_type = 1
+" Highlight only SpellBad
+let g:spelunker_highlight_type = 2
+let g:spelunker_disable_uri_checking = 1
+let g:spelunker_disable_backquoted_checking = 1
+let g:spelunker_white_list_for_user = ['args', 'kwargs']
+" Disable email-like words checking. (default: 0)
+let g:spelunker_disable_email_checking = 1
+" Disable account name checking. (default: 0)
+let g:spelunker_disable_account_name_checking = 1
+let g:spelunker_disable_acronym_checking = 1
+
+autocmd TermOpen * :let b:enable_spelunker_vim = 0
