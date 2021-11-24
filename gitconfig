@@ -18,7 +18,6 @@
         prune-all = !git remote | xargs -n 1 git remote prune
         rem = rebase master
         rim = rebase --interactive master
-        edit-unmerged = "!f() { git diff --name-status --diff-filter=U | cut -f2 ; }; stty stop '' -ixoff ; nvim -p `f`"
         edit-unmerged = "!f() { git diff --name-status --diff-filter=U | cut -f2 ; }; stty stop '' -ixoff ; nvim -p '+/^\\(<<<<<<\\|>>>>>>\\|======\\)/' `f`"
         add-unmerged = "!f() { git diff --name-status --diff-filter=U | cut -f2 ; }; git add `f`"
         alias = "!sh -c '[ $# = 2 ] && git config --global alias.\"$1\" \"$2\" && exit 0 || echo \"usage: git alias <new alias> <original command>\" >&2 && exit 1' -"
