@@ -217,17 +217,17 @@ fu ()
 
 bb ()
 {
-  bl build "$@"
+  python3 /google/src/cloud/vtolmer/bl/google3/experimental/users/vtolmer/scripts/bl.py build "$@"
 }
 
 br ()
 {
-  bl run "$@"
+  python3 /google/src/cloud/vtolmer/bl/google3/experimental/users/vtolmer/scripts/bl.py run "$@"
 }
 
 bt ()
 {
-  bl test "$@"
+  python3 /google/src/cloud/vtolmer/bl/google3/experimental/users/vtolmer/scripts/bl.py test "$@"
 }
 
 bc ()
