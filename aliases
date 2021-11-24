@@ -148,10 +148,6 @@ ls ()
 }
 
 alias cortune=$HOME/projects/config/cowsay.sh
-mkdir ()
-{
-  /bin/mkdir -pv "$@"
-}
 
 irc ()
 {
@@ -286,7 +282,7 @@ and ()
 }
 build-mpm ()
 (
-  cd /google/src/files/205373024/depot/google3
+  cd /google/src/files/head/depot/google3
   rabbit --verifiable mpm --stamp -c opt --symlink_prefix=/tmp/output/blaze- "$@"
 )
 
