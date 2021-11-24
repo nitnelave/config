@@ -306,3 +306,8 @@ and ()
 {
   [ $? -eq 0 ] && "$@"
 }
+
+androidstudio ()
+{
+  /opt/android-studio-with-blaze-stable/bin/studio.sh $@
+}
