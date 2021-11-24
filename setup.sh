@@ -1,5 +1,7 @@
 #! /bin/sh
 
+set -e
+
 if [ $# -ge 1 ] && [ $1 = "-f" ]
 then
   FORCE=1
@@ -34,32 +36,17 @@ link i3config .i3/config
 mkdir -p $HOME/.config/zathura
 link zathurarc .config/zathura/zathurarc
 link signature .signature
-link slrnrc .slrnrc
-link dircolors .dircolors
-link vrapperrc .vrapperrc
 link xstart .xstart-generic
 link xkb .xkb
 link idea/ideavimrc .ideavimrc
-link vimperatorrc .vimperatorrc
-link pentadactylrc .pentadactylrc
 link Xdefaults .Xdefaults
 link oh-my-zsh .oh-my-zsh
-link "vim/RainbowParenthesis.vim" ".vim/plugin/RainbowParenthesis.vim"
 link lesskey .lesskey
 link ssh_config .ssh/config
 
 link vim/ftplugin .vim/ftplugin
-link vim/ycm_extra_conf.py .vim/.ycm_extra_conf.py
+link vim/cheat40.txt .vim/cheat40.txt
 
-
-if ! [ -e "$HOME/.weechat/irc.conf" ] || [ ! -h "$HOME/.weechat/irc.conf" ]; then
-  mkdir -p "$HOME/.weechat"
-  rm -f "$HOME/.weechat/irc.conf"
-  ln -s "$CONFIG/weechat/irc.conf" "$HOME/.weechat/irc.conf"
-  echo "$HOME/.weechat/irc.conf --> $CONFIG/weechat/irc.conf"
-fi
-mkdir -p "$HOME/.weechat"
-link "weechat/irc.conf" ".weechat/irc.conf"
 
 if ! [ -e "$HOME/.xprofile" ]; then
   ln -s "$HOME/.xsession" "$HOME/.xprofile"
@@ -74,8 +61,6 @@ if ! [ -e "$HOME/.gnupg/pubring.gpg" ] && [ -e "$SCRIPTS/gpg" ]; then
   echo "$HOME/.gnupg --> $HOME/scripts/gpg"
 fi
 
-mkdir -p $HOME/.m2
-link m2/settings.xml .m2/settings.xml
 
 copy () {
   if ! [ -e $HOME/$2 ]; then
@@ -87,7 +72,6 @@ copy () {
 echo "Copying defaults..."
 
 copy gitconfig .gitconfig
-copy jnewsrc .jnewsrc
 copy zshrc .zshrc
 copy bashrc .bashrc
 copy vimrc .vimrc
@@ -119,28 +103,7 @@ xinit .xsessionrc
 
 rm -rf "$HOME/.xinitrc-generic" "$HOME/.xsession-generic"
 
-
-if [ -L "$HOME/.vimrc" ]
-then
-  rm "$HOME/.vimrc"
-  echo "source $HOME/.vimrc-generic" > "$HOME/.vimrc"
-fi
-
-echo "Setting up lesskey..."
-lesskey "$HOME/.lesskey"
-
-if [ ! -e ~/.nvim/dein ]; then
-  echo "Setting up Dein..."
-  mkdir -p ~/.nvim
-  curl https://raw.githubusercontent.com/Shougo/dein.vim/master/bin/installer.sh > /tmp/installer.sh
-  sh /tmp/installer.sh ~/.nvim/dein
-fi
-
 echo "Installing misc tools"
-
-if [ -f "$HOME/.local/bin/thefuck" ]; then
-  pip3 uninstall -y thefuck || sudo pip3 uninstall -y thefuck
-fi
 
 if [ ! -e "$HOME/.fzf" ]; then
   git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf \

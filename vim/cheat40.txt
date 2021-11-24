@@ -1,0 +1,18 @@
+Press q to dismiss,
+  <Tab> to lose focus
+
+LSP:
+gd -> definition
+gD -> implementation
+gr -> references
+gh -> def/ref popup
+K -> hover doc
+<c-k> -> signature help
+,a -> code actions
+,r -> rename
+,d -> show diagnostics
+g] -> next diagnostic
+,g -> open git terminal
+
+
+
