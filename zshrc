@@ -39,7 +39,7 @@ zstyle :compinstall filename '$HOME/.zshrc'
 # History
 setopt appendhistory extended_glob HIST_IGNORE_ALL_DUPS HIST_SAVE_NO_DUPS sh_word_split
 autoload -Uz compinit
-compinit
+compinit -u
 HISTFILE=~/.histfile
 HISTSIZE=10000
 SAVEHIST=10000
@@ -77,7 +77,8 @@ export LESS_TERMCAP_ue=$'\E[0m'           # end underline
 export LESS_TERMCAP_us=$'\E[032;1;146m' # begin underline
 
 export EDITOR=nvim
-
+zle -N edit-command-line
+bindkey -M vicmd v edit-command-line
 
 
 typeset -g _START_TIMER
