@@ -64,7 +64,7 @@
         editor = nvim
 [user]
         name = Valentin Tolmer
-        email = valentin.tolmer@gmail.com
+        email = valentin@tolmer.fr
 
 [sendemail]
         smtpserver = imap.googlemail.com
