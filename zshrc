@@ -144,7 +144,7 @@ ZSH_THEME_GIT_PROMPT_UNTRACKED="%{$fg[green]%}?"
 ZSH_THEME_GIT_PROMPT_CLEAN=""
 
 function my_in_hg() {
-  [[ -d .hg ]] || $(hg summary > /dev/null 2>&1)
+  [[ -d .hg ]] || [[ -d ../.hg ]] || $(hg summary > /dev/null 2>&1)
 }
 
 function my_hg_get_branch_name {
