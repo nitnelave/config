@@ -8,18 +8,85 @@ fi
 
 last_modified_git_file ()
 {
-  echo $(git status | \
-    grep -E "(modified|added|untracked):" | \
+  git status | \
+    grep -E "(modified|added|untracked|renamed|new file):" | \
+    grep -v BUILD | \
+    sed -E "s/.* -> (.*)/\1/" | \
     sed -E "s/.*?: *([^\s]*)/\1/" | \
     xargs stat -c "%Y %N" | \
     sort -rn | \
     head -1 | \
-    cut -f2- -d" ")
+    cut -f2- -d" "
+}
+
+last_modified_hg_file ()
+{
+  hg status | \
+    grep -E "^[MA] " | \
+    grep -v BUILD | \
+    sed -E "s/. (.*)/\1/" | \
+    xargs stat -c "%Y %N" | \
+    sort -rn | \
+    head -1 | \
+    cut -f2- -d" "
+}
+
+last_modified_vcs_file ()
+{
+  last_file=$(last_modified_git_file 2>/dev/null)
+  if [ "$last_file" = "" ]; then
+    last_file=$(last_modified_hg_file)
+  fi
+  echo $last_file
+}
+
+normalize ()
+{
+  echo $1 | sed -E "s@^'(.*?)'\$@\1@"
 }
 
 file_to_target ()
 {
-  echo $1 | sed -e 's/\/\([^/]*\)\.proto\(\.h\)\?$/:\1_proto/' | sed -e "s,^\s*'\?\([^-].*\)/\([^/:]\+\)\.[^./]*,\1:\2,"
+  heuristic_target=$(normalize $1 | sed -e 's/\/\([^/]*\)\.proto\(\.h\)\?$/:\1_proto/' | sed -e "s,^\s*'\?\([^-].*\)/\([^/:]\+\)\.[^./]*,\1:\2,")
+  target=$heuristic_target
+  if ! blaze query "$target" 1>/dev/null 2>&1
+  then
+    echo "Simple heuristic failed to find the target, trying with blaze..." 1>&2
+    fullname=$(blaze query $1 2>/dev/null)
+    target=$(blaze query "attr("srcs", $fullname, ${fullname//:*/}:*)" |& \
+      grep '\/\/' | \
+      grep -v "nullness_checker" | \
+      grep -v "lint_test" | \
+      sort | \
+      head -1)
+    if [ -z $target ]
+    then
+      target=$heuristic_target
+      if [ -z $target ]
+      then
+        echo "Could not find target" 1>&2
+        exit 1
+      fi
+      while true
+      do
+        read -p "No target found for \"$target\". Try to create one? (y/N)" SHOULD_CREATE_TARGET 1>&2
+        case $SHOULD_CREATE_TARGET in
+          [yY]*)
+            BUILD_FILE=$(echo $TARGET | sed -e 's/:.*$/\/BUILD/')
+            /usr/bin/build_cleaner --action_spec=add_missing_rules $BUILD_FILE 1>&2
+            break;
+            ;;
+          [nN]*|"")
+            echo "Could not find target" 1>&2
+            exit 1
+            break;
+            ;;
+          *)
+        esac
+      done
+    fi
+  fi
+  echo $target
 }
 
 is_valid_target ()
@@ -41,8 +108,13 @@ fi
 args=$@
 
 TARGET=
+ORIGINAL_TARGET=
 for arg in $args
 do
+  if [ "$arg" = "--" ]
+  then
+    break
+  fi
   if is_valid_target "$arg"
   then
     TARGET=$arg
@@ -55,22 +127,35 @@ if [ -z "$TARGET" ]
 then
   # Look for a file target
   args=
+  FOUND_TARGET=
   for arg in "$@";
   do
-    target=$(file_to_target $arg)
-    if [ -z "$TARGET" ] && is_valid_target $target
+    if [ "$arg" = "--" ]
     then
-      TARGET=$target
-      echo "Found file $arg, converting to target $target"
+      FOUND_TARGET=1
     fi
-    args="$args $target"
+    if [ -z "$FOUND_TARGET" ]
+    then
+      target=$(file_to_target $arg)
+      if [ -z "$TARGET" ] && is_valid_target $target
+      then
+        TARGET=$target
+        ORIGINAL_TARGET=$(normalize $arg)
+        echo "Found file $arg, converting to target $target"
+        FOUND_TARGET=1
+      fi
+      args="$args $target"
+    else
+      args="$args $arg"
+    fi
   done
 fi
 
 # Still no target, we ask git what was the last edited file.
 if [ -z "$TARGET" ]
 then
-  last_file=$(last_modified_git_file)
+  last_file=$(last_modified_vcs_file)
+  ORIGINAL_TARGET=$(normalize $last_file)
   if ! is_valid_target $last_file
   then
     last_file=$(file_to_target $last_file)
@@ -79,7 +164,7 @@ then
   then
     TARGET=$last_file
     args="$args $TARGET"
-    echo "Getting target from git: $TARGET"
+    echo "Getting target from vcs: $TARGET"
   fi
 fi
 
@@ -89,10 +174,16 @@ then
   exit 2
 fi
 
-if [ "$MODE" = "test" ] && ! (echo "$TARGET" | grep test > /dev/null)
+if [ "$MODE" = "test" ] && [ -z "$(blaze query 'tests('"$TARGET"')')" ]
 then
-  args=$(echo $args | sed "s~$TARGET~${TARGET}_test~")
-  TARGET="${TARGET}_test"
+  if echo "$ORIGINAL_TARGET" | grep -E '\.java$' >/dev/null
+  then
+    NEW_TARGET=$(file_to_target $(echo $ORIGINAL_TARGET | sed -E 's#^java/(.*)\.java#javatests/\1Test.java#'))
+  else
+    NEW_TARGET="${TARGET}_test"
+  fi
+  args=$(echo $args | sed "s~$TARGET~$NEW_TARGET~")
+  TARGET=$NEW_TARGET
   echo "Asking for tests, so converting target to $TARGET"
 fi
 
@@ -120,7 +211,8 @@ run_cmd ()
 run_build_cleaner_cmd ()
 {
   BUILD_ClEANER_WITH_ARGS="$*"
-  $BUILD_ClEANER_WITH_ARGS | tee -a $LOG_FILE && grep -q "update_visibility" $LOG_FILE
+  echo "Running build cleaner: $BUILD_ClEANER_WITH_ARGS"
+  eval $BUILD_ClEANER_WITH_ARGS | tee -a $LOG_FILE && grep -q "update_visibility" $LOG_FILE
   if [ 0 -eq $? ]
   then
     while true
@@ -128,7 +220,7 @@ run_build_cleaner_cmd ()
       read -p "Update the visibility? (Y/n)" SHOULD_UPDATE
       case $SHOULD_UPDATE in
         [yY]*|"")
-          $BUILD_ClEANER_WITH_ARGS --update_visibility
+          eval $BUILD_ClEANER_WITH_ARGS --update_visibility
           break;
           ;;
         [nN]*)
@@ -140,39 +232,40 @@ run_build_cleaner_cmd ()
   fi
 }
 
+check_for_dependencies ()
+{
+  BUILD_CLEANER_CMD=$(grep -E -o "$1" "$LOG_FILE")
+  RETVAL=$?
+  if [ $RETVAL -eq 0 ]; then
+    # Run the command, then re-run the build.
+    run_build_cleaner_cmd /usr/bin/$BUILD_CLEANER_CMD && run_cmd
+  fi
+  return $RETVAL
+}
+
 run_cmd
 
 # Check if it complained that the target is not defined
 grep -q "no such target" "$LOG_FILE"
 if [ 0 -eq $? ]
 then
-  while true
-  do
-    read -p "No target found. Try to create one? (y/N)" SHOULD_CREATE_TARGET
-    case $SHOULD_CREATE_TARGET in
-      [yY]*)
-        BUILD_FILE=$(echo $TARGET | sed -e 's/:.*$/\/BUILD/')
-        /usr/bin/build_cleaner --action_spec=add_missing_rules $BUILD_FILE
-        run_cmd
-        break;
-        ;;
-      [nN]*|"")
-        break;
-        ;;
-      *)
-    esac
-  done
+  exit 1
 fi
 
 
 # Check if it complained about build_cleaner
-BUILD_CLEANER_CMD=$(grep -E -o "^build_cleaner //.*:[-a-zA-Z0-9_]*" "$LOG_FILE")
-if [ $? -eq 0 ]; then
-  # Run the command, then re-run the build.
-  run_build_cleaner_cmd /usr/bin/$BUILD_CLEANER_CMD && run_cmd
-fi
+check_for_dependencies "^build_cleaner //.*:[-a-zA-Z0-9_]*"
+check_for_dependencies "^build_cleaner --only_add .*"
+while check_for_dependencies "add_dep .*"
+do
+  echo "Retrying after adding deps"
+done
 # Check if it complained about a file not found.
-if grep -E "fatal error:.*\.h. file not found" "$LOG_FILE" > /dev/null || grep -E "is not visible from target" "$LOG_FILE" > /dev/null
+if grep -E "fatal error:.*\.h. file not found" "$LOG_FILE" > /dev/null \
+  || grep -E "is not visible from target" "$LOG_FILE" > /dev/null \
+  || grep -q "doesn"\'"t directly depend" "$LOG_FILE" >/dev/null \
+  || grep -q "proto: File not found" "$LOG_FILE" >/dev/null \
+  || grep -q "use of private header from outside its module" "$LOG_FILE" >/dev/null
 then
   run_build_cleaner_cmd /usr/bin/build_cleaner $TARGET && run_cmd
 fi
@@ -183,7 +276,7 @@ then
   /usr/bin/$TAZE_CMD && run_cmd
 fi
 # Check if the tests failed
-if grep -E "_test.*FAILED.{0,4} in [0-9.]*s" "$LOG_FILE" >/dev/null; then
+if grep -E "[tT]est.*FAILED.{0,4} in [0-9.]*s" "$LOG_FILE" >/dev/null; then
   TEST_LOG=$(grep -E -o "/usr/local/google/[^ ]*/test.log" "$LOG_FILE" | head -n 1)
   echo -ne '\007'
   less +/FAILED $TEST_LOG
