@@ -594,7 +594,7 @@ nnoremap <silent> gr    <cmd>lua vim.lsp.buf.references()<CR>
 nnoremap <silent> gh    <cmd>lua require'lspsaga.provider'.lsp_finder()<CR>
 nnoremap <silent><leader>a    <cmd>lua require('lspsaga.codeaction').code_action()<CR>
 vnoremap <silent><leader>a :<C-U>lua require('lspsaga.codeaction').range_code_action()<CR>
-nnoremap <silent><leader>r <cmd>lua require('lspsaga.rename').rename()<CR>
+nnoremap <silent><c-r> <cmd>lua require('lspsaga.rename').rename()<CR>
 
 " Set updatetime for CursorHold
 " 300ms of no cursor movement to trigger CursorHold
