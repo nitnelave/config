@@ -45,6 +45,8 @@ call plug#begin('~/.vim/plugged')
 
   Plug 'lifepillar/vim-cheat40'
 
+  Plug 'sso://user/mcdermottm/vim-csearch'
+
   " LSP & completion
   " Collection of common configurations for the Nvim LSP client
   Plug 'neovim/nvim-lspconfig'
@@ -205,6 +207,8 @@ match ErrorMsg '^\(<\|=\|>\)\{7\}\([^=].\+\)\?$'
 set nofoldenable
 
 set comments=s0:/*,mb:**,ex:*/,:// " Comments
+let &comments='s:/*,mb: *,ex: */,b:#,:// ' " Comments
+autocmd Filetype c,cpp let &comments .= ':///\ ,://\ ,fb:-'
 
 set list
 set listchars=tab:>-,trail:.
@@ -335,7 +339,6 @@ nnoremap Y y$
 " Yank relative file path.
 nnoremap <silent> yf :let @"=@%<CR>
 
-
 " map ; to :
 noremap ; :
 
@@ -412,6 +415,9 @@ cab accents call g:AccentsToLatex()
 
 vnoremap f :FormatLines<CR>
 noremap ff :FormatLines<CR>
+
+nnoremap <leader>cs :CSearch<Space>
+nnoremap <leader>cw :CSearch <C-r><C-w><CR>
 
 " Plugin configs
 
