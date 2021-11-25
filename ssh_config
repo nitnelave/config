@@ -1,21 +1,9 @@
-Host dad
-    HostName dad.tolmer.fr
-    User owncloud
+Host *
+    ControlMaster auto
+    ControlPath ~/.ssh/master-%r@%h:%p
+    ControlPersist 30m
+
 
 Host server
-    HostName server.tolmer.fr
+    HostName 144.76.57.52
     User nitnelave
-
-Host acu
-    HostName acu.epita.fr
-    User tolmer_v
-
-Host node7
-    ProxyCommand  ssh lrde netcat -w 120 %h %p
-    User vtolmer
-Host bratislava
-    ProxyCommand  ssh lrde netcat -w 120 %h %p
-    User vtolmer
-Host lrde
-    HostName ssh.lrde.epita.fr
-    User vtolmer
