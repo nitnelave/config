@@ -191,7 +191,7 @@ set smarttab
 set autoindent
 
 " This one is complicated. See :help cinoptions-values for details
-set cinoptions=(0,u0,U0,t0,g1,h1,N-s,>s
+set cinoptions=(0,W4,u0,U0,t0,g1,h1,N-s,>s
 
 " In diff mode, open the buffers vertically, and ignore whitespace changes.
 set diffopt=iwhite,vertical
