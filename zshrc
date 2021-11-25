@@ -202,6 +202,7 @@ setprompt () {
     PR_LRCORNER=┘
     PR_URCORNER=┐
 
+    VISUAL_BELL=$(echo -e '\a')
 
     ZSH_THEME_GIT_PROMPT_PREFIX="(on %{$fg[white]%}"
     ZSH_THEME_GIT_PROMPT_SUFFIX=")%{$reset_color%}"
