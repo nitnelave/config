@@ -260,7 +260,7 @@ augroup END
 
 autocmd Filetype c,cpp set comments^=:///\ ,://\ ,fb:-
 
-autocmd BufWritePre * if &ft!="markdown"|:%s/\v\s+$//e|endif
+autocmd BufWritePre * if &ft!="markdown" && &ft!="diff"|:%s/\v\s+$//e|endif
 autocmd BufWritePre .{article,letter,followup} :%s/\v^--$/-- /e
 autocmd BufWritePre /tmp/mutt-* :%s/\v^--$/-- /e
 
