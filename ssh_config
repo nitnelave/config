@@ -5,6 +5,9 @@ Host *
 
 Match host *.corp.google.com
   ProxyCommand corp-ssh-helper %h %p
+  TCPKeepAlive yes
+  ServerAliveInterval 5
+  ServerAliveCountMax 5
 
 Host server
     HostName 144.76.57.52
@@ -14,6 +17,26 @@ Host workstation
     HostName vtolmer.zrh.corp.google.com
     ProxyCommand corp-ssh-helper %h %p
     User vtolmer
+    ForwardAgent yes
+    RequestTTY yes
+    RemoteCommand cd $(p4 g4d fig) && zsh -l
 
-Match host *.corp.google.com
-  ProxyCommand corp-ssh-helper %h %p
+Host workstation-gcert
+    HostName vtolmer.zrh.corp.google.com
+    ProxyCommand corp-ssh-helper %h %p
+    User vtolmer
+    ForwardAgent yes
+
+Host workstation-adb
+    HostName vtolmer.zrh.corp.google.com
+    ProxyCommand corp-ssh-helper %h %p
+    User vtolmer
+    ForwardAgent yes
+    RemoteForward 5037 localhost:5037
+
+Host ubiquity
+    HostName vtolmer.c.googlers.com
+    ProxyCommand corp-ssh-helper %h %p
+    User vtolmer
+    ForwardAgent yes
+    RemoteForward 5037 localhost:5037
