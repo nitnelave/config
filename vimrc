@@ -459,7 +459,7 @@ endif
 lua <<EOF
 local nvim_lsp = require'lspconfig'
 
-local opts = {
+local rust_opts = {
     tools = { -- rust-tools options
         autoSetHints = true,
         hover_with_actions = true,
@@ -489,7 +489,7 @@ local opts = {
     },
 }
 
-require('rust-tools').setup(opts)
+require('rust-tools').setup(rust_opts)
 require'lspconfig'.clangd.setup{}
 EOF
 
