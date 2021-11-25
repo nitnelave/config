@@ -587,6 +587,7 @@ nnoremap <silent> <C-w> <cmd>lua require('lspsaga.action').smart_scroll_with_sag
 " scroll up hover doc
 nnoremap <silent> <C-c> <cmd>lua require('lspsaga.action').smart_scroll_with_saga(-4)<CR>
 nnoremap <silent> <c-k> <cmd>lua require('lspsaga.signaturehelp').signature_help()<CR>
+inoremap <silent> <c-k> <cmd>lua require('lspsaga.signaturehelp').signature_help()<CR>
 "nnoremap <silent> 1gD   <cmd>lua vim.lsp.buf.type_definition()<CR>
 nnoremap <silent> gr    <cmd>lua vim.lsp.buf.references()<CR>
 "nnoremap <silent> g0    <cmd>lua vim.lsp.buf.document_symbol()<CR>
