@@ -3,6 +3,7 @@
         st = status
         ri = rebase --interactive --autosquash
         d = difftool
+        dm = diff master
         co = checkout
         br = branch
         df = diff
@@ -10,6 +11,7 @@
         ds = diff --stat
         ci = commit
         ca = commit --amend
+        can = commit --amend --no-edit
         pop = stash pop
         poop = stash pop
         punch = push
@@ -17,47 +19,39 @@
         rem = rebase master
         rim = rebase --interactive master
         edit-unmerged = "!f() { git diff --name-status --diff-filter=U | cut -f2 ; }; stty stop '' -ixoff ; nvim -p `f`"
+        edit-unmerged = "!f() { git diff --name-status --diff-filter=U | cut -f2 ; }; stty stop '' -ixoff ; nvim -p '+/\\(<<<<<<\\|>>>>>>\\|======\\)/' `f`"
         add-unmerged = "!f() { git diff --name-status --diff-filter=U | cut -f2 ; }; git add `f`"
         alias = "!sh -c '[ $# = 2 ] && git config --global alias.\"$1\" \"$2\" && exit 0 || echo \"usage: git alias <new alias> <original command>\" >&2 && exit 1' -"
         aliases = !git config --get-regexp 'alias.*' | colrm 1 6 | sed 's/[ ]/ = /'
-        lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
-        lga = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative --all
+        lg = "!f() { \
+          LOG_OPTIONS=\"--graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative\"; \
+          ARGS=\"$@\"; \
+          if [ -z \"$ARGS\" ]; then \
+            ARGS=master..; \
+          fi; \
+          eval git log $LOG_OPTIONS $ARGS; \
+          }; f"
+        lga = "!git lg --all $@"
         cont = rebase --continue
         graph = log --graph --pretty=oneline
         all = log --graph --pretty=oneline --all
         lm = "!git lga | head -n $(git lga | grep -n $(git rev-parse --short master) | cut -d : -f 1) | less"
-        open-edited = "!f() { git diff --name-only master ; }; if [ $(git merge-base HEAD master) == $(git rev-parse --verify master) ]; then stty stop '' -ixoff ; vim -p `f`; else echo Not based on master; fi"
-        modified-files = "!f() { git diff --name-only master ; }; if [ $(git merge-base HEAD master) == $(git rev-parse --verify master) ]; then f; else echo Not based on master; fi"
-
-        #Google exclusive
-        export = "!([ $(git rev-parse --abbrev-ref HEAD) != master ] || (echo 'Do not export master' && false)) && git fix && /google/data/ro/projects/shelltoys/g5.sar export -g --merge"
-        ex = "!([ $(git rev-parse --abbrev-ref HEAD) != master ] || (echo 'Do not export master' && false)) && git fix && /google/data/ro/projects/shelltoys/g5.sar export -g --merge"
-        patch = !/google/data/ro/projects/shelltoys/g5.sar patch
-        mail = !/google/data/ro/projects/shelltoys/g5.sar mail
-        submit = !/google/data/ro/projects/shelltoys/g5.sar submit
-        lint = !/google/data/ro/projects/shelltoys/g5.sar lint
-        drop = !/google/data/ro/projects/shelltoys/g5.sar drop
-        revert = !/google/data/ro/projects/shelltoys/g5.sar revert
-        hint = !/google/data/ro/projects/shelltoys/g5.sar hint
-        fix = !/google/data/ro/projects/shelltoys/g5.sar fix
-        cleanup = !/google/data/ro/projects/shelltoys/g5.sar cleanup
-        findreviewers = !/google/data/ro/projects/shelltoys/g5.sar findreviewers
-        sync = !(export BRANCH=$(git rev-parse --abbrev-ref HEAD)\
-                 && git stash save git5-sync \
-                 && git checkout master \
-                 && /google/data/ro/projects/shelltoys/g5.sar sync \
-                 && git checkout "$BRANCH" \
-                 && git rebase master \
-                 && if echo "$(git stash list | head -n 1)" | grep git5-sync 2>&1 >/dev/null \n then git stash pop \n fi)
-        track = "!f() { export BRANCH=$(git rev-parse --abbrev-ref HEAD)\
-                  && git stash save git5-track \
-                  && git checkout master \
-                  && /google/data/ro/projects/shelltoys/g5.sar track \"$@\" \
-                  && git checkout "$BRANCH" \
-                  && git rebase master \
-                  && (if echo "$(git stash list | head -n 1)" | grep git5-track 2>&1 >/dev/null; then git stash pop; fi)}; f"
-        acanex = "!git add . && git commit --amend --no-edit && git fix && /google/data/ro/projects/shelltoys/g5.sar export -g"
-
+        modified-files = "!f() { \
+            LOCAL_ROOT=${2:-$GIT_PREFIX}; \
+            BASE=${1:-master}; \
+            if [ $(git merge-base HEAD "$BASE") == $(git rev-parse --verify "$BASE") ]; then \
+              git diff --name-only "$BASE" | sed "s@^$LOCAL_ROOT@@" ; \
+            else \
+              echo Not based on "$BASE" >&2; \
+              return 1; \
+            fi }; f"
+        open-modified = "!f() { \
+            BASE=${1:-master}; \
+            FILES=$(git modified-files $BASE $GIT_PREFIX); \
+            if [ $? -eq 1 ]; then return 1; fi; \
+              cd $GIT_PREFIX; \
+              $EDITOR -p $FILES; \
+            }; f"
 
 [core]
         excludesfile = ~/.gitignore
@@ -80,9 +74,10 @@
         from = Valentin Tolmer <nitnelave1@gmail.com>
 [merge]
         summary = true
-        tool = vimdiff
+        tool = nvim -d
+        noprefix = true
 [diff]
-        tool = vimdiff
+        tool = nvim -d
 [difftool]
         prompt = false
 [color]
