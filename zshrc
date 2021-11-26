@@ -24,7 +24,7 @@ COMPLETION_WAITING_DOTS="true"
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(git git-extras ssh-agent docker docker-compose)
+plugins=(git git-extras ssh-agent docker docker-compose zsh-syntax-highlighting)
 
 # If a glob has no match, leave as-is
 setopt +o nomatch
@@ -273,3 +273,5 @@ bindkey '^X^R' fzf-history-widget-accept
 if which cowsay >/dev/null 2>/dev/null && which fortune >/dev/null 2>/dev/null; then
   cortune
 fi
+
+source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
