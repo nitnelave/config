@@ -567,7 +567,7 @@ saga.init_lsp_saga {
   finder_action_keys = {
     open = '<CR>',
     vsplit = 's',
-    quit = 'q',
+    quit = {'q', '<ESC>'},
     scroll_down = '<c-w>',
     scroll_up = '<c-c>'
   },
