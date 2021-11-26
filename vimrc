@@ -230,7 +230,7 @@ let g:netrw_banner = 0
 let g:netrw_liststyle = 3
 augroup netrw_mapping
   autocmd!
-  autocmd filetype netrw call NetrwMapping()
+  autocmd BufNewFile,BufEnter netrw call NetrwMapping()
 augroup END
 
 function! NetrwMapping()
