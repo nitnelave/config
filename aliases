@@ -311,3 +311,7 @@ androidstudio ()
 {
   /opt/android-studio-with-blaze-stable/bin/studio.sh $@
 }
+
+setup-ssh () {
+  rw workstation-gcert --nossh_interactively && ssh workstation
+}
