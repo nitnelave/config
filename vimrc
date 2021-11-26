@@ -231,8 +231,8 @@ augroup netrw_mapping
 augroup END
 
 function! NetrwMapping()
-  nunmap <buffer> Th
-  nunmap <buffer> Tb
+  unmap! <buffer> Th
+  unmap! <buffer> Tb
   nnoremap <buffer> t j
   nnoremap <buffer> n k
   nnoremap <buffer> T 8j
