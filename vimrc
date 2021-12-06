@@ -496,7 +496,12 @@ local rust_opts = {
 }
 
 require('rust-tools').setup(rust_opts)
-require'lspconfig'.clangd.setup{}
+local util = require 'lspconfig.util'
+nvim_lsp.clangd.setup {
+    cmd = {"clangd"},
+    root_dir = util.root_pattern('build/compile_commands.json', '.git'),
+    capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+  }
 EOF
 
 " Setup Completion
