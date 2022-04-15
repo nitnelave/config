@@ -1,40 +1,30 @@
 eval `dircolors -b ~/.dircolors`
 zstyle -e ':completion:*:default' list-colors 'reply=("${PREFIX:+=(#bi)($PREFIX:t)(?)*==02=01}:${(s.:.)LS_COLORS}")'
 
-# Path to your oh-my-zsh configuration.
-ZSH=$HOME/.oh-my-zsh
-
-# Set to this to use case-sensitive completion
-CASE_SENSITIVE="true"
-
-# Uncomment this to disable bi-weekly auto-update checks
-DISABLE_AUTO_UPDATE="true"
-
-# Uncomment following line if you want to disable command autocorrection
-DISABLE_CORRECTION="true"
-
-# Uncomment following line if you want red dots to be displayed while waiting for completion
-COMPLETION_WAITING_DOTS="true"
-
-# Uncomment following line if you want to disable marking untracked files under
-# VCS as dirty. This makes repository status check for large repositories much,
-# much faster.
-# DISABLE_UNTRACKED_FILES_DIRTY="true"
-
-# Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
-# Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
-# Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(git git-extras ssh-agent docker docker-compose zsh-syntax-highlighting)
+# Disable software flow control, i.e. Ctrl-S freezes
+stty -ixon
 
 # If a glob has no match, leave as-is
 setopt +o nomatch
 
-source $ZSH/oh-my-zsh.sh
+# Setup fzf
+# ---------
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+FZF_DEFAULT_COMMAND='rg -g ""'
+
+bindkey '^g' fzf-cd-widget
+# Remove esc-c as fzf trigger
+bindkey -r '\ec'
 
 # Completion
 zstyle ':completion:*' insert-unambiguous true
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
 zstyle :compinstall filename '$HOME/.zshrc'
+
+[ -f ~/.zsh/_git ] && zstyle ':completion:*:*:git:*' script ~/.completion/git/git-completion.sh && fpath=(~/.zsh $fpath)
+
+[ -e ~/.zsh/zsh-autosuggestions ] && source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
 
 # History
 setopt appendhistory extended_glob HIST_IGNORE_ALL_DUPS HIST_SAVE_NO_DUPS sh_word_split
@@ -44,9 +34,10 @@ HISTFILE=~/.histfile
 HISTSIZE=10000
 SAVEHIST=10000
 bindkey -v
-bindkey "^q" push-line
+bindkey "^q" push-line-or-edit
 
 unsetopt beep notify
+
 
 autoload up-line-or-beginning-search
 autoload down-line-or-beginning-search
@@ -57,7 +48,7 @@ bindkey "^[[3~" delete-char
 bindkey "^[[A" history-search-backward
 bindkey "^[[B" history-search-forward
 bindkey "^N" up-line-or-beginning-search
-bindkey "^T" down-line-or-beginning-search
+bindkey "^t" down-line-or-beginning-search
 bindkey "^_" beginning-of-line
 bindkey "^a" beginning-of-line
 bindkey "^[^_" end-of-line
@@ -132,11 +123,20 @@ _stop_timer () {
   _START_TIMER=$_END_TIMER
 }
 
+autoload -Uz add-zsh-hook
 add-zsh-hook preexec _start_timer
 add-zsh-hook precmd _stop_timer
 
+autoload -Uz vcs_info
+zstyle ':vcs_info:git:*' formats '(on %b%c%u)'
+zstyle ':vcs_info:*' check-for-changes true
+zstyle ':vcs_info:*' unstagedstr '!'
+zstyle ':vcs_info:*' stagedstr '+'
+zstyle ':vcs_info:git:*' actionformats '(%b [%a%c%u])'
+
 # Prompt
 function precmd {
+  vcs_info
   local TERMWIDTH
   (( TERMWIDTH = ${COLUMNS} - 1 ))
 
@@ -151,7 +151,7 @@ function precmd {
 
   # Measure the different parts of the prompt
   local pwdsize=${#${(%):-%~}}
-  local gittext="$(git_prompt_info)-"
+  local gittext="${vcs_info_msg_0_}-"
   local gitsize=${"#${gittext}"}
 
   local PADDING=7
@@ -218,7 +218,7 @@ setprompt () {
 $PR_CYAN$PR_SHIFT_IN$PR_ULCORNER$PR_BLUE$PR_HBAR$PR_SHIFT_OUT(\
 $PR_GREEN%$PR_PWDLEN<...<%~%<<$PR_BLUE)$PR_SHIFT_IN\
 $PR_HBAR$PR_HBAR${(e)PR_FILLBAR}$PR_BLUE$PR_HBAR$PR_SHIFT_OUT\
-$PR_MAGENTA$(git_prompt_info)\
+$PR_MAGENTA${vcs_info_msg_0_}\
 $PR_BLUE$PR_SHIFT_IN$PR_HBAR$PR_CYAN$PR_URCORNER$PR_SHIFT_OUT$VISUAL_BELL\
 
 $PR_CYAN$PR_SHIFT_IN$PR_LLCORNER'"$HOST_NAME"'$PR_BLUE$PR_HBAR$PR_SHIFT_OUT\
@@ -240,38 +240,18 @@ alias reload="source ~/.zshrc"
 
 export PATH=$PATH:~/projects/config/bin
 
-# Setup fzf
-# ---------
-if [[ ! "$PATH" == *$HOME/.fzf/bin* ]]; then
-  export PATH="$PATH:/usr/local/google/home/vtolmer/.fzf/bin"
+
+if which fuck >/dev/null
+then
+  eval $(thefuck --alias)
+  run_fuck () {
+    echo
+    fuck --enable-experimental-instant-mode </dev/tty
+    echo '\n'
+    zle redisplay
+  }
+  zle -N run_fuck
+  bindkey '^f' run_fuck
 fi
 
-FZF_DEFAULT_COMMAND='ag -g ""'
-
-_fzf_compgen_path() {
-  echo "$1"
-  command ag -g "$1"
-}
-
-# Auto-completion
-# ---------------
-[[ $- == *i* ]] && source "$HOME/.fzf/shell/completion.zsh" 2> /dev/null
-
-fzf-history-widget-accept() {
-  fzf-history-widget
-  zle accept-line
-}
-zle     -N     fzf-history-widget-accept
-bindkey '^X^R' fzf-history-widget-accept
-
-# Key bindings
-# ------------
-#source "$HOME/.fzf/shell/key-bindings.zsh"
-
-
-# funny message
-if which cowsay >/dev/null 2>/dev/null && which fortune >/dev/null 2>/dev/null; then
-  cortune
-fi
-
-source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+[ -f /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ] && source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh

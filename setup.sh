@@ -35,12 +35,12 @@ mkdir -p $HOME/.i3
 link i3config .i3/config
 mkdir -p $HOME/.config/zathura
 link zathurarc .config/zathura/zathurarc
-link signature .signature
+#link signature .signature
 link xstart .xstart-generic
 link xkb .xkb
-link idea/ideavimrc .ideavimrc
-link Xdefaults .Xdefaults
-link oh-my-zsh .oh-my-zsh
+#link idea/ideavimrc .ideavimrc
+#link Xdefaults .Xdefaults
+#link oh-my-zsh .oh-my-zsh
 link lesskey .lesskey
 link ssh_config .ssh/config
 
@@ -101,8 +101,6 @@ xinit .xsession
 xinit .xinitrc
 xinit .xsessionrc
 
-rm -rf "$HOME/.xinitrc-generic" "$HOME/.xsession-generic"
-
 echo "Installing misc tools"
 
 if [ ! -e "$HOME/.fzf" ]; then
@@ -114,6 +112,16 @@ if [ ! -e "$HOME/.um-repo" ]; then
   git clone --depth 1 https://github.com/sinclairtarget/um.git ~/.um-repo \
     && mkdir -p ~/.bin \
     && ln -s ~/.bin/um ~/.um-repo/bin/um
+fi
+
+if [ ! -f "$HOME/.zsh/_git" ]; then
+  mkdir -p ~/.zsh ~/.completion/git/
+  wget https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash  -O ~/.completion/git/git-completion.sh
+  wget https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.zsh -O "$HOME/.zsh/_git"
+fi
+
+if [ ! -e ~/.zsh/zsh-autosuggestions ]; then
+  git clone https://github.com/zsh-users/zsh-autosuggestions ~/.zsh/zsh-autosuggestions
 fi
 
 echo "Configuration successful!"
