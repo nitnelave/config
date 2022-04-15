@@ -488,7 +488,8 @@ local rust_opts = {
             ["rust-analyzer"] = {
                 -- enable clippy on save
                 checkOnSave = {
-                    command = "clippy"
+                    command = "clippy",
+                    extraArgs = "--target_dir target/rust-analyzer"
                 },
             }
         }
