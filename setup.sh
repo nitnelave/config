@@ -123,5 +123,6 @@ if ! which nvim >/dev/null; then
 fi
 
 which delta >/dev/null || cargo install git-delta
+which rg >/dev/null || cargo install ripgrep
 
 echo "Configuration successful!"
