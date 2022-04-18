@@ -49,7 +49,7 @@ call plug#begin('~/.vim/plugged')
   " Collection of common configurations for the Nvim LSP client
   Plug 'neovim/nvim-lspconfig'
   " Nicer UI.
-  Plug 'tami5/lspsaga.nvim', { 'branch': 'nvim51' }
+  Plug 'tami5/lspsaga.nvim', { 'branch': 'nvim6.0' }
 
   " Completion framework
   Plug 'hrsh7th/nvim-cmp'
