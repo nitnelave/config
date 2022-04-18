@@ -87,6 +87,9 @@ call plug#begin('~/.vim/plugged')
   " Tree sitter
   Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 
+  " Bulk rename files
+  Plug 'qpkorr/vim-renamer'
+
 call plug#end()
 
 " General vim settings
