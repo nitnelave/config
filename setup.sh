@@ -7,7 +7,8 @@ then
   FORCE=1
 fi
 
-echo "Loading config folder in ${CONFIG=`dirname $0`}"
+CONFIG="$(cd "$(dirname "$0")"; pwd -P)"
+echo "Loading config folder in ${CONFIG}"
 
 link () {
   [ "$FORCE" = "1" ] && rm -rf "$HOME/$2"
