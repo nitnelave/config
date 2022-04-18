@@ -115,4 +115,13 @@ if [ ! -e ~/.zsh/zsh-autosuggestions ]; then
   git clone https://github.com/zsh-users/zsh-autosuggestions ~/.zsh/zsh-autosuggestions
 fi
 
+which rustup >/dev/null || curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+
+if ! which nvim >/dev/null; then
+  wget https://github.com/neovim/neovim/releases/download/v0.7.0/nvim-linux64.tar.gz -O /tmp/nvim.tar.gz
+  tar xzvf /tmp/nvim.tar.gz -C ~/.bin
+fi
+
+which delta >/dev/null || cargo install git-delta
+
 echo "Configuration successful!"
