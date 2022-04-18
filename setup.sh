@@ -7,9 +7,7 @@ then
   FORCE=1
 fi
 
-echo "Loading config folder in ${CONFIG=`dirname $(pwd)/$0`}"
-
-SCRIPTS=${SCRIPTS:-$HOME/scripts}
+echo "Loading config folder in ${CONFIG=`dirname $0`}"
 
 link () {
   [ "$FORCE" = "1" ] && rm -rf "$HOME/$2"
@@ -27,6 +25,7 @@ echo "Linking config files..."
 link vimrc .vimrc-generic
 link zshrc .zshrc-generic
 link bashrc .bashrc-generic
+link dircolors .dircolors
 link aliases .aliases
 link gitconfig .gitconfig-generic
 link gitignore-generic .gitignore
@@ -52,15 +51,6 @@ if ! [ -e "$HOME/.xprofile" ]; then
   ln -s "$HOME/.xsession" "$HOME/.xprofile"
   echo "$HOME/.xprofile --> $HOME/.xsession"
 fi
-
-mkdir -p $HOME/.gnupg
-if ! [ -e "$HOME/.gnupg/pubring.gpg" ] && [ -e "$SCRIPTS/gpg" ]; then
-  for i in `ls $SCRIPTS/gpg`; do
-    ln -s $SCRIPTS/gpg/$i $HOME/.gnupg/$i
-  done
-  echo "$HOME/.gnupg --> $HOME/scripts/gpg"
-fi
-
 
 copy () {
   if ! [ -e $HOME/$2 ]; then
