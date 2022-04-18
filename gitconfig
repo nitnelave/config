@@ -3,7 +3,7 @@
         st = status
         ri = rebase --interactive --autosquash
         d = difftool
-        dm = diff master
+        dm = difftool master
         co = checkout
         br = branch
         df = diff
@@ -56,6 +56,11 @@
 [core]
         excludesfile = ~/.gitignore
         editor = nvim
+        pager = delta
+[interactive]
+        diffFilter = delta --color-only
+[delta]
+        navigate = true
 [user]
         name = Valentin Tolmer
         email = valentin@tolmer.fr
@@ -76,10 +81,15 @@
         summary = true
         tool = nvim -d
         noprefix = true
+        conflictStyle = diff3
 [diff]
-        tool = nvim -d
-[difftool]
-        prompt = false
+        colorMoved = default
+        #tool = difft
+        #tool = nvim -d
+#[difftool]
+#        prompt = false
+#[difftool "difft"]
+#        cmd = difft "$LOCAL" "$REMOTE"
 [color]
         ui = true
 [log]
