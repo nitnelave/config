@@ -30,7 +30,7 @@ zstyle :compinstall filename '$HOME/.zshrc'
 setopt appendhistory extended_glob HIST_IGNORE_ALL_DUPS HIST_SAVE_NO_DUPS sh_word_split
 autoload -Uz compinit
 compinit -u
-HISTFILE=~/.histfile
+export HISTFILE=~/.histfile
 HISTSIZE=10000
 SAVEHIST=10000
 bindkey -v
