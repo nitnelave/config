@@ -40,16 +40,15 @@ call plug#begin('~/.vim/plugged')
 
   " Tools
 
-  Plug 'ctrlpvim/ctrlp.vim'
-  Plug 'FelikZ/ctrlp-py-matcher'
-
   Plug 'lifepillar/vim-cheat40'
 
   " LSP & completion
   " Collection of common configurations for the Nvim LSP client
   Plug 'neovim/nvim-lspconfig'
-  " Nicer UI.
-  Plug 'tami5/lspsaga.nvim', { 'branch': 'nvim6.0' }
+  " Nicer UI
+  Plug 'ray-x/guihua.lua', {'do': 'cd lua/fzy && make' }
+  Plug 'ray-x/navigator.lua'
+  Plug 'ray-x/lsp_signature.nvim'
 
   " Completion framework
   Plug 'hrsh7th/nvim-cmp'
@@ -69,9 +68,6 @@ call plug#begin('~/.vim/plugged')
   " To enable more of the features of rust-analyzer, such as inlay hints and more!
   Plug 'simrat39/rust-tools.nvim'
 
-  " Symbols outline.
-  Plug 'simrat39/symbols-outline.nvim'
-
   " Snippet engine
   Plug 'hrsh7th/vim-vsnip'
   Plug 'hrsh7th/vim-vsnip-integ'
@@ -83,6 +79,7 @@ call plug#begin('~/.vim/plugged')
   Plug 'nvim-lua/popup.nvim'
   Plug 'nvim-lua/plenary.nvim'
   Plug 'nvim-telescope/telescope.nvim'
+  Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
 
   " Tree sitter
   Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
@@ -420,92 +417,77 @@ cab accents call g:AccentsToLatex()
 let g:localvimrc_sandbox = 0
 let g:localvimrc_ask = 0
 
-" Ctrl-P
-
-let g:ctrlp_cmd = 'CtrlPMixed'
-let g:ctrlp_working_path_mode = 'raw'
-let g:ctrlp_root_markers = ['.vimrc', 'google3', '.git', '.hg']
-let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files -co --exclude-standard']
-let g:ctrlp_switch_buffer = 'EV'
-let g:ctrlp_clear_cache_on_exit = 0
-
-
-let g:ctrlp_prompt_mappings = {
-      \ 'PrtSelectMove("j")':   ['<c-t>', '<down>'],
-      \ 'PrtSelectMove("k")':   ['<c-n>', '<up>'],
-      \ 'PrtCurStart()':        ['<c-a>', '<Home>', '<kHome>'],
-      \ 'PrtCurEnd()':          ['<c-e>', '<End>', '<kEnd>'],
-      \ 'PrtHistory(-1)':       ['<c-c>'],
-      \ 'PrtHistory(1)':        ['<c-w>'],
-      \ 'PrtCurLeft()':         ['<left>', '<c-^>'],
-      \ 'AcceptSelection("h")': ['<c-x>', '<c-cr>'],
-      \ 'AcceptSelection("t")': [],
-      \ 'PrtDeleteWord()':      ['<c-H>'],
-      \ 'PrtExit()':            ['<esc>'],
-      \ }
-
-if executable('ag')
-  " Use Ag over Grep
-  set grepprg=ag\ --nogroup\ --nocolor
-
-  " Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
-  let g:ctrlp_user_command = 'ag %s -i --nocolor --nogroup --hidden
-        \ --ignore .git
-        \ --ignore .svn
-        \ --ignore .hg
-        \ --ignore .DS_Store
-        \ --ignore "**/*.pyc"
-        \ --ignore .git5_specs
-        \ --ignore review
-        \ -g ""'
-endif
-
 " LSP
 
-" Configure LSP through rust-tools.nvim plugin.
-" rust-tools will configure and enable certain LSP features for us.
-" See https://github.com/simrat39/rust-tools.nvim#configuration
 lua <<EOF
-local nvim_lsp = require'lspconfig'
-
-local rust_opts = {
-    tools = { -- rust-tools options
-        autoSetHints = true,
-        hover_with_actions = true,
-        inlay_hints = {
-            show_parameter_hints = false,
-            parameter_hints_prefix = "",
-            other_hints_prefix = "",
-        },
-    },
-
-    -- all the opts to send to nvim-lspconfig
-    -- these override the defaults set by rust-tools.nvim
-    -- see https://github.com/neovim/nvim-lspconfig/blob/master/CONFIG.md#rust_analyzer
-    server = {
-        -- on_attach is a callback called when the language server attachs to the buffer
-        -- on_attach = on_attach,
-        settings = {
-            -- to enable rust-analyzer settings visit:
-            -- https://github.com/rust-analyzer/rust-analyzer/blob/master/docs/user/generated_config.adoc
-            ["rust-analyzer"] = {
-                -- enable clippy on save
-                checkOnSave = {
-                    command = "clippy",
-                    extraArgs = "--target_dir target/rust-analyzer"
-                },
-            }
-        }
-    },
-}
-
-require('rust-tools').setup(rust_opts)
 local util = require 'lspconfig.util'
-nvim_lsp.clangd.setup {
-    cmd = {"clangd"},
-    root_dir = util.root_pattern('build/compile_commands.json', '.git'),
-    capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+require'navigator'.setup({
+  default_mapping = false,  -- set to false if you will remap every key
+  keymaps = {
+    { key = 'gd', func = "require('navigator.definition').definition()" },
+    { key = 'gD', func = "declaration({ border = 'rounded', max_width = 80 })" },
+    { key = 'gr', func = "require('navigator.reference').reference()" }, -- reference deprecated?
+    { key = '<c-k>', func = 'signature_help()' },
+    { mode = 'i', key = '<c-k>', func = 'signature_help()' },
+    { key = 'K', func = 'hover({ popup_opts = { border = single, max_width = 80 }})' },
+    { key = 'ga', mode = 'n', func = "require('navigator.codeAction').code_action()" },
+    { key = '<c-r>', func = "require('navigator.rename').rename()" },
+    { key = 'gi', func = 'incoming_calls()' },
+    { key = 'go', func = 'outgoing_calls()' },
+    { key = 'g]', func = "diagnostic.goto_next({ border = 'rounded', max_width = 80})" },
+    { key = 'g[', func = "diagnostic.goto_prev({ border = 'rounded', max_width = 80})" },
+    { key = 'ge', func = 'diagnostic.set_loclist()' },
+    { key = 'ff', func = 'formatting()', mode = 'n' },
+  },
+  lsp = {
+    clangd = {
+      root_dir = util.root_pattern('build/compile_commands.json', '.git'),
+      flags = {allow_incremental_sync = true, debounce_text_changes = 500},
+      cmd = {
+        "clangd", "--background-index", "--suggest-missing-includes", "--clang-tidy",
+        "--header-insertion=iwyu"
+      },
+      filetypes = {"c", "cpp", "objc", "objcpp"},
+      on_attach = function(client)
+        client.resolved_capabilities.document_formatting = true
+        on_attach(client)
+      end,
+      capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+    },
+    rust_analyzer = {
+      root_dir = function(fname)
+        return util.root_pattern("Cargo.toml", "rust-project.json", ".git")(fname)
+                   or util.path.dirname(fname)
+      end,
+      filetypes = {"rust"},
+      message_level = vim.lsp.protocol.MessageType.error,
+      on_attach = on_attach,
+      settings = {
+        ["rust-analyzer"] = {
+          assist = {importMergeBehavior = "last", importPrefix = "by_self"},
+          cargo = {loadOutDirsFromCheck = true},
+          procMacro = {enable = true},
+          checkOnSave = {
+            command = "clippy",
+            extraArgs = {"--target-dir", "target/rust-analyzer"},
+          },
+        },
+      },
+      flags = {allow_incremental_sync = true, debounce_text_changes = 500}
+    },
   }
+})
+
+if vim.o.ft == 'clap_input' and vim.o.ft == 'guihua' and vim.o.ft == 'guihua_rust' then
+  require'cmp'.setup.buffer { completion = {enable = false} }
+end
+
+require "lsp_signature".setup({
+  bind = true, -- This is mandatory, otherwise border config won't get registered.
+  handler_opts = {
+    border = "rounded"
+  }
+})
 EOF
 
 " Setup Completion
@@ -575,98 +557,6 @@ require("cmp_git").setup({
 })
 EOF
 
-" LSP saga config
-lua <<EOF
-local saga = require 'lspsaga'
-saga.init_lsp_saga {
-  finder_action_keys = {
-    open = '<CR>',
-    vsplit = 's',
-    quit = {'q', '<ESC>'},
-    scroll_down = '<c-w>',
-    scroll_up = '<c-c>'
-  },
-  code_action_prompt = {
-    enable = false,
-  },
-}
-EOF
-
-if executable('pyls')
-    " pip install python-language-server
-    au User lsp_setup call lsp#register_server({
-        \ 'name': 'pyls',
-        \ 'cmd': {server_info->['pyls']},
-        \ 'allowlist': ['python'],
-        \ })
-endif
-
-"function! s:on_lsp_buffer_enabled() abort
-"    setlocal omnifunc=lsp#complete
-"    setlocal signcolumn=yes
-"    if exists('+tagfunc') | setlocal tagfunc=lsp#tagfunc | endif
-"    nmap <buffer> gd <plug>(lsp-definition)
-"    nmap <buffer> gs <plug>(lsp-document-symbol-search)
-"    nmap <buffer> gS <plug>(lsp-workspace-symbol-search)
-"    nmap <buffer> gr <plug>(lsp-references)
-"    nmap <buffer> gi <plug>(lsp-implementation)
-"    nmap <buffer> gt <plug>(lsp-type-definition)
-"    nmap <buffer> <leader>rn <plug>(lsp-rename)
-"    nmap <buffer> [g <plug>(lsp-previous-diagnostic)
-"    nmap <buffer> ]g <plug>(lsp-next-diagnostic)
-"    nmap <buffer> K <plug>(lsp-hover)
-"    inoremap <buffer> <expr><c-f> lsp#scroll(+4)
-"    inoremap <buffer> <expr><c-d> lsp#scroll(-4)
-"
-"    let g:lsp_format_sync_timeout = 1000
-"    autocmd! BufWritePre *.rs,*.go call execute('LspDocumentFormatSync')
-"    " refer to doc to add more commands
-"endfunction
-"
-"augroup lsp_install
-"    au!
-"    " call s:on_lsp_buffer_enabled only for languages that has the server registered.
-"    autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
-"augroup END
-
-" Code navigation shortcuts
-nnoremap <silent> <c-]> <cmd>lua vim.lsp.buf.definition()<CR>
-nnoremap <silent> gd    <cmd>lua vim.lsp.buf.definition()<CR>
-nnoremap <silent> gD    <cmd>lua vim.lsp.buf.implementation()<CR>
-nnoremap <silent> K <cmd>lua require('lspsaga.hover').render_hover_doc()<CR>
-" scroll down hover doc or scroll in definition preview
-nnoremap <silent> <C-w> <cmd>lua require('lspsaga.action').smart_scroll_with_saga(4)<CR>
-" scroll up hover doc
-nnoremap <silent> <C-c> <cmd>lua require('lspsaga.action').smart_scroll_with_saga(-4)<CR>
-nnoremap <silent> <c-k> <cmd>lua require('lspsaga.signaturehelp').signature_help()<CR>
-inoremap <silent> <c-k> <cmd>lua require('lspsaga.signaturehelp').signature_help()<CR>
-"nnoremap <silent> 1gD   <cmd>lua vim.lsp.buf.type_definition()<CR>
-nnoremap <silent> gr    <cmd>lua vim.lsp.buf.references()<CR>
-"nnoremap <silent> g0    <cmd>lua vim.lsp.buf.document_symbol()<CR>
-"nnoremap <silent> gW    <cmd>lua vim.lsp.buf.workspace_symbol()<CR>
-nnoremap <silent> gh    <cmd>lua require'lspsaga.provider'.lsp_finder()<CR>
-nnoremap <silent><leader>a    <cmd>lua require('lspsaga.codeaction').code_action()<CR>
-vnoremap <silent><leader>a :<C-U>lua require('lspsaga.codeaction').range_code_action()<CR>
-nnoremap <silent><c-r> <cmd>lua require('lspsaga.rename').rename()<CR>
-
-" Set updatetime for CursorHold
-" 300ms of no cursor movement to trigger CursorHold
-set updatetime=300
-" Show diagnostic popup on cursor hold
-autocmd CursorHold * :Lspsaga show_line_diagnostics
-
-nnoremap <silent><leader>d <cmd>Lspsaga show_line_diagnostics<CR>
-" Goto previous/next diagnostic warning/error
-nnoremap <silent> g[ <cmd>Lspsaga diagnostic_jump_next<CR>
-nnoremap <silent> g] <cmd>Lspsaga diagnostic_jump_prev<CR>
-
-" Show/hide float terminal
-nnoremap <silent> <leader>g <cmd>lua require('lspsaga.floaterm').open_float_terminal('lazygit')<CR>
-tnoremap <silent> <leader>g <C-\><C-n>:lua require('lspsaga.floaterm').close_float_terminal()<CR>
-
-autocmd BufWritePre *.rs lua vim.lsp.buf.formatting_sync(nil, 200)
-
-
 " VSnip
 
 imap <expr> <Tab>   vsnip#jumpable(1)   ? '<Plug>(vsnip-jump-next)'      : '<Tab>'
@@ -721,60 +611,37 @@ let g:spelunker_disable_acronym_checking = 1
 
 autocmd TermOpen * :let b:enable_spelunker_vim = 0
 
-" Symbols outline
+" Telescope
 lua <<EOF
-vim.g.symbols_outline = {
-    highlight_hovered_item = true,
-    show_guides = false,
-    auto_preview = true,
-    --position = 'right',
-    width = 45,
-    --show_numbers = false,
-    --show_relative_numbers = false,
-    show_symbol_details = false,
-    preview_bg_highlight = 'FloatShadow',
-    keymaps = { -- These keymaps can be a string or a table for multiple keys
-        close = {"<Esc>", "q"},
-        goto_location = "<Cr>",
-        focus_location = "o",
-        hover_symbol = "<C-space>",
-        toggle_preview = "K",
-        rename_symbol = "<c-r>",
-        code_actions = "<mapleader>a",
+local actions = require "telescope.actions"
+require('telescope').setup {
+  defaults = {
+    mappings = {
+      i = {
+        ["<C-t>"] = actions.move_selection_next,
+        ["<C-n>"] = actions.move_selection_previous,
+      },
+      n = {
+        ["t"] = actions.move_selection_next,
+        ["n"] = actions.move_selection_previous,
+        ["T"] = actions.move_to_top,
+        ["N"] = actions.move_to_bottom,
+      }
     },
-    --lsp_blacklist = {},
-    --symbol_blacklist = {},
-    -- If the symbols don't work, make sure you are using alacritty, and have a NerdFont installed:
-    -- https://github.com/ryanoasis/nerd-fonts/blob/master/patched-fonts/BitstreamVeraSansMono/Regular/complete/Bitstream%20Vera%20Sans%20Mono%20Nerd%20Font%20Complete.ttf
-    symbols = {
-        File = {icon = "", hl = "TSURI"},
-        Module = {icon = "", hl = "TSNamespace"},
-        Namespace = {icon = "", hl = "TSNamespace"},
-        Package = {icon = "", hl = "TSNamespace"},
-        Class = {icon = "𝓒", hl = "TSType"},
-        Method = {icon = "ƒ", hl = "TSMethod"},
-        Property = {icon = "", hl = "TSMethod"},
-        Field = {icon = "", hl = "TSField"},
-        Constructor = {icon = "", hl = "TSConstructor"},
-        Enum = {icon = "ℰ", hl = "TSType"},
-        Interface = {icon = "ﰮ", hl = "TSType"},
-        Function = {icon = "", hl = "TSFunction"},
-        Variable = {icon = "", hl = "TSConstant"},
-        Constant = {icon = "", hl = "TSConstant"},
-        String = {icon = "𝓐", hl = "TSString"},
-        Number = {icon = "#", hl = "TSNumber"},
-        Boolean = {icon = "⊨", hl = "TSBoolean"},
-        Array = {icon = "", hl = "TSConstant"},
-        Object = {icon = "⦿", hl = "TSType"},
-        Key = {icon = "🔐", hl = "TSType"},
-        Null = {icon = "NULL", hl = "TSType"},
-        EnumMember = {icon = "", hl = "TSField"},
-        Struct = {icon = "𝓢", hl = "TSType"},
-        Event = {icon = "🗲", hl = "TSType"},
-        Operator = {icon = "+", hl = "TSOperator"},
-        TypeParameter = {icon = "𝙏", hl = "TSParameter"}
+  },
+  extensions = {
+    fzf = {
+      fuzzy = true,                    -- false will only do exact matching
+      override_generic_sorter = true,  -- override the generic sorter
+      override_file_sorter = true,     -- override the file sorter
     }
+  }
 }
+-- To get fzf loaded and working with telescope, you need to call
+-- load_extension, somewhere after setup function:
+require('telescope').load_extension('fzf')
 EOF
-
-nnoremap <silent> <leader>o :SymbolsOutline<CR>
+nnoremap <c-p> <cmd>Telescope git_files<cr>
+nnoremap gr <cmd>Telescope lsp_references<cr>
+nnoremap fs <cmd>Telescope lsp_document_symbol<cr>
+nnoremap fS <cmd>Telescope lsp_workspace_symbol<cr>
