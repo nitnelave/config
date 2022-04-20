@@ -66,3 +66,23 @@ and ()
 {
   [ $? -eq 0 ] && "$@"
 }
+
+f() (
+  if [ $# -eq 0 ]
+  then
+      fzf | sort
+      return 0
+  fi
+  program="$1"
+  shift
+  opts="$@"
+  arguments="$(fzf --multi)"
+  if [ -z "${arguments}" ]; then
+      return 1
+  fi
+  for arg in "${arguments[@]}"; do
+      arguments=$(echo "$arg" | sed "s/'/''/g; s/.*/'&'/g; s/\n//g")
+  done
+  echo "$program $opts $arguments"
+  eval $program $opts $arguments
+)
