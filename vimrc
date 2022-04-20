@@ -419,8 +419,19 @@ let g:localvimrc_ask = 0
 
 " LSP
 
+
 lua <<EOF
 local util = require 'lspconfig.util'
+local capabilities = vim.lsp.protocol.make_client_capabilities()
+capabilities.textDocument.completion.completionItem.snippetSupport = true
+capabilities.textDocument.completion.completionItem.resolveSupport = {
+  properties = { "documentation", "detail", "additionalTextEdits" },
+}
+local cmp_capabilities = require("cmp_nvim_lsp").update_capabilities(capabilities)
+local clangd_capabilities = cmp_capabilities
+clangd_capabilities.textDocument.semanticHighlighting = true
+clangd_capabilities.offsetEncoding = "utf-8"
+
 require'navigator'.setup({
   default_mapping = false,  -- set to false if you will remap every key
   keymaps = {
@@ -440,6 +451,10 @@ require'navigator'.setup({
     { key = 'ff', func = 'formatting()', mode = 'n' },
   },
   lsp = {
+    disable_lsp = {'bashls', 'ccls', 'closure_lsp', 'cssls', 'dartls',
+    'denols', 'dockerls', 'dotls', 'graphql', 'intelephense',
+    'kotlin_language_server', 'nimls', 'pylsp', 'pyright', 'sqlls',
+    'sumneko_lua', 'vimls', 'vim-language-server', 'yamlls'},
     clangd = {
       root_dir = util.root_pattern('build/compile_commands.json', '.git'),
       flags = {allow_incremental_sync = true, debounce_text_changes = 500},
@@ -450,9 +465,8 @@ require'navigator'.setup({
       filetypes = {"c", "cpp", "objc", "objcpp"},
       on_attach = function(client)
         client.resolved_capabilities.document_formatting = true
-        on_attach(client)
       end,
-      capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+      capabilities = clangd_capabilities
     },
     rust_analyzer = {
       root_dir = function(fname)
@@ -557,6 +571,10 @@ require("cmp_git").setup({
 })
 EOF
 
+hi LspReferenceRead gui=underline cterm=underline
+hi LspReferenceText gui=underline cterm=underline
+hi LspReferenceWrite gui=underline cterm=underline
+
 " VSnip
 
 imap <expr> <Tab>   vsnip#jumpable(1)   ? '<Plug>(vsnip-jump-next)'      : '<Tab>'
@@ -643,5 +661,5 @@ require('telescope').load_extension('fzf')
 EOF
 nnoremap <c-p> <cmd>Telescope git_files<cr>
 nnoremap gr <cmd>Telescope lsp_references<cr>
-nnoremap fs <cmd>Telescope lsp_document_symbol<cr>
-nnoremap fS <cmd>Telescope lsp_workspace_symbol<cr>
+nnoremap fs <cmd>Telescope lsp_document_symbols<cr>
+nnoremap fS <cmd>Telescope lsp_workspace_symbols<cr>
