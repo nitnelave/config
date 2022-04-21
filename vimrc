@@ -427,10 +427,10 @@ capabilities.textDocument.completion.completionItem.snippetSupport = true
 capabilities.textDocument.completion.completionItem.resolveSupport = {
   properties = { "documentation", "detail", "additionalTextEdits" },
 }
-local cmp_capabilities = require("cmp_nvim_lsp").update_capabilities(capabilities)
-local clangd_capabilities = cmp_capabilities
+local clangd_capabilities  = require("cmp_nvim_lsp").update_capabilities(capabilities)
 clangd_capabilities.textDocument.semanticHighlighting = true
 clangd_capabilities.offsetEncoding = "utf-8"
+--local on_attach = require("navigator.lspclient.attach").on_attach
 
 require'navigator'.setup({
   default_mapping = false,  -- set to false if you will remap every key
@@ -465,6 +465,7 @@ require'navigator'.setup({
       filetypes = {"c", "cpp", "objc", "objcpp"},
       on_attach = function(client)
         client.resolved_capabilities.document_formatting = true
+        --on_attach(client)
       end,
       capabilities = clangd_capabilities
     },
@@ -571,6 +572,9 @@ require("cmp_git").setup({
 })
 EOF
 
+hi clear LspReferenceRead
+hi clear LspReferenceText
+hi clear LspReferenceWrite
 hi LspReferenceRead gui=underline cterm=underline
 hi LspReferenceText gui=underline cterm=underline
 hi LspReferenceWrite gui=underline cterm=underline
