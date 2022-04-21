@@ -3,8 +3,9 @@
         st = status
         ri = rebase --interactive --autosquash
         d = difftool
-        dm = difftool master
+        dm = diff master
         co = checkout
+        com = checkout master
         br = branch
         df = diff
         dc = diff --cached
