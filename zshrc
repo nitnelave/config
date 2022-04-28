@@ -34,6 +34,7 @@ export HISTFILE=~/.histfile
 HISTSIZE=10000
 SAVEHIST=10000
 bindkey -v
+autoload -U edit-command-line
 bindkey "^q" push-line-or-edit
 
 unsetopt beep notify
