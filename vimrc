@@ -420,6 +420,8 @@ let g:localvimrc_ask = 0
 " LSP
 
 
+nnoremap ff :lua vim.lsp.buf.formatting()<CR>
+
 lua <<EOF
 local util = require 'lspconfig.util'
 local capabilities = vim.lsp.protocol.make_client_capabilities()
@@ -429,8 +431,9 @@ capabilities.textDocument.completion.completionItem.resolveSupport = {
 }
 local clangd_capabilities  = require("cmp_nvim_lsp").update_capabilities(capabilities)
 clangd_capabilities.textDocument.semanticHighlighting = true
-clangd_capabilities.offsetEncoding = "utf-8"
---local on_attach = require("navigator.lspclient.attach").on_attach
+clangd_capabilities.offsetEncoding = {"utf-8"}
+local rust_capabilities = capabilities
+rust_capabilities.document_formatting = true
 
 require'navigator'.setup({
   default_mapping = false,  -- set to false if you will remap every key
@@ -447,10 +450,11 @@ require'navigator'.setup({
     { key = 'go', func = 'outgoing_calls()' },
     { key = 'g]', func = "diagnostic.goto_next({ border = 'rounded', max_width = 80})" },
     { key = 'g[', func = "diagnostic.goto_prev({ border = 'rounded', max_width = 80})" },
-    { key = 'ge', func = 'diagnostic.set_loclist()' },
-    { key = 'ff', func = 'formatting()', mode = 'n' },
+    { key = 'gE', func = 'diagnostic.set_loclist()' },
+    { key = 'ge', func = "require('navigator.diagnostics').show_diagnostics()" },
   },
   lsp = {
+    format_on_save = true,
     disable_lsp = {'bashls', 'ccls', 'closure_lsp', 'cssls', 'dartls',
     'denols', 'dockerls', 'dotls', 'graphql', 'intelephense',
     'kotlin_language_server', 'nimls', 'pylsp', 'pyright', 'sqlls',
@@ -465,7 +469,7 @@ require'navigator'.setup({
       filetypes = {"c", "cpp", "objc", "objcpp"},
       on_attach = function(client)
         client.resolved_capabilities.document_formatting = true
-        --on_attach(client)
+        require("navigator.lspclient.attach").on_attach(client)
       end,
       capabilities = clangd_capabilities
     },
@@ -476,7 +480,7 @@ require'navigator'.setup({
       end,
       filetypes = {"rust"},
       message_level = vim.lsp.protocol.MessageType.error,
-      on_attach = on_attach,
+      capabilities = rust_capabilities,
       settings = {
         ["rust-analyzer"] = {
           assist = {importMergeBehavior = "last", importPrefix = "by_self"},
@@ -488,7 +492,7 @@ require'navigator'.setup({
           },
         },
       },
-      flags = {allow_incremental_sync = true, debounce_text_changes = 500}
+      flags = {allow_incremental_sync = true, debounce_text_changes = 500},
     },
   }
 })
