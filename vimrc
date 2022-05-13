@@ -87,6 +87,8 @@ call plug#begin('~/.vim/plugged')
   " Bulk rename files
   Plug 'qpkorr/vim-renamer'
 
+  " Theme
+  Plug 'sonph/onehalf', { 'rtp': 'vim' }
 call plug#end()
 
 " General vim settings
@@ -251,16 +253,7 @@ function! NetrwMapping()
   nnoremap <buffer> H <C-w>r
 endfunction
 
-color desert
-
-" Spellcheck highlighting
-augroup my_colors
-  autocmd!
-  autocmd ColorScheme desert hi clear SpellBad
-  autocmd ColorScheme desert hi SpellBad cterm=underline ctermfg=red
-  autocmd ColorScheme desert hi SpelunkerSpellBad cterm=underline ctermfg=red
-  autocmd ColorScheme desert hi SpelunkerComplexOrCompoundWord cterm=underline ctermfg=NONE
-augroup END
+color onehalfdark
 
 " Autocmd, per language
 
