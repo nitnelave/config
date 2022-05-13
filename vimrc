@@ -662,6 +662,7 @@ require('telescope').setup {
 require('telescope').load_extension('fzf')
 EOF
 nnoremap <c-p> <cmd>Telescope git_files<cr>
+nnoremap <c-b> <cmd>Telescope buffers<cr>
 nnoremap gr <cmd>Telescope lsp_references<cr>
 nnoremap fs <cmd>Telescope lsp_document_symbols<cr>
 nnoremap fS <cmd>Telescope lsp_workspace_symbols<cr>
