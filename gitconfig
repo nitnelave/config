@@ -3,7 +3,7 @@
         st = status
         ri = rebase --interactive --autosquash
         d = difftool
-        dm = diff master
+        dm = "!f() { git diff $(git merge-base HEAD master ) $@ ; }; f"
         co = checkout
         com = checkout master
         br = branch
@@ -40,12 +40,8 @@
         modified-files = "!f() { \
             LOCAL_ROOT=${2:-$GIT_PREFIX}; \
             BASE=${1:-master}; \
-            if [ $(git merge-base HEAD "$BASE") = $(git rev-parse --verify "$BASE") ]; then \
-              git diff --name-only "$BASE" | sed "s@^$LOCAL_ROOT@@" ; \
-            else \
-              echo Not based on "$BASE" >&2; \
-              return 1; \
-            fi }; f"
+            git diff --name-only $(git merge-base HEAD "$BASE") | sed "s@^$LOCAL_ROOT@@" ; \
+            }; f"
         open-modified = "!f() { \
             BASE=${1:-master}; \
             FILES=$(git modified-files $BASE $GIT_PREFIX); \
