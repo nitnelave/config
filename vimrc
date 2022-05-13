@@ -459,13 +459,11 @@ require'navigator'.setup({
       root_dir = util.root_pattern('build/compile_commands.json', '.git'),
       flags = {allow_incremental_sync = true, debounce_text_changes = 500},
       cmd = {
-        "clangd", "--background-index", "--suggest-missing-includes", "--clang-tidy",
-        "--header-insertion=iwyu"
+        "clangd", "--background-index", "--clang-tidy", "--header-insertion=iwyu", "--all-scopes-completion", "--completion-style=bundled"
       },
       filetypes = {"c", "cpp", "objc", "objcpp"},
       on_attach = function(client)
         client.resolved_capabilities.document_formatting = true
-        require("navigator.lspclient.attach").on_attach(client)
       end,
       capabilities = clangd_capabilities
     },
