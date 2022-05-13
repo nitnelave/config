@@ -87,6 +87,9 @@ call plug#begin('~/.vim/plugged')
   " Bulk rename files
   Plug 'qpkorr/vim-renamer'
 
+  " Git sessions
+  Plug 'wting/gitsessions.vim'
+
   " Theme
   Plug 'sonph/onehalf', { 'rtp': 'vim' }
 call plug#end()
