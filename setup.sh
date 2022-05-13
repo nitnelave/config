@@ -125,4 +125,6 @@ fi
 which delta >/dev/null || cargo install git-delta
 which rg >/dev/null || cargo install ripgrep
 
+which direnv >/dev/null || sudo apt install direnv
+
 echo "Configuration successful!"

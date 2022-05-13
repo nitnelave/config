@@ -23,6 +23,7 @@ __pycache__
 *.log
 *.out
 .lvimrc
+.envrc
 *.pyc
 tags.lock
 tags.temp
