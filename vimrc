@@ -49,6 +49,8 @@ call plug#begin('~/.vim/plugged')
   Plug 'ray-x/guihua.lua', {'do': 'cd lua/fzy && make' }
   Plug 'ray-x/navigator.lua'
   Plug 'ray-x/lsp_signature.nvim'
+  " LSP status in status line.
+  Plug 'nvim-lua/lsp-status.nvim'
 
   " Completion framework
   Plug 'hrsh7th/nvim-cmp'
@@ -59,7 +61,7 @@ call plug#begin('~/.vim/plugged')
   " Snippet completion source for nvim-cmp
   Plug 'hrsh7th/cmp-vsnip'
 
-  " Other usefull completion sources
+  " Other useful completion sources
   Plug 'hrsh7th/cmp-path'
   Plug 'hrsh7th/cmp-buffer'
   Plug 'hrsh7th/cmp-cmdline'
@@ -80,9 +82,11 @@ call plug#begin('~/.vim/plugged')
   Plug 'nvim-lua/plenary.nvim'
   Plug 'nvim-telescope/telescope.nvim'
   Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
+  Plug 'nvim-telescope/telescope-live-grep-args.nvim'
 
   " Tree sitter
   Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+  Plug 'nvim-treesitter/nvim-treesitter-context'
 
   " Bulk rename files
   Plug 'qpkorr/vim-renamer'
@@ -90,8 +94,17 @@ call plug#begin('~/.vim/plugged')
   " Git sessions
   Plug 'wting/gitsessions.vim'
 
+  " Git sessions
+  Plug 'tpope/vim-fugitive'
+
+  " Close hidden buffers
+  Plug 'kazhala/close-buffers.nvim'
+
   " Theme
   Plug 'sonph/onehalf', { 'rtp': 'vim' }
+
+  " Leap
+  Plug 'ggandor/leap.nvim'
 call plug#end()
 
 " General vim settings
@@ -133,7 +146,14 @@ set number
 set laststatus=2
 
 " Format the status line
-set statusline=%f\ %l\|%c\ %m\ %#warningmsg#%*%=%p%%\ (%Y%R)
+" Statusline
+function! LspStatus() abort
+  if luaeval('#vim.lsp.buf_get_clients() > 0')
+    return luaeval("require('lsp-status').status()")
+  endif
+  return ''
+endfunction
+set statusline=%f\ %l\|%c\ %m\ %#warningmsg#%*%=%{LspStatus()}%p%%\ (%Y%R)
 
 " Enhance command line completion
 set wildmenu
@@ -161,9 +181,6 @@ set wrap
 set completeopt=menuone,noinsert,noselect
 set shortmess+=c
 
-" Ignore case on search
-set ignorecase
-
 " Ignore case unless there is an uppercase letter in the pattern
 set smartcase
 
@@ -176,7 +193,7 @@ set inccommand=nosplit
 " Don't highlight matched strings
 set nohlsearch
 
-" Toggle g option by default on substition
+" Toggle g option by default on substitution
 set gdefault
 
 " The length of a tab
@@ -325,6 +342,11 @@ command! Q q
 command! Qa qa
 command! Wq wq
 command! WQ wq
+command! EX Ex
+command! VEX Vex
+command! VEx Vex
+cabbrev vex <c-r>=(getcmdtype()==':' && getcmdpos()==1 ? 'Vex' : 'vex')<CR>
+cabbrev ex <c-r>=(getcmdtype()==':' && getcmdpos()==1 ? 'Ex' : 'ex')<CR>
 
 " Yank from cursor to end of line, to be consistent with C and D
 nnoremap Y y$
@@ -415,12 +437,23 @@ let g:localvimrc_ask = 0
 
 " LSP
 
-
-nnoremap ff :lua vim.lsp.buf.formatting()<CR>
+nnoremap <c-f> :lua vim.lsp.buf.formatting()<CR>
 
 lua <<EOF
+local lsp_status = require('lsp-status')
+lsp_status.config {
+  show_filename = false,
+  indicator_errors = 'E',
+  indicator_warnings = 'W',
+  indicator_info = 'i',
+  indicator_hint = '?',
+  indicator_ok = 'Ok',
+}
+lsp_status.register_progress()
+
 local util = require 'lspconfig.util'
 local capabilities = vim.lsp.protocol.make_client_capabilities()
+for k,v in pairs(lsp_status.capabilities) do capabilities[k] = v end
 capabilities.textDocument.completion.completionItem.snippetSupport = true
 capabilities.textDocument.completion.completionItem.resolveSupport = {
   properties = { "documentation", "detail", "additionalTextEdits" },
@@ -434,20 +467,20 @@ rust_capabilities.document_formatting = true
 require'navigator'.setup({
   default_mapping = false,  -- set to false if you will remap every key
   keymaps = {
-    { key = 'gd', func = "require('navigator.definition').definition()" },
-    { key = 'gD', func = "declaration({ border = 'rounded', max_width = 80 })" },
-    { key = 'gr', func = "require('navigator.reference').reference()" }, -- reference deprecated?
-    { key = '<c-k>', func = 'signature_help()' },
-    { mode = 'i', key = '<c-k>', func = 'signature_help()' },
-    { key = 'K', func = 'hover({ popup_opts = { border = single, max_width = 80 }})' },
-    { key = 'ga', mode = 'n', func = "require('navigator.codeAction').code_action()" },
-    { key = '<c-r>', func = "require('navigator.rename').rename()" },
-    { key = 'gi', func = 'incoming_calls()' },
-    { key = 'go', func = 'outgoing_calls()' },
-    { key = 'g]', func = "diagnostic.goto_next({ border = 'rounded', max_width = 80})" },
-    { key = 'g[', func = "diagnostic.goto_prev({ border = 'rounded', max_width = 80})" },
-    { key = 'gE', func = 'diagnostic.set_loclist()' },
-    { key = 'ge', func = "require('navigator.diagnostics').show_diagnostics()" },
+    { key = 'gd', func = require('navigator.definition').definition, desc = 'definition' },
+    { key = 'gD', func = function () vim.lsp.buf.declaration({ border = 'rounded', max_width = 80 }) end, desc = 'declaration' },
+    { key = 'gr', func = require('navigator.reference').reference, desc = 'references' }, -- reference deprecated?
+    { key = '<c-k>', func = vim.lsp.signature_help, desc = 'signature_help' },
+    { mode = 'i', key = '<c-k>', func = vim.lsp.signature_help, desc = 'signature_help' },
+    { key = 'K', func = function () vim.lsp.buf.hover({ popup_opts = { border = single, max_width = 80 }}) end, desc = 'hover_doc' },
+    { key = 'ga', mode = 'n', func = require('navigator.codeAction').code_action, desc = 'code_actions' },
+    { key = '<c-r>', func = require('navigator.rename').rename, desc = 'rename'},
+    { key = 'gi', func = vim.lsp.buf.incoming_calls, desc = 'incoming calls' },
+    { key = 'go', func = vim.lsp.buf.outgoing_calls, desc = 'outgoing calls' },
+    { key = 'g]', func = function () vim.diagnostic.goto_next({ border = 'rounded', max_width = 80}) end, desc = 'next diagnostic' },
+    { key = 'g[', func = function () vim.diagnostic.goto_prev({ border = 'rounded', max_width = 80}) end, desc = 'prev diagnostic' },
+    { key = 'gE', func = vim.diagnostic.setloclist, desc = 'diagnostics set loclist' },
+    { key = 'ge', func = require('navigator.diagnostics').show_diagnostics, desc = 'show_diagnostics' },
   },
   lsp = {
     format_on_save = true,
@@ -456,14 +489,19 @@ require'navigator'.setup({
     'kotlin_language_server', 'nimls', 'pylsp', 'pyright', 'sqlls',
     'sumneko_lua', 'vimls', 'vim-language-server', 'yamlls'},
     clangd = {
+      handlers = lsp_status.extensions.clangd.setup(),
       root_dir = util.root_pattern('build/compile_commands.json', '.git'),
       flags = {allow_incremental_sync = true, debounce_text_changes = 500},
       cmd = {
         "clangd", "--background-index", "--clang-tidy", "--header-insertion=iwyu", "--all-scopes-completion", "--completion-style=bundled"
       },
       filetypes = {"c", "cpp", "objc", "objcpp"},
+      init_options = {
+        clangdFileStatus = true
+      },
       on_attach = function(client)
         client.resolved_capabilities.document_formatting = true
+        lsp_status.on_attach(client)
       end,
       capabilities = clangd_capabilities
     },
@@ -475,6 +513,7 @@ require'navigator'.setup({
       filetypes = {"rust"},
       message_level = vim.lsp.protocol.MessageType.error,
       capabilities = rust_capabilities,
+      on_attach = lsp_status.on_attach,
       settings = {
         ["rust-analyzer"] = {
           assist = {importMergeBehavior = "last", importPrefix = "by_self"},
@@ -491,6 +530,17 @@ require'navigator'.setup({
   }
 })
 
+-- Don't open the loclist on compilation failure.
+vim.api.nvim_create_autocmd({ 'BufWritePre' }, {
+    group = vim.api.nvim_create_augroup('delete_nvim_nv_event_autos', {}),
+    desc = 'delete diagnostic update',
+    callback = function()
+      vim.api.nvim_create_augroup("nvim_nv_event_autos", {
+          clear = true
+      })
+    end,
+  })
+
 if vim.o.ft == 'clap_input' and vim.o.ft == 'guihua' and vim.o.ft == 'guihua_rust' then
   require'cmp'.setup.buffer { completion = {enable = false} }
 end
@@ -503,9 +553,58 @@ require "lsp_signature".setup({
 })
 EOF
 
+hi default GuihuaTextViewDark ctermfg=white ctermbg=black
+hi default GuihuaListDark ctermfg=white ctermbg=black
+hi default GuihuaListHl ctermfg=white ctermbg=cyan
+
 " Setup Completion
 " See https://github.com/hrsh7th/nvim-cmp#basic-configuration
 lua <<EOF
+
+local lspkind_comparator = function(conf)
+  local lsp_types = require('cmp.types').lsp
+  return function(entry1, entry2)
+    if entry1.source.name ~= 'nvim_lsp' then
+      if entry2.source.name == 'nvim_lsp' then
+        return false
+      else
+        return nil
+      end
+    end
+    local kind1 = lsp_types.CompletionItemKind[entry1:get_kind()]
+    local kind2 = lsp_types.CompletionItemKind[entry2:get_kind()]
+    local priority1 = conf.kind_priority[kind1] or 0
+    local priority2 = conf.kind_priority[kind2] or 0
+    if priority1 == priority2 then
+      return nil
+    end
+    return priority2 < priority1
+  end
+end
+local label_comparator = function(entry1, entry2)
+  return entry1.completion_item.label < entry2.completion_item.label
+end
+
+local no_text_kind = function(entry1, entry2)
+  if entry1.source.name ~= 'nvim_lsp' then
+    if entry2.source.name == 'nvim_lsp' then
+      return false
+    else
+      return nil
+    end
+  end
+  local lsp_types = require('cmp.types').lsp
+  local kind1 = lsp_types.CompletionItemKind[entry1:get_kind()]
+  local kind2 = lsp_types.CompletionItemKind[entry2:get_kind()]
+  if kind1 == Text and kind2 ~= Text then
+    return false
+  elseif kind2 == Text and kind1 ~= Text then
+    return true
+  else
+    return nil
+  end
+end
+
 local cmp = require'cmp'
 cmp.setup({
   -- Enable LSP snippets
@@ -518,15 +617,30 @@ cmp.setup({
     ['<C-n>'] = cmp.mapping.select_prev_item(),
     ['<C-t>'] = cmp.mapping.select_next_item(),
     -- Add tab support
-    ['<S-Tab>'] = cmp.mapping.select_prev_item(),
-    ['<Tab>'] = cmp.mapping.select_next_item(),
+    ["<Tab>"] = cmp.mapping(function(fallback)
+      if cmp.visible() then
+        cmp.select_next_item()
+      elseif vim.fn["vsnip#available"](1) == 1 then
+        feedkey("<Plug>(vsnip-expand-or-jump)", "")
+      elseif has_words_before() then
+        cmp.complete()
+      else
+        fallback() -- The fallback function sends a already mapped key. In this case, it's probably `<Tab>`.
+      end
+    end, { "i", "s" }),
+    ["<S-Tab>"] = cmp.mapping(function()
+      if cmp.visible() then
+        cmp.select_prev_item()
+      elseif vim.fn["vsnip#jumpable"](-1) == 1 then
+        feedkey("<Plug>(vsnip-jump-prev)", "")
+      end
+    end, { "i", "s" }),
     ['<C-c>'] = cmp.mapping.scroll_docs(-4),
     ['<C-w>'] = cmp.mapping.scroll_docs(4),
     ['<C-Space>'] = cmp.mapping.complete(),
     ['<C-e>'] = cmp.mapping.close(),
     ['<CR>'] = cmp.mapping.confirm({
       behavior = cmp.ConfirmBehavior.Insert,
-      select = true,
     })
   },
 
@@ -534,11 +648,80 @@ cmp.setup({
   sources = {
     { name = 'nvim_lsp' },
     { name = 'vsnip' },
-    { name = 'path' },
     { name = 'buffer' },
-    { name = "cmp_git" },
-    { name = "cmdline" },
   },
+  sorting = {
+    comparators = {
+      no_text_kind,
+      cmp.config.compare.scopes,
+      cmp.config.compare.locality,
+      cmp.config.compare.offset,
+      cmp.config.compare.exact,
+      cmp.config.compare.score,
+      lspkind_comparator({
+        kind_priority = {
+          Field = 11,
+          Property = 11,
+          Constant = 10,
+          Enum = 10,
+          EnumMember = 10,
+          Event = 10,
+          Function = 10,
+          Method = 10,
+          Operator = 10,
+          Reference = 10,
+          Struct = 10,
+          Variable = 9,
+          File = 8,
+          Folder = 8,
+          Class = 5,
+          Color = 5,
+          Module = 5,
+          Function = 4,
+          Keyword = 2,
+          Constructor = 1,
+          Interface = 1,
+          Snippet = 0,
+          Text = 1,
+          TypeParameter = 1,
+          Unit = 1,
+          Value = 1,
+        },
+      }),
+      label_comparator,
+      cmp.config.compare.sort_text,
+      cmp.config.compare.length,
+      cmp.config.compare.order,
+    },
+  },
+})
+
+
+-- Set configuration for specific filetype.
+cmp.setup.filetype('gitcommit', {
+  sources = cmp.config.sources({
+    { name = 'cmp_git' }, -- You can specify the `cmp_git` source if you were installed it.
+  }, {
+    { name = 'buffer' },
+  })
+})
+
+-- Use buffer source for `/` and `?` (if you enabled `native_menu`, this won't work anymore).
+cmp.setup.cmdline({ '/', '?' }, {
+  mapping = cmp.mapping.preset.cmdline(),
+  sources = {
+    { name = 'buffer' }
+  }
+})
+
+-- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
+cmp.setup.cmdline(':', {
+  mapping = cmp.mapping.preset.cmdline(),
+  sources = cmp.config.sources({
+    { name = 'path' }
+  }, {
+    { name = 'cmdline' }
+  })
 })
 
 require("cmp_git").setup({
@@ -569,6 +752,7 @@ require("cmp_git").setup({
     },
 })
 EOF
+
 
 hi clear LspReferenceRead
 hi clear LspReferenceText
@@ -633,8 +817,10 @@ autocmd TermOpen * :let b:enable_spelunker_vim = 0
 
 " Telescope
 lua <<EOF
+local telescope = require "telescope"
 local actions = require "telescope.actions"
-require('telescope').setup {
+local lga_actions = require("telescope-live-grep-args.actions")
+telescope.setup {
   defaults = {
     mappings = {
       i = {
@@ -646,6 +832,7 @@ require('telescope').setup {
         ["n"] = actions.move_selection_previous,
         ["T"] = actions.move_to_top,
         ["N"] = actions.move_to_bottom,
+        ["<C-v>"] = actions.select_vertical,
       }
     },
   },
@@ -654,15 +841,117 @@ require('telescope').setup {
       fuzzy = true,                    -- false will only do exact matching
       override_generic_sorter = true,  -- override the generic sorter
       override_file_sorter = true,     -- override the file sorter
+    },
+    live_grep_args = {
+      auto_quoting = true, -- enable/disable auto-quoting
+      -- override default mappings
+      -- default_mappings = {},
+      default_mappings = {}
     }
   }
 }
 -- To get fzf loaded and working with telescope, you need to call
 -- load_extension, somewhere after setup function:
-require('telescope').load_extension('fzf')
+telescope.load_extension('fzf')
+telescope.load_extension("live_grep_args")
+vim.keymap.set({ "n", "v" }, "<c-g>", function()
+  telescope.extensions.live_grep_args.live_grep_args({ vimgrep_arguments = {
+    "rg",
+    "--color=never",
+    "--no-heading",
+    "--with-filename",
+    "--line-number",
+    "--column",
+    "--smart-case",
+    "--glob",
+    "!test",
+    "--glob",
+    "!tests"} })
+end)
+vim.keymap.set({ "n", "v" }, "<c-a-g>", function()
+  telescope.extensions.live_grep_args.live_grep_args({ vimgrep_arguments = {
+    "rg",
+    "--color=never",
+    "--no-heading",
+    "--with-filename",
+    "--line-number",
+    "--column",
+    "--smart-case"} })
+end)
 EOF
 nnoremap <c-p> <cmd>Telescope git_files<cr>
-nnoremap <c-b> <cmd>Telescope buffers<cr>
+"nnoremap <c-b> <cmd>Telescope buffers<cr>
 nnoremap gr <cmd>Telescope lsp_references<cr>
 nnoremap fs <cmd>Telescope lsp_document_symbols<cr>
 nnoremap fS <cmd>Telescope lsp_workspace_symbols<cr>
+
+lua <<EOF
+function pickTab()
+  local builtin = require("telescope.builtin")
+  local action_state = require("telescope.actions.state")
+  local actions = require("telescope.actions")
+  builtin.buffers({
+    attach_mappings = function()
+      actions.select_default:replace(function(prompt_bufnr)
+        local bufnr = action_state.get_selected_entry().bufnr
+        -- pick first window that comprises relevant buffer
+        local winid = vim.tbl_filter(function(w)
+          return vim.api.nvim_win_get_buf(w) == bufnr
+        end, vim.api.nvim_list_wins())[1]
+        local tabpage = vim.api.nvim_win_get_tabpage(winid)
+        actions.close(prompt_bufnr)
+        vim.api.nvim_set_current_win(winid)
+      end)
+      return true
+    end,
+  })
+end
+vim.api.nvim_set_keymap("n", "<c-b>", ":lua pickTab()<CR>", { noremap = true, silent = true })
+EOF
+
+" Switch source and header
+nnoremap ,rh :ClangdSwitchSourceHeader<CR>
+
+" Tree-sitter context
+lua <<EOF
+require'treesitter-context'.setup{
+    enable = true,
+    max_lines = 0, -- How many lines the window should span. Values <= 0 mean no limit.
+    trim_scope = 'outer', -- Which context lines to discard if `max_lines` is exceeded. Choices: 'inner', 'outer'
+    patterns = { -- Match patterns for TS nodes. These get wrapped to match at word boundaries.
+        -- For all filetypes
+        -- Note that setting an entry here replaces all other patterns for this entry.
+        -- By setting the 'default' entry below, you can control which nodes you want to
+        -- appear in the context window.
+        default = {
+            'class',
+            'function',
+            'method',
+            -- 'for', -- These won't appear in the context
+            -- 'while',
+            -- 'if',
+            -- 'switch',
+            -- 'case',
+        },
+        -- Example for a specific filetype.
+        -- If a pattern is missing, *open a PR* so everyone can benefit.
+        rust = {
+            'impl_item',
+        },
+    },
+    exact_patterns = {
+        -- Example for a specific filetype with Lua patterns
+        -- Treat patterns.rust as a Lua pattern (i.e "^impl_item$" will
+        -- exactly match "impl_item" only)
+        -- rust = true,
+    },
+    mode = 'cursor',  -- Line used to calculate context. Choices: 'cursor', 'topline'
+}
+EOF
+hi TreesitterContext ctermbg=236 ctermfg=white
+
+" Leap
+nnoremap f <Plug>(leap-forward)
+vnoremap f <Plug>(leap-forward)
+nnoremap F <Plug>(leap-backward)
+vnoremap F <Plug>(leap-backward)

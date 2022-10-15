@@ -5,14 +5,32 @@ LSP:
 gd -> definition
 gD -> implementation
 gr -> references
-gh -> def/ref popup
 K -> hover doc
 <c-k> -> signature help
 ,a -> code actions
-,r -> rename
-,d -> show diagnostics
+<c-r> -> rename variable
+ge -> show error on current line
+gE -> show all errors
 g] -> next diagnostic
+g[ -> previous diagnostic
 ,g -> open git terminal
+<c-f> -> format the file
 
+FZF:
+<c-p> -> open file
+<c-g> -> grep non-test files
+<c-G> -> grep all files
+<c-b> -> find tab
+in a picker:  <c-v> -> open in new vertical split
 
+,rh -> switch between header/cc
 
+f + 2 letters: jump forward on the screen
+F + 2 letters: jump backward on the screen
+
+Zg -> mark (sub-)word as spelled correctly
+
+, is a movement that means "the argument of the function"
+ci, -> delete the argument, switch to insert mode
+da, -> delete the argument and the comma
+>, -> switch the argument with the next one
