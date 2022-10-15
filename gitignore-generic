@@ -8,7 +8,6 @@ vgcore.*
 *.a
 *.o.fPIC
 *.~
-*.gz
 .gdb_history
 *.d
 *.war
@@ -28,4 +27,3 @@ __pycache__
 tags.lock
 tags.temp
 tags
-1
