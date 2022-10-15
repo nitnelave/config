@@ -3,9 +3,9 @@
         st = status
         ri = rebase --interactive --autosquash
         d = difftool
-        dm = "!f() { git diff $(git merge-base HEAD master ) $@ ; }; f"
+        dm = "!f() { git diff $(git merge-base HEAD origin/master ) $@ ; }; f"
         co = checkout
-        com = checkout master
+        com = checkout origin/master
         br = branch
         df = diff
         dc = diff --cached
@@ -17,8 +17,8 @@
         poop = stash pop
         punch = push
         prune-all = !git remote | xargs -n 1 git remote prune
-        rem = rebase master
-        rim = rebase --interactive master
+        rem = rebase origin/master
+        rim = rebase --interactive origin/master
         edit-unmerged = "!f() { git diff --name-status --diff-filter=U | cut -f2 ; }; stty stop '' -ixoff ; nvim -p `f`"
         edit-unmerged = "!f() { git diff --name-status --diff-filter=U | cut -f2 ; }; stty stop '' -ixoff ; nvim -p '+/^\\(<<<<<<\\|>>>>>>\\|======\\)/' `f`"
         add-unmerged = "!f() { git diff --name-status --diff-filter=U | cut -f2 ; }; git add `f`"
@@ -28,7 +28,7 @@
           LOG_OPTIONS=\"--graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative\"; \
           ARGS=\"$@\"; \
           if [ -z \"$ARGS\" ]; then \
-            ARGS=master..; \
+            ARGS=origin/master..; \
           fi; \
           eval git log $LOG_OPTIONS $ARGS; \
           }; f"
@@ -36,14 +36,14 @@
         cont = rebase --continue
         graph = log --graph --pretty=oneline
         all = log --graph --pretty=oneline --all
-        lm = "!git lga | head -n $(git lga | grep -n $(git rev-parse --short master) | cut -d : -f 1) | less"
+        lm = "!git lga | head -n $(git lga | grep -n $(git rev-parse --short origin/master) | cut -d : -f 1) | less"
         modified-files = "!f() { \
             LOCAL_ROOT=${2:-$GIT_PREFIX}; \
-            BASE=${1:-master}; \
+            BASE=${1:-origin/master}; \
             git diff --name-only $(git merge-base HEAD "$BASE") | sed "s@^$LOCAL_ROOT@@" ; \
             }; f"
         open-modified = "!f() { \
-            BASE=${1:-master}; \
+            BASE=${1:-origin/master}; \
             FILES=$(git modified-files $BASE $GIT_PREFIX); \
             if [ $? -eq 1 ]; then return 1; fi; \
             cd ${GIT_PREFIX:-.}; \
