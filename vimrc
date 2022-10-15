@@ -56,7 +56,7 @@ call plug#begin('~/.vim/plugged')
   Plug 'hrsh7th/nvim-cmp'
 
   " LSP completion source for nvim-cmp
-  Plug 'hrsh7th/cmp-nvim-lsp'
+  Plug 'hrsh7th/cmp-nvim-lsp', {'commit': 'affe808a5c56b71630f17aa7c38e15c59fd648a8'}
 
   " Snippet completion source for nvim-cmp
   Plug 'hrsh7th/cmp-vsnip'
@@ -66,6 +66,11 @@ call plug#begin('~/.vim/plugged')
   Plug 'hrsh7th/cmp-buffer'
   Plug 'hrsh7th/cmp-cmdline'
   Plug 'hrsh7th/cmp-git'
+
+  " Dependency for refactoring.
+  Plug 'nvim-lua/plenary.nvim'
+  " Refactoring
+  Plug 'ThePrimeagen/refactoring.nvim'
 
   " To enable more of the features of rust-analyzer, such as inlay hints and more!
   Plug 'simrat39/rust-tools.nvim'
@@ -464,6 +469,21 @@ clangd_capabilities.offsetEncoding = {"utf-8"}
 local rust_capabilities = capabilities
 rust_capabilities.document_formatting = true
 
+function clang_options()
+   local f=io.open('/usr/local/ht-clang-15-0-0/bin/clangd',"r")
+   if f~=nil then
+     io.close(f)
+     return {'/usr/local/ht-clang-15-0-0/bin/clangd', '-j=80',
+     '--compile-commands-dir=./build/ub-18.04-clang-15.0.0-generic.debug',
+     "--background-index", "--clang-tidy", "--header-insertion=iwyu",
+     "--all-scopes-completion", "--completion-style=bundled"}
+   else
+     return {"clangd", "--background-index", "--clang-tidy",
+     "--header-insertion=iwyu", "--all-scopes-completion",
+     "--completion-style=bundled"}
+   end
+end
+
 require'navigator'.setup({
   default_mapping = false,  -- set to false if you will remap every key
   keymaps = {
@@ -492,9 +512,7 @@ require'navigator'.setup({
       handlers = lsp_status.extensions.clangd.setup(),
       root_dir = util.root_pattern('build/compile_commands.json', '.git'),
       flags = {allow_incremental_sync = true, debounce_text_changes = 500},
-      cmd = {
-        "clangd", "--background-index", "--clang-tidy", "--header-insertion=iwyu", "--all-scopes-completion", "--completion-style=bundled"
-      },
+      cmd = clang_options(),
       filetypes = {"c", "cpp", "objc", "objcpp"},
       init_options = {
         clangdFileStatus = true
@@ -955,3 +973,29 @@ nnoremap f <Plug>(leap-forward)
 vnoremap f <Plug>(leap-forward)
 nnoremap F <Plug>(leap-backward)
 vnoremap F <Plug>(leap-backward)
+
+" Refactoring
+lua <<EOF
+require('refactoring').setup({})
+-- Remaps for the refactoring operations currently offered by the plugin
+vim.api.nvim_set_keymap("v", "<leader>re", [[ <Esc><Cmd>lua require('refactoring').refactor('Extract Function')<CR>]], {noremap = true, silent = true, expr = false})
+vim.api.nvim_set_keymap("v", "<leader>rv", [[ <Esc><Cmd>lua require('refactoring').refactor('Extract Variable')<CR>]], {noremap = true, silent = true, expr = false})
+vim.api.nvim_set_keymap("v", "<leader>ri", [[ <Esc><Cmd>lua require('refactoring').refactor('Inline Variable')<CR>]], {noremap = true, silent = true, expr = false})
+
+-- Extract block doesn't need visual mode
+vim.api.nvim_set_keymap("n", "<leader>rb", [[ <Cmd>lua require('refactoring').refactor('Extract Block')<CR>]], {noremap = true, silent = true, expr = false})
+
+-- Inline variable can also pick up the identifier currently under the cursor without visual mode
+vim.api.nvim_set_keymap("n", "<leader>ri", [[ <Cmd>lua require('refactoring').refactor('Inline Variable')<CR>]], {noremap = true, silent = true, expr = false})
+
+-- load refactoring Telescope extension
+require("telescope").load_extension("refactoring")
+
+-- remap to open the Telescope refactoring menu in visual mode
+vim.api.nvim_set_keymap(
+  "v",
+  "<leader>rr",
+  "<Esc><cmd>lua require('telescope').extensions.refactoring.refactors()<CR>",
+  { noremap = true }
+)
+EOF

@@ -23,6 +23,14 @@ FZF:
 <c-b> -> find tab
 in a picker:  <c-v> -> open in new vertical split
 
+REFACTOR:
+
+,rr -> refactor menu
+,re -> extract selection into function
+,rv -> extract selection into a variable
+,ri -> inline variable
+,rb -> extract block into function
+
 ,rh -> switch between header/cc
 
 f + 2 letters: jump forward on the screen
