@@ -9,9 +9,10 @@ setopt +o nomatch
 
 # Setup fzf
 # ---------
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 FZF_DEFAULT_COMMAND='rg -g ""'
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 bindkey '^g' fzf-cd-widget
 # Remove esc-c as fzf trigger
@@ -22,7 +23,7 @@ zstyle ':completion:*' insert-unambiguous true
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
 zstyle :compinstall filename '$HOME/.zshrc'
 
-[ -f ~/.zsh/_git ] && zstyle ':completion:*:*:git:*' script ~/.completion/git/git-completion.sh && fpath=(~/.zsh $fpath)
+[ -e ~/.completion/git ] && zstyle ':completion:*:*:git:*' script ~/.completion/git/git-completion.sh && fpath=(~/.zsh $fpath)
 
 [ -e ~/.zsh/zsh-autosuggestions ] && source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
 
