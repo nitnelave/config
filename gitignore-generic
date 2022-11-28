@@ -13,7 +13,6 @@ vgcore.*
 *.war
 *.class
 *.iso
-0
 .syntastic_config
 .idea
 *.iml
