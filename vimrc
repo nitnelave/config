@@ -1001,7 +1001,11 @@ vnoremap F <Plug>(leap-backward)
 
 " Refactoring
 lua <<EOF
-require('refactoring').setup({})
+require('refactoring').setup({
+  extract_var_statements = {
+    cpp = "const auto %s = %s;\n"
+  }
+})
 -- Remaps for the refactoring operations currently offered by the plugin
 vim.api.nvim_set_keymap("v", "<leader>re", [[ <Esc><Cmd>lua require('refactoring').refactor('Extract Function')<CR>]], {noremap = true, silent = true, expr = false})
 vim.api.nvim_set_keymap("v", "<leader>rv", [[ <Esc><Cmd>lua require('refactoring').refactor('Extract Variable')<CR>]], {noremap = true, silent = true, expr = false})
