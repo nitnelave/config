@@ -499,7 +499,6 @@ require'navigator'.setup({
   keymaps = {
     { key = 'gd', func = require('navigator.definition').definition, desc = 'definition' },
     { key = 'gD', func = function () vim.lsp.buf.declaration({ border = 'rounded', max_width = 80 }) end, desc = 'declaration' },
-    { key = 'gr', func = require('navigator.reference').reference, desc = 'references' }, -- reference deprecated?
     { key = '<c-k>', func = vim.lsp.signature_help, desc = 'signature_help' },
     { mode = 'i', key = '<c-k>', func = vim.lsp.signature_help, desc = 'signature_help' },
     { key = 'K', func = function () vim.lsp.buf.hover({ popup_opts = { border = single, max_width = 80 }}) end, desc = 'hover_doc' },
