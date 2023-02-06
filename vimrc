@@ -195,6 +195,7 @@ set completeopt=menuone,noinsert,noselect
 set shortmess+=c
 
 " Ignore case unless there is an uppercase letter in the pattern
+set ignorecase
 set smartcase
 
 " Move cursor to the matched string
