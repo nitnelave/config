@@ -483,7 +483,7 @@ function clang_options()
    local f=io.open('/usr/local/ht-clang-15-0-0/bin/clangd',"r")
    if f~=nil then
      io.close(f)
-     return {'/usr/local/ht-clang-15-0-0/bin/clangd', '-j=80',
+     return {'/usr/local/ht-clang-15-0-0/bin/clangd', '-j=40',
      '--compile-commands-dir=./build/ub-18.04-clang-15.0.0-generic.debug',
      "--background-index", "--clang-tidy", "--header-insertion=iwyu",
      "--all-scopes-completion", "--completion-style=bundled"}
