@@ -849,6 +849,12 @@ local actions = require "telescope.actions"
 local lga_actions = require("telescope-live-grep-args.actions")
 telescope.setup {
   defaults = {
+    path_display = {
+      shorten = 3
+    },
+    cache_picker = {
+      num_pickers = 10,
+    },
     mappings = {
       i = {
         ["<C-t>"] = actions.move_selection_next,
@@ -873,7 +879,14 @@ telescope.setup {
       auto_quoting = true, -- enable/disable auto-quoting
       -- override default mappings
       -- default_mappings = {},
-      default_mappings = {}
+      default_mappings = {},
+      mappings = { -- extend mappings
+        i = {
+          ["<C-k>"] = lga_actions.quote_prompt(),
+          ["<C-i>"] = lga_actions.quote_prompt({ postfix = " --iglob " }),
+          ["<C-f>"] = lga_actions.quote_prompt({ postfix = " -t " }),
+        },
+      },
     }
   }
 }
@@ -905,12 +918,15 @@ vim.keymap.set({ "n", "v" }, "<c-a-g>", function()
     "--column",
     "--smart-case"} })
 end)
+vim.keymap.set({ "n", "v" }, "<c-x>", function()
+  require("telescope.builtin").pickers()
+end)
 EOF
 nnoremap <c-p> <cmd>Telescope git_files<cr>
 "nnoremap <c-b> <cmd>Telescope buffers<cr>
 nnoremap gr <cmd>Telescope lsp_references<cr>
-nnoremap fs <cmd>Telescope lsp_document_symbols<cr>
-nnoremap fS <cmd>Telescope lsp_workspace_symbols<cr>
+nnoremap ,fs <cmd>lua require('telescope.builtin').lsp_document_symbols({symbol_width = 60, ignore_symbols = {"namespace"}})<cr>
+nnoremap ,fS <cmd>lua require('telescope.builtin').lsp_dynamic_workspace_symbols({symbol_width = 60, ignore_symbols = {"namespace"}})<cr>
 
 lua <<EOF
 function pickTab()
