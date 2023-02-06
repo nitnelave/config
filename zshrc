@@ -242,7 +242,7 @@ ttyctl -f
 source ~/.aliases
 alias reload="source ~/.zshrc"
 
-export PATH=$PATH:~/projects/config/bin:~/.bin/nvim-linux64/bin:~/.cargo/bin
+export PATH=$PATH:~/projects/config/bin:~/.bin/nvim-linux64/bin:~/.cargo/bin:~/.local/bin
 
 
 if which fuck >/dev/null
