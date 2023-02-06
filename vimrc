@@ -1,6 +1,10 @@
 " Clear autocmds
 autocmd!
 
+" Disable NetRW.
+let g:loaded_netrw = 1
+let g:loaded_netrwPlugin = 1
+
 " Install automatically Plug, if not already there.
 if empty(glob('~/.vim/autoload/plug.vim'))
   silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
@@ -41,6 +45,10 @@ call plug#begin('~/.vim/plugged')
   " Tools
 
   Plug 'lifepillar/vim-cheat40'
+
+  " for icons
+  Plug 'nvim-tree/nvim-web-devicons'
+  Plug 'kyazdani42/nvim-tree.lua'
 
   " LSP & completion
   " Collection of common configurations for the Nvim LSP client
@@ -347,11 +355,12 @@ command! Q q
 command! Qa qa
 command! Wq wq
 command! WQ wq
-command! EX Ex
-command! VEX Vex
-command! VEx Vex
-cabbrev vex <c-r>=(getcmdtype()==':' && getcmdpos()==1 ? 'Vex' : 'vex')<CR>
-cabbrev ex <c-r>=(getcmdtype()==':' && getcmdpos()==1 ? 'Ex' : 'ex')<CR>
+command! Ex NvimTreeFindFileToggle
+command! Vex NvimTreeFindFileToggle
+command! VEX NvimTreeFindFileToggle
+command! VEx NvimTreeFindFileToggle
+cabbrev vex <c-r>=(getcmdtype()==':' && getcmdpos()==1 ? 'NvimTreeFindFileToggle' : 'vex')<CR>
+cabbrev ex <c-r>=(getcmdtype()==':' && getcmdpos()==1 ? 'NvimTreeFindFileToggle' : 'ex')<CR>
 
 " Yank from cursor to end of line, to be consistent with C and D
 nnoremap Y y$
@@ -998,4 +1007,33 @@ vim.api.nvim_set_keymap(
   "<Esc><cmd>lua require('telescope').extensions.refactoring.refactors()<CR>",
   { noremap = true }
 )
+EOF
+
+" Nvim tree
+lua <<EOF
+require("nvim-tree").setup {
+  view = {
+    centralize_selection = true,
+    hide_root_folder = true,
+    width = 80,
+    mappings = {
+      custom_only = true,
+      list = {
+        { key = "<CR>", action = "edit_in_place" },
+        { key = "<BS>", action = "close_node" },
+        { key = "<C-v>", action = "vsplit" },
+        { key = "<C-t>", action = "tabnew" },
+        { key = "a", action = "create" },
+        { key = "d", action = "remove" },
+        { key = "r", action = "rename" },
+        { key = "y", action = "copy_name" },
+        { key = "Y", action = "copy_path" },
+        { key = "-", action = "dir_up" },
+        { key = "f", action = "live_filter" },
+        { key = "F", action = "clear_live_filter" },
+        { key = "q", action = "close" },
+      },
+    },
+  }
+}
 EOF
