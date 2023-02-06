@@ -33,6 +33,7 @@ alias suspend="sudo pm-suspend"
 alias tax="tar xf"
 alias v="nvim -p"
 alias vim="stty stop '' -ixoff ; vim -p"
+alias vimdiff="nvim -d"
 alias grep="grep --color=auto"
 
 alias ipython-slides="ipython nbconvert --to slides --post serve"
