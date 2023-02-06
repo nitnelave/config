@@ -57,8 +57,8 @@ call plug#begin('~/.vim/plugged')
   Plug 'ray-x/guihua.lua', {'do': 'cd lua/fzy && make' }
   Plug 'ray-x/navigator.lua'
   Plug 'ray-x/lsp_signature.nvim'
-  " LSP status in status line.
-  Plug 'nvim-lua/lsp-status.nvim'
+  " LSP status
+  Plug 'j-hui/fidget.nvim'
 
   " Completion framework
   Plug 'hrsh7th/nvim-cmp'
@@ -159,14 +159,7 @@ set number
 set laststatus=2
 
 " Format the status line
-" Statusline
-function! LspStatus() abort
-  if luaeval('#vim.lsp.buf_get_clients() > 0')
-    return luaeval("require('lsp-status').status()")
-  endif
-  return ''
-endfunction
-set statusline=%f\ %l\|%c\ %m\ %#warningmsg#%*%=%{LspStatus()}%p%%\ (%Y%R)
+set statusline=%f\ %l\|%c\ %m\ %#warningmsg#%*%=%p%%\ (%Y%R)
 
 " Enhance command line completion
 set wildmenu
@@ -452,23 +445,11 @@ let g:localvimrc_ask = 0
 
 " LSP
 
-nnoremap <c-f> :lua vim.lsp.buf.formatting()<CR>
+nnoremap <c-f> :lua vim.lsp.buf.format { async = true }<CR>
 
 lua <<EOF
-local lsp_status = require('lsp-status')
-lsp_status.config {
-  show_filename = false,
-  indicator_errors = 'E',
-  indicator_warnings = 'W',
-  indicator_info = 'i',
-  indicator_hint = '?',
-  indicator_ok = 'Ok',
-}
-lsp_status.register_progress()
-
 local util = require 'lspconfig.util'
 local capabilities = vim.lsp.protocol.make_client_capabilities()
-for k,v in pairs(lsp_status.capabilities) do capabilities[k] = v end
 capabilities.textDocument.completion.completionItem.snippetSupport = true
 capabilities.textDocument.completion.completionItem.resolveSupport = {
   properties = { "documentation", "detail", "additionalTextEdits" },
@@ -518,7 +499,6 @@ require'navigator'.setup({
     'kotlin_language_server', 'nimls', 'pylsp', 'pyright', 'sqlls',
     'sumneko_lua', 'vimls', 'vim-language-server', 'yamlls'},
     clangd = {
-      handlers = lsp_status.extensions.clangd.setup(),
       root_dir = util.root_pattern('build/compile_commands.json', '.git'),
       flags = {allow_incremental_sync = true, debounce_text_changes = 500},
       cmd = clang_options(),
@@ -527,8 +507,7 @@ require'navigator'.setup({
         clangdFileStatus = true
       },
       on_attach = function(client)
-        client.resolved_capabilities.document_formatting = true
-        lsp_status.on_attach(client)
+        client.server_capabilities.document_formatting = true
       end,
       capabilities = clangd_capabilities
     },
@@ -540,7 +519,6 @@ require'navigator'.setup({
       filetypes = {"rust"},
       message_level = vim.lsp.protocol.MessageType.error,
       capabilities = rust_capabilities,
-      on_attach = lsp_status.on_attach,
       settings = {
         ["rust-analyzer"] = {
           assist = {importMergeBehavior = "last", importPrefix = "by_self"},
@@ -1057,3 +1035,5 @@ require("nvim-tree").setup {
   }
 }
 EOF
+
+lua require"fidget".setup{}
