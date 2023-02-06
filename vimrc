@@ -580,8 +580,8 @@ require "lsp_signature".setup({
 })
 EOF
 
-hi default GuihuaTextViewDark ctermfg=white ctermbg=black
-hi default GuihuaListDark ctermfg=white ctermbg=black
+hi default GuihuaTextViewDark ctermfg=white ctermbg=236 cterm=NONE
+hi default GuihuaListDark ctermfg=white ctermbg=236 cterm=NONE
 hi default GuihuaListHl ctermfg=white ctermbg=cyan
 
 " Setup Completion
