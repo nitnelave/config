@@ -7,6 +7,8 @@ stty -ixon
 # If a glob has no match, leave as-is
 setopt +o nomatch
 
+export TERM="xterm-256color"
+
 # Setup fzf
 # ---------
 
