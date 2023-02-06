@@ -825,8 +825,10 @@ EOF
 
 " Spelunker
 
+set nospell
+
 " Only check words currently displayed
-let g:spelunker_check_type = 1
+let g:spelunker_check_type = 2
 " Highlight only SpellBad
 let g:spelunker_highlight_type = 2
 let g:spelunker_disable_uri_checking = 1
