@@ -4,6 +4,7 @@
         ri = rebase --interactive --autosquash
         d = difftool
         dm = "!f() { git diff $(git merge-base HEAD origin/master ) $@ ; }; f"
+        dms = dm --stat
         co = checkout
         com = checkout origin/master
         br = branch
@@ -17,6 +18,7 @@
         poop = stash pop
         punch = push
         prune-all = !git remote | xargs -n 1 git remote prune
+        prune-branch = !git branch --merged origin/master | grep -v 'HEAD' | xargs -r git branch -d
         rem = rebase origin/master
         rim = rebase --interactive origin/master
         edit-unmerged = "!f() { git diff --name-status --diff-filter=U | cut -f2 ; }; stty stop '' -ixoff ; nvim -p `f`"
