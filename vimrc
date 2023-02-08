@@ -75,7 +75,7 @@ call plug#begin('~/.vim/plugged')
   Plug 'hrsh7th/cmp-cmdline'
   Plug 'hrsh7th/cmp-git'
 
-  " Dependency for refactoring.
+  " Dependency for refactoring and null-ls.
   Plug 'nvim-lua/plenary.nvim'
   " Refactoring
   Plug 'ThePrimeagen/refactoring.nvim'
@@ -118,6 +118,9 @@ call plug#begin('~/.vim/plugged')
 
   " Leap
   Plug 'ggandor/leap.nvim'
+
+  " null-ls
+  Plug 'jose-elias-alvarez/null-ls.nvim'
 call plug#end()
 
 " General vim settings
@@ -1048,3 +1051,289 @@ require("nvim-tree").setup {
 EOF
 
 lua require"fidget".setup{}
+
+lua <<EOF
+if vim.g.enable_null_lints == nil then
+  local f=io.open('/usr/local/ht-clang-15-0-0/bin/clangd',"r")
+  if f~=nil then
+    io.close(f)
+    vim.g.enable_null_lints = true
+  else
+    vim.g.enable_null_lints = false
+  end
+end
+-- Toggle the lints. Still need to save to refresh them.
+vim.api.nvim_set_keymap("n", "<leader>l", ":lua vim.g.enable_null_lints = not vim.g.enable_null_lints<CR>", {noremap = true, silent = true})
+
+local null_ls = require("null-ls")
+null_ls.setup({
+  sources = {
+    null_ls.builtins.code_actions.refactoring,
+    -- pip3 install --user cmakelang
+    null_ls.builtins.diagnostics.cmake_lint,
+    -- null_ls.builtins.formatting.cmake_format,
+    -- cppcheck?
+  }
+})
+
+local ts = vim.treesitter
+local ts_utils = require 'nvim-treesitter.ts_utils'
+
+local const_arg_query = [[
+    (_
+      declarator: (_
+        (parameter_list
+          (_
+            .
+            type: (_) @type
+            declarator: (identifier) @id)))) @decl
+]]
+local const_arg_parsed_query = vim.treesitter.query.parse_query("cpp", const_arg_query)
+
+local const_arg = {
+    name = "const_arg",
+    method = null_ls.methods.DIAGNOSTICS_ON_SAVE,
+    filetypes = { "cpp" },
+    generator = {
+        fn = function(params)
+            if not vim.g.enable_null_lints then return end
+            local diagnostics = {}
+            tsparser = ts.get_parser(params.bufnr, params.filetype)
+            tstree = tsparser:parse()
+            local root = tstree[1]:root()
+
+            for pattern, match in const_arg_parsed_query:iter_matches(root, params.bufnr) do
+              (function()
+                local decl = match[3]
+                if decl:type() ~= "function_definition" and decl:type() ~= "lambda_expression" then
+                  return
+                end
+                local arg_type = match[1]
+                local id = match[2]
+                if not has_const then
+                  local row1, col1, row2, col2 = arg_type:range()
+                  table.insert(diagnostics, {
+                      row = row1 + 1,
+                      end_row = row2 + 1,
+                      col = col1 + 1,
+                      end_col = col2 + 1,
+                      source = "const_arg",
+                      message = "Argument \"" .. vim.treesitter.query.get_node_text(id, params.bufnr) .. "\" should be const",
+                      severity = vim.diagnostic.severity.WARN,
+                  })
+                end
+              end)()
+            end
+            return diagnostics
+        end,
+    },
+}
+null_ls.register(const_arg)
+
+local boost_main_query = [[
+    (_
+      (preproc_include)
+      (preproc_def
+        .
+        (identifier) @id
+        (#eq? @id "BOOST_TEST_MAIN")
+        .
+      )
+    )
+]]
+local boost_main_parsed_query = vim.treesitter.query.parse_query("cpp", boost_main_query)
+
+local boost_main = {
+    name = "boost_main",
+    method = null_ls.methods.DIAGNOSTICS_ON_SAVE,
+    filetypes = { "cpp" },
+    generator = {
+        fn = function(params)
+            if not vim.g.enable_null_lints then return end
+            local diagnostics = {}
+            tsparser = ts.get_parser(params.bufnr, params.filetype)
+            tstree = tsparser:parse()
+            local root = tstree[1]:root()
+
+            for pattern, match in boost_main_parsed_query:iter_matches(root, params.bufnr) do
+                local id = match[1]
+                local row1, col1, row2, col2 = id:range()
+                table.insert(diagnostics, {
+                    row = row1 + 1,
+                    end_row = row2 + 1,
+                    col = col1 + 1,
+                    end_col = col2 + 1,
+                    source = "boost_main",
+                    message = "#define BOOST_TEST_MAIN should appear before any includes",
+                    severity = vim.diagnostic.severity.WARN,
+                })
+            end
+            return diagnostics
+        end,
+    },
+}
+
+null_ls.register(boost_main)
+
+local decl_no_name_query = [[
+    (_
+      declarator: (function_declarator
+        (parameter_list
+          (_
+            type: (_) @type
+            declarator: (_) @id)))) @decl
+]]
+local decl_no_name_parsed_query = vim.treesitter.query.parse_query("cpp", decl_no_name_query)
+
+local decl_no_name = {
+    name = "decl_no_name",
+    method = null_ls.methods.DIAGNOSTICS_ON_SAVE,
+    filetypes = { "cpp" },
+    generator = {
+        fn = function(params)
+            if not vim.g.enable_null_lints then return end
+            local diagnostics = {}
+            tsparser = ts.get_parser(params.bufnr, params.filetype)
+            tstree = tsparser:parse()
+            local root = tstree[1]:root()
+
+            for pattern, match in decl_no_name_parsed_query:iter_matches(root, params.bufnr) do
+              (function()
+                local decl = match[3]
+                if decl:type() ~= "declaration" and decl:type() ~= "field_declaration" then
+                  return
+                end
+                local arg_type = match[1]
+                local id = match[2]
+                if id:type() ~= "identifier" then
+                  for node in id:iter_children() do
+                    if node:type() == "identifier" then
+                      id = node
+                      break
+                    elseif node:type() == "parameter_list" then
+                      -- Variable declaration parsed as function, most vexing parse.
+                      return
+                    end
+                  end
+                  if id:type() ~= "identifier" then
+                    local row, _, _, _ = id:range()
+                    error("Could not find identifier for " .. vim.treesitter.query.get_node_text(id, params.bufnr) .. " at line " .. row + 1)
+                    return
+                  end
+                end
+                local id_text = vim.treesitter.query.get_node_text(id, params.bufnr)
+                if id_text:len() <= 3 then
+                  return
+                end
+                local type_text = vim.treesitter.query.get_node_text(arg_type, params.bufnr)
+                local lower_type = string.lower(type_text)
+                local short_arg = string.gsub(id_text, "_", "")
+                if lower_type:find(short_arg, 1, true) ~= nil then
+                  local row1, col1, row2, col2 = id:range()
+                  table.insert(diagnostics, {
+                      row = row1 + 1,
+                      end_row = row2 + 1,
+                      col = col1 + 1,
+                      end_col = col2 + 1,
+                      source = "decl_no_name",
+                      message = "Argument name \"" .. id_text .. "\" can be omitted",
+                      severity = vim.diagnostic.severity.WARN,
+                  })
+                end
+              end)()
+            end
+            return diagnostics
+        end,
+    },
+}
+null_ls.register(decl_no_name)
+
+local decl_no_const_query = [[
+    (_
+      declarator: (function_declarator
+        (parameter_list
+          (_
+            (type_qualifier) @const
+            (#eq? @const "const")
+            type: (_) @type
+            declarator: (_)? @id)))) @decl
+]]
+local decl_no_const_parsed_query = vim.treesitter.query.parse_query("cpp", decl_no_const_query)
+
+local decl_no_const = {
+    name = "decl_no_const",
+    method = null_ls.methods.DIAGNOSTICS_ON_SAVE,
+    filetypes = { "cpp" },
+    generator = {
+        fn = function(params)
+            if not vim.g.enable_null_lints then return end
+            local diagnostics = {}
+            tsparser = ts.get_parser(params.bufnr, params.filetype)
+            tstree = tsparser:parse()
+            local root = tstree[1]:root()
+
+            for pattern, match in decl_no_const_parsed_query:iter_matches(root, params.bufnr) do
+              (function()
+                local decl = match[4]
+                if decl:type() ~= "declaration" and decl:type() ~= "field_declaration" then
+                  return
+                end
+                local type_text = vim.treesitter.query.get_node_text(match[2], params.bufnr)
+                if match[3] ~= nil then
+                  local id_text = vim.treesitter.query.get_node_text(match[3], params.bufnr)
+                  if id_text:find("&") ~= nil or id_text:find("*") ~= nil then
+                    return
+                  end
+                end
+                local row1, col1, row2, col2 = match[1]:range()
+                table.insert(diagnostics, {
+                    row = row1 + 1,
+                    end_row = row2 + 1,
+                    col = col1 + 1,
+                    end_col = col2 + 1,
+                    source = "decl_no_const",
+                    message = "\"const\" in declaration is not necessary",
+                    severity = vim.diagnostic.severity.WARN,
+                })
+              end)()
+            end
+            return diagnostics
+        end,
+    },
+}
+null_ls.register(decl_no_const)
+
+local forbidden_patterns_list = {
+  "BOOST_TEST",
+};
+
+local forbidden_words = {
+    name = "forbidden_words",
+    method = null_ls.methods.DIAGNOSTICS_ON_SAVE,
+    filetypes = { "cpp" },
+    generator = {
+        fn = function(params)
+            if not vim.g.enable_null_lints then return end
+            local diagnostics = {}
+            for line_number, line in pairs(params.content) do
+              for _, pattern in pairs(forbidden_patterns_list) do
+                local match_start, match_end = line:find("[^%w_]" .. pattern .. "[^%w_]")
+                if match_start ~= nil then
+                  table.insert(diagnostics, {
+                      row = line_number,
+                      end_row = line_number,
+                      col = match_start + 1,
+                      end_col = match_end - 1,
+                      source = "forbidden_words",
+                      message = "\"" .. line:sub(match_start + 1, match_end - 1) .. "\" is forbidden",
+                      severity = vim.diagnostic.severity.WARN,
+                  })
+                end
+              end
+            end
+            return diagnostics
+        end,
+    },
+}
+null_ls.register(forbidden_words)
+EOF
