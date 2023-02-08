@@ -5,16 +5,29 @@ LSP:
 gd -> definition
 gD -> implementation
 gr -> references
-K -> hover doc
-<c-k> -> signature help
-,a -> code actions
+ga -> code actions
 <c-r> -> rename variable
 ge -> show error on current line
 gE -> show all errors
 g] -> next diagnostic
 g[ -> previous diagnostic
-,g -> open git terminal
 <c-f> -> format the file
+K -> hover doc
+<c-k> -> signature help
+
+File explorer:
+ex / vex: open file tree
+<c-v>: open file in new vsplit
+<c-t>: open file in new tab
+a: create a file
+d: delete a file
+r: rename
+y: copy file name
+Y: copy absolute path
+-: dir up
+f: filter by regex
+F: clear filter
+
 
 FZF:
 <c-p> -> open file
@@ -32,6 +45,7 @@ REFACTOR:
 ,rb -> extract block into function
 
 ,rh -> switch between header/cc
+,rc -> switch to CMakeLists.txt
 
 f + 2 letters: jump forward on the screen
 F + 2 letters: jump backward on the screen
