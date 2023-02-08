@@ -456,7 +456,7 @@ capabilities.textDocument.completion.completionItem.resolveSupport = {
 }
 local clangd_capabilities  = require("cmp_nvim_lsp").update_capabilities(capabilities)
 clangd_capabilities.textDocument.semanticHighlighting = true
-clangd_capabilities.offsetEncoding = {"utf-8"}
+clangd_capabilities.offsetEncoding = { "utf-16" }
 local rust_capabilities = capabilities
 rust_capabilities.document_formatting = true
 
@@ -484,6 +484,7 @@ require'navigator'.setup({
     { mode = 'i', key = '<c-k>', func = vim.lsp.signature_help, desc = 'signature_help' },
     { key = 'K', func = function () vim.lsp.buf.hover({ popup_opts = { border = single, max_width = 80 }}) end, desc = 'hover_doc' },
     { key = 'ga', mode = 'n', func = require('navigator.codeAction').code_action, desc = 'code_actions' },
+    { key = 'ga', mode = 'v', func = vim.lsp.buf.code_action, desc = 'visual_code_actions' },
     { key = '<c-r>', func = require('navigator.rename').rename, desc = 'rename'},
     { key = 'gi', func = vim.lsp.buf.incoming_calls, desc = 'incoming calls' },
     { key = 'go', func = vim.lsp.buf.outgoing_calls, desc = 'outgoing calls' },
@@ -825,6 +826,13 @@ lua <<EOF
 local telescope = require "telescope"
 local actions = require "telescope.actions"
 local lga_actions = require("telescope-live-grep-args.actions")
+local fzf_opts = {
+  fuzzy = true,                    -- false will only do exact matching
+  override_generic_sorter = true,  -- override the generic sorter
+  override_file_sorter = true,     -- override the file sorter
+  case_mode = "smart_case",        -- or "ignore_case" or "respect_case"
+                                   -- the default case_mode is "smart_case"
+}
 telescope.setup {
   defaults = {
     path_display = {
@@ -847,12 +855,14 @@ telescope.setup {
       }
     },
   },
-  extensions = {
-    fzf = {
-      fuzzy = true,                    -- false will only do exact matching
-      override_generic_sorter = true,  -- override the generic sorter
-      override_file_sorter = true,     -- override the file sorter
+  pickers = {
+    -- Manually set sorter, for some reason not picked up automatically
+    lsp_dynamic_workspace_symbols = {
+      sorter = telescope.extensions.fzf.native_fzf_sorter(fzf_opts)
     },
+  },
+  extensions = {
+    fzf = fzf_opts,
     live_grep_args = {
       auto_quoting = true, -- enable/disable auto-quoting
       -- override default mappings
@@ -932,6 +942,7 @@ EOF
 
 " Switch source and header
 nnoremap ,rh :ClangdSwitchSourceHeader<CR>
+nnoremap ,rc :execute 'e' expand("%:p:h")."/CMakeLists.txt"<CR>
 
 " Tree-sitter context
 lua <<EOF
