@@ -55,7 +55,7 @@ dex ()
 }
 
 suv () {
-  sudo -E vim $*
+  sudo -E /home/nitnelave/.bin/nvim-linux64/bin/nvim $*
 }
 
 dc () (
