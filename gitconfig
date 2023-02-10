@@ -97,5 +97,6 @@
         autocorrect = 1
 [push]
         default = current
+        autoSetupRemote = true
 [pull]
         rebase = true
