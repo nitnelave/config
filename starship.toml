@@ -1,0 +1,76 @@
+# Get editor completions based on the config schema
+"$schema" = 'https://starship.rs/config-schema.json'
+
+# Inserts a blank line between shell prompts
+add_newline = true
+
+scan_timeout = 30
+command_timeout = 500
+
+format = """
+[┌](blue)\
+$time\
+[─](blue)\
+$directory\
+$fill\
+$git_branch\
+$git_state\
+$git_status\
+$hg_branch\
+$docker_context\
+$package\
+$custom\
+$sudo\
+$cmd_duration\
+[┐](blue)\
+$line_break\
+[└](blue)\
+$hostname\
+$jobs\
+$status\
+$container\
+$character"""
+
+# Replace the '❯' symbol in the prompt with '➜'
+[character] # The name of the module we are configuring is 'character'
+success_symbol = '[➜](bold green)' # The 'success_symbol' segment is being set to '➜' with the color 'bold green'
+
+[cmd_duration]
+min_time = 10_000
+
+[directory]
+format = '[\($path\)]($style)[$read_only]($read_only_style)'
+
+[hostname]
+ssh_symbol = ''
+format = '[\($ssh_symbol$hostname\)]($style)'
+
+[time]
+disabled = false
+format = '[\[$time\]]($style)'
+style = 'bold gray'
+
+[status]
+disabled = false
+
+[git_branch]
+format = '[($symbol$branch)]($style)'
+
+[git_state]
+rebase = 'r'
+merge = 'm'
+revert = 'rev'
+cherry_pick = 'c'
+bisect = 'b'
+
+[fill]
+symbol = '─'
+style = 'blue'
+
+
+#    PR_HBAR=─
+#    PR_ULCORNER=┌
+#    PR_LLCORNER=└
+#    PR_LRCORNER=┘
+#    PR_URCORNER=┐
+#

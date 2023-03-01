@@ -9,17 +9,6 @@ setopt +o nomatch
 
 export TERM="xterm-256color"
 
-# Setup fzf
-# ---------
-
-FZF_DEFAULT_COMMAND='rg -g ""'
-
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
-bindkey '^g' fzf-cd-widget
-# Remove esc-c as fzf trigger
-bindkey -r '\ec'
-
 # Completion
 zstyle ':completion:*' insert-unambiguous true
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
@@ -75,189 +64,33 @@ export EDITOR=nvim
 zle -N edit-command-line
 bindkey -M vicmd v edit-command-line
 
-
-typeset -g _START_TIMER
-typeset -g _END_TIMER
-
-print_hours () {
-  N=$1
-  H=$((N / 3600))
-  N=$((N - H * 3600))
-  echo -n "${H}h, "
-  print_minutes $N
-}
-
-print_minutes () {
-  N=$1
-  M=$((N / 60))
-  N=$((N - M * 60))
-  echo -n "${M}m, "
-  print_seconds $N
-}
-
-print_seconds () {
-  echo -n "${N}s"
-}
-
-print_formatted_time () {
-  echo -n "Execution took "
-  N=$1
-  if [ $N -gt 3600 ]
-  then
-    print_hours $N
-  else
-    print_minutes $N
-  fi
-  echo ""
-}
-
-_start_timer () {
-  _START_TIMER=$(date +%s)
-  _END_TIMER=$_START_TIMER
-}
-
-_stop_timer () {
-  _END_TIMER=$(date +%s)
-  DIFF=$((_END_TIMER - _START_TIMER))
-  # between 2 min and 1 day
-  if [ $DIFF -gt 120 -a $DIFF -lt 8640000 ]
-  then
-    print_formatted_time $DIFF
-  fi
-  _START_TIMER=$_END_TIMER
-}
-
-autoload -Uz add-zsh-hook
-add-zsh-hook preexec _start_timer
-add-zsh-hook precmd _stop_timer
-
-autoload -Uz vcs_info
-zstyle ':vcs_info:git:*' formats '(on %b%c%u)'
-zstyle ':vcs_info:*' check-for-changes true
-zstyle ':vcs_info:*' unstagedstr '!'
-zstyle ':vcs_info:*' stagedstr '+'
-zstyle ':vcs_info:git:*' actionformats '(%b [%a%c%u])'
-
-# Prompt
-function precmd {
-  vcs_info
-  local TERMWIDTH
-  (( TERMWIDTH = ${COLUMNS} - 1 ))
-
-  PR_FILLBAR=""
-  PR_PWDLEN=""
-
-  # Remove colors from the git output to count the characters
-  ZSH_THEME_GIT_PROMPT_PREFIX="(on "
-  ZSH_THEME_GIT_PROMPT_SUFFIX=")"
-  ZSH_THEME_GIT_PROMPT_DIRTY="!"
-  ZSH_THEME_GIT_PROMPT_UNTRACKED="?"
-
-  # Measure the different parts of the prompt
-  local pwdsize=${#${(%):-%~}}
-  local gittext="${vcs_info_msg_0_}-"
-  local gitsize=${"#${gittext}"}
-
-  local PADDING=7
-
-  # Truncate the path if it's too long.
-  if [[ "$gitsize + $pwdsize + $PADDING" -gt $TERMWIDTH ]]; then
-    ((PR_PWDLEN=$TERMWIDTH - $gitsize - $PADDING))
-  else
-    PR_FILLBAR="\${(l.(($TERMWIDTH - ($pwdsize + $gitsize + $PADDING)))..${PR_HBAR}.)}"
-  fi
-
-  # Put the colors back
-  ZSH_THEME_GIT_PROMPT_PREFIX="$fg[blue]($fg[magenta]on %{$fg[white]%}"
-  ZSH_THEME_GIT_PROMPT_SUFFIX="$fg[blue])%{$reset_color%}"
-  ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[red]%}!"
-  ZSH_THEME_GIT_PROMPT_UNTRACKED="%{$fg[green]%}?"
-}
-
-setprompt () {
-    # Need this so the prompt will work.
-
-    setopt prompt_subst
-
-    # See if we can use colors.
-
-    autoload colors zsh/terminfo
-    if [[ "$terminfo[colors]" -ge 8 ]]; then
-      colors
-    fi
-    for color in RED GREEN YELLOW BLUE MAGENTA CYAN WHITE; do
-        eval PR_$color='%{$terminfo[bold]$fg[${(L)color}]%}'
-        eval PR_LIGHT_$color='%{$fg[${(L)color}]%}'
-        (( count = $count + 1 ))
-    done
-    PR_NO_COLOUR="%{$terminfo[sgr0]%}"
-
-###size
-    # See if we can use extended characters to look nicer.
-
-    typeset -A altchar
-    set -A altchar ${(s..)terminfo[acsc]}
-    PR_SET_CHARSET="%{$terminfo[enacs]%}"
-    PR_SHIFT_IN="%{$terminfo[smacs]%}"
-    PR_SHIFT_OUT="%{$terminfo[rmacs]%}"
-    PR_HBAR=─
-    PR_ULCORNER=┌
-    PR_LLCORNER=└
-    PR_LRCORNER=┘
-    PR_URCORNER=┐
-
-    VISUAL_BELL=$(echo -e '\a')
-
-    ZSH_THEME_GIT_PROMPT_PREFIX="(on %{$fg[white]%}"
-    ZSH_THEME_GIT_PROMPT_SUFFIX=")%{$reset_color%}"
-    ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[red]%}!"
-    ZSH_THEME_GIT_PROMPT_UNTRACKED="%{$fg[green]%}?"
-    ZSH_THEME_GIT_PROMPT_CLEAN=""
-
-    if [[ -z "$DISPLAY" ]] ; then HOST_NAME='($PR_GREEN$PR_SHIFT_OUT%m$PR_SHIFT_IN$PR_CYAN)'; else unset HOST_NAME; fi
-###
-    # Finally, the prompt.
-
-    PROMPT='\
-$PR_CYAN$PR_SHIFT_IN$PR_ULCORNER$PR_BLUE$PR_HBAR$PR_SHIFT_OUT(\
-$PR_GREEN%$PR_PWDLEN<...<%~%<<$PR_BLUE)$PR_SHIFT_IN\
-$PR_HBAR$PR_HBAR${(e)PR_FILLBAR}$PR_BLUE$PR_HBAR$PR_SHIFT_OUT\
-$PR_MAGENTA${vcs_info_msg_0_}\
-$PR_BLUE$PR_SHIFT_IN$PR_HBAR$PR_CYAN$PR_URCORNER$PR_SHIFT_OUT$VISUAL_BELL\
-
-$PR_CYAN$PR_SHIFT_IN$PR_LLCORNER'"$HOST_NAME"'$PR_BLUE$PR_HBAR$PR_SHIFT_OUT\
-%(?..[$PR_LIGHT_RED%?$PR_BLUE])\
-$PR_LIGHT_BLUE$PR_BLUE$PR_SHIFT_IN$PR_HBAR>$PR_SHIFT_OUT\
-$PR_NO_COLOUR '
-}
-
-setprompt
-
 fpath=(~/.zsh/completion $fpath)
 
 autoload -Uz compinit && compinit -i
 
+# Freeze TTY controls.
 ttyctl -f
 
 source ~/.aliases
 alias reload="source ~/.zshrc"
 
-export PATH=$PATH:~/projects/config/bin:~/.bin/nvim-linux64/bin:~/.cargo/bin:~/.local/bin
-
-
-if which fuck >/dev/null
-then
-  eval $(thefuck --alias)
-  run_fuck () {
-    echo
-    fuck --enable-experimental-instant-mode </dev/tty
-    echo '\n'
-    zle redisplay
-  }
-  zle -N run_fuck
-  bindkey '^f' run_fuck
-fi
+export PATH=$PATH:~/projects/config/bin:~/.bin/nvim/bin:~/.cargo/bin:~/.local/bin:~/.bin
 
 [ -f /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ] && source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 eval "$(direnv hook zsh)"
+
+# Setup fzf
+# ---------
+
+FZF_DEFAULT_COMMAND='rg -g ""'
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+bindkey '^g' fzf-cd-widget
+# Remove esc-c as fzf trigger
+bindkey -r '\ec'
+
+# Setup Starship.
+
+eval "$(starship init zsh)"

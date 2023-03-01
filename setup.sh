@@ -35,14 +35,13 @@ mkdir -p $HOME/.i3
 link i3config .i3/config
 mkdir -p $HOME/.config/zathura
 link zathurarc .config/zathura/zathurarc
-#link signature .signature
 link xstart .xstart-generic
 link xkb .xkb
 #link idea/ideavimrc .ideavimrc
 #link Xdefaults .Xdefaults
-#link oh-my-zsh .oh-my-zsh
 link lesskey .lesskey
 link ssh_config .ssh/config
+link starship.toml .config/starship.toml
 
 link vim/ftplugin .vim/ftplugin
 link vim/cheat40.txt .vim/cheat40.txt
@@ -126,5 +125,7 @@ which delta >/dev/null || cargo install git-delta
 which rg >/dev/null || cargo install ripgrep
 
 which direnv >/dev/null || sudo apt install direnv
+
+curl -sS https://starship.rs/install.sh | sh -s -- --bin-dir $HOME/.bin
 
 echo "Configuration successful!"
