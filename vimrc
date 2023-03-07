@@ -1028,7 +1028,7 @@ require("nvim-tree").setup {
   view = {
     centralize_selection = true,
     hide_root_folder = true,
-    width = 80,
+    width = function() return math.floor(vim.o.columns / table.getn(vim.api.nvim_tabpage_list_wins(0))) end,
     mappings = {
       custom_only = true,
       list = {
