@@ -1071,7 +1071,15 @@ null_ls.setup({
   sources = {
     null_ls.builtins.code_actions.refactoring,
     -- pip3 install --user cmakelang
-    null_ls.builtins.diagnostics.cmake_lint,
+    null_ls.builtins.diagnostics.cmake_lint.with({
+      extra_args = {
+        "--local-var-pattern", "[A-Z][A-Z0-9_]+",
+        "--argument-var-pattern", "[A-Z][A-Z0-9_]+",
+        "--macro-pattern", "ht_[a-z0-9_]+",
+        "--function-pattern", "ht_[a-z0-9_]+",
+        "--disabled-codes", "C0113",
+      },
+    }),
     -- null_ls.builtins.formatting.cmake_format,
     -- cppcheck?
   }
@@ -1206,6 +1214,7 @@ local decl_no_name = {
                 end
                 local arg_type = match[1]
                 local id = match[2]
+                local row, _, _, _ = id:range()
                 if id:type() ~= "identifier" then
                   for node in id:iter_children() do
                     if node:type() == "identifier" then
@@ -1215,11 +1224,6 @@ local decl_no_name = {
                       -- Variable declaration parsed as function, most vexing parse.
                       return
                     end
-                  end
-                  if id:type() ~= "identifier" then
-                    local row, _, _, _ = id:range()
-                    error("Could not find identifier for " .. vim.treesitter.query.get_node_text(id, params.bufnr) .. " at line " .. row + 1)
-                    return
                   end
                 end
                 local id_text = vim.treesitter.query.get_node_text(id, params.bufnr)
@@ -1305,8 +1309,13 @@ local decl_no_const = {
 null_ls.register(decl_no_const)
 
 local forbidden_patterns_list = {
-  "BOOST_TEST",
+  {pattern = "\bBOOST_TEST\b", message = "Use BOOST_CHECK"},
+  {pattern = "\\(ht_base/\\)\\@<!\\(std::\\)\\@<!string_view", message = "Use std::string_view"},
 };
+
+for _, pattern in pairs(forbidden_patterns_list) do
+  pattern.regex = vim.regex(pattern.pattern)
+end
 
 local forbidden_words = {
     name = "forbidden_words",
@@ -1318,15 +1327,15 @@ local forbidden_words = {
             local diagnostics = {}
             for line_number, line in pairs(params.content) do
               for _, pattern in pairs(forbidden_patterns_list) do
-                local match_start, match_end = line:find("[^%w_]" .. pattern .. "[^%w_]")
+                local match_start, match_end = pattern.regex:match_str(line)
                 if match_start ~= nil then
                   table.insert(diagnostics, {
                       row = line_number,
                       end_row = line_number,
-                      col = match_start + 1,
-                      end_col = match_end - 1,
+                      col = match_start,
+                      end_col = match_end,
                       source = "forbidden_words",
-                      message = "\"" .. line:sub(match_start + 1, match_end - 1) .. "\" is forbidden",
+                      message = "\"" .. line:sub(match_start, match_end) .. "\" is forbidden. " .. pattern.message,
                       severity = vim.diagnostic.severity.WARN,
                   })
                 end
