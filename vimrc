@@ -364,6 +364,7 @@ nnoremap Y y$
 " Yank relative file path.
 nnoremap <silent> yf :let @"=@%<CR>
 
+au TextYankPost * silent! lua vim.highlight.on_yank {higroup="IncSearch", timeout=250, on_visual=false}
 
 " map ; to :
 noremap ; :
