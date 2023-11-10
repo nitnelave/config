@@ -55,6 +55,8 @@ call plug#begin('~/.vim/plugged')
   " Unix commands on the current file, :Move and :Mkdir
   Plug 'tpope/vim-eunuch'
 
+  Plug 'nvim-treesitter/playground'
+
   " Language-specific support.
 
   "Plug 'rust-lang/rust.vim'
@@ -273,6 +275,8 @@ set signcolumn=yes
 
 set breakindent showbreak=..
 set linebreak
+
+let g:vimsyn_embed='l'
 
 let vimDir = '$HOME/.vim'
 let &runtimepath.=','.vimDir
@@ -1137,7 +1141,7 @@ local const_arg_query = [[
             type: (_) @type
             declarator: (identifier) @id)))) @decl
 ]]
-local const_arg_parsed_query = vim.treesitter.query.parse_query("cpp", const_arg_query)
+local const_arg_parsed_query = vim.treesitter.query.parse("cpp", const_arg_query)
 
 local const_arg = {
     name = "const_arg",
@@ -1167,7 +1171,7 @@ local const_arg = {
                       col = col1 + 1,
                       end_col = col2 + 1,
                       source = "const_arg",
-                      message = "Argument \"" .. vim.treesitter.query.get_node_text(id, params.bufnr) .. "\" should be const",
+                      message = "Argument \"" .. vim.treesitter.get_node_text(id, params.bufnr) .. "\" should be const",
                       severity = vim.diagnostic.severity.WARN,
                   })
                 end
@@ -1179,51 +1183,6 @@ local const_arg = {
 }
 null_ls.register(const_arg)
 
-local boost_main_query = [[
-    (_
-      (preproc_include)
-      (preproc_def
-        .
-        (identifier) @id
-        (#eq? @id "BOOST_TEST_MAIN")
-        .
-      )
-    )
-]]
-local boost_main_parsed_query = vim.treesitter.query.parse_query("cpp", boost_main_query)
-
-local boost_main = {
-    name = "boost_main",
-    method = null_ls.methods.DIAGNOSTICS_ON_SAVE,
-    filetypes = { "cpp" },
-    generator = {
-        fn = function(params)
-            if not vim.g.enable_null_lints then return end
-            local diagnostics = {}
-            tsparser = ts.get_parser(params.bufnr, params.filetype)
-            tstree = tsparser:parse()
-            local root = tstree[1]:root()
-
-            for pattern, match in boost_main_parsed_query:iter_matches(root, params.bufnr) do
-                local id = match[1]
-                local row1, col1, row2, col2 = id:range()
-                table.insert(diagnostics, {
-                    row = row1 + 1,
-                    end_row = row2 + 1,
-                    col = col1 + 1,
-                    end_col = col2 + 1,
-                    source = "boost_main",
-                    message = "#define BOOST_TEST_MAIN should appear before any includes",
-                    severity = vim.diagnostic.severity.WARN,
-                })
-            end
-            return diagnostics
-        end,
-    },
-}
-
-null_ls.register(boost_main)
-
 local decl_no_name_query = [[
     (_
       declarator: (function_declarator
@@ -1232,7 +1191,7 @@ local decl_no_name_query = [[
             type: (_) @type
             declarator: (_) @id)))) @decl
 ]]
-local decl_no_name_parsed_query = vim.treesitter.query.parse_query("cpp", decl_no_name_query)
+local decl_no_name_parsed_query = vim.treesitter.query.parse("cpp", decl_no_name_query)
 
 local decl_no_name = {
     name = "decl_no_name",
@@ -1266,11 +1225,11 @@ local decl_no_name = {
                     end
                   end
                 end
-                local id_text = vim.treesitter.query.get_node_text(id, params.bufnr)
+                local id_text = vim.treesitter.get_node_text(id, params.bufnr)
                 if id_text:len() <= 3 then
                   return
                 end
-                local type_text = vim.treesitter.query.get_node_text(arg_type, params.bufnr)
+                local type_text = vim.treesitter.get_node_text(arg_type, params.bufnr)
                 local lower_type = string.lower(type_text)
                 local short_arg = string.gsub(id_text, "_", "")
                 if lower_type:find(short_arg, 1, true) ~= nil then
@@ -1303,7 +1262,7 @@ local decl_no_const_query = [[
             type: (_) @type
             declarator: (_)? @id)))) @decl
 ]]
-local decl_no_const_parsed_query = vim.treesitter.query.parse_query("cpp", decl_no_const_query)
+local decl_no_const_parsed_query = vim.treesitter.query.parse("cpp", decl_no_const_query)
 
 local decl_no_const = {
     name = "decl_no_const",
@@ -1323,9 +1282,9 @@ local decl_no_const = {
                 if decl:type() ~= "declaration" and decl:type() ~= "field_declaration" then
                   return
                 end
-                local type_text = vim.treesitter.query.get_node_text(match[2], params.bufnr)
+                local type_text = vim.treesitter.get_node_text(match[2], params.bufnr)
                 if match[3] ~= nil then
-                  local id_text = vim.treesitter.query.get_node_text(match[3], params.bufnr)
+                  local id_text = vim.treesitter.get_node_text(match[3], params.bufnr)
                   if id_text:find("&") ~= nil or id_text:find("*") ~= nil then
                     return
                   end
@@ -1350,7 +1309,7 @@ null_ls.register(decl_no_const)
 
 local forbidden_patterns_list = {
   {pattern = "\bBOOST_TEST\b", message = "Use BOOST_CHECK"},
-  {pattern = "\\(ht_base/\\)\\@<!\\(std::\\)\\@<!string_view", message = "Use std::string_view"},
+  {pattern = "\\(include <\\)\\@<!\\(ht_base/\\)\\@<!\\(std::\\)\\@<!\\(\\.\\)\\@<!\\(_\\)\\@<!\\(->\\)\\@<!string_view", message = "Use std::string_view"},
 };
 
 for _, pattern in pairs(forbidden_patterns_list) do
@@ -1386,4 +1345,25 @@ local forbidden_words = {
     },
 }
 null_ls.register(forbidden_words)
+
+require "nvim-treesitter.configs".setup {
+  playground = {
+    enable = true,
+    disable = {},
+    updatetime = 25, -- Debounced time for highlighting nodes in the playground from source code
+    persist_queries = false, -- Whether the query persists across vim sessions
+    keybindings = {
+      toggle_query_editor = 'o',
+      toggle_hl_groups = 'i',
+      toggle_injected_languages = 't',
+      toggle_anonymous_nodes = 'a',
+      toggle_language_display = 'I',
+      focus_language = 'f',
+      unfocus_language = 'F',
+      update = 'R',
+      goto_node = '<cr>',
+      show_help = '?',
+    },
+  }
+}
 EOF
