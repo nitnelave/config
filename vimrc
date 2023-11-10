@@ -34,6 +34,8 @@ call plug#begin('~/.vim/plugged')
   Plug 'tpope/vim-abolish'
   " Spellcheck with CamlCase support.
   Plug 'kamykn/spelunker.vim'
+  " Unix commands on the current file, :Move and :Mkdir
+  Plug 'tpope/vim-eunuch'
 
   " Language-specific support.
 
@@ -121,6 +123,7 @@ call plug#begin('~/.vim/plugged')
 
   " null-ls
   Plug 'jose-elias-alvarez/null-ls.nvim'
+
 call plug#end()
 
 " General vim settings
