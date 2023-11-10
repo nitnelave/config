@@ -32,10 +32,12 @@ F: clear filter
 
 
 FZF:
-<c-p> -> open file
+<c-p> -> find file
 <c-g> -> grep non-test files
 <c-G> -> grep all files
 <c-b> -> find tab
+<c-x> -> re-open last picker
+<c-m> -> git modified files since master
 in a picker:  <c-v> -> open in new vertical split
 
 REFACTOR:

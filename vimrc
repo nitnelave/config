@@ -887,7 +887,10 @@ local fzf_opts = {
 telescope.setup {
   defaults = {
     path_display = {
-      shorten = 3
+      shorten = {
+        len = 1,
+        exclude = {-1, -2, 4, 5, 6, 7, 8}
+      }
     },
     cache_picker = {
       num_pickers = 10,
@@ -992,7 +995,68 @@ function pickTab()
     end,
   })
 end
-vim.api.nvim_set_keymap("n", "<c-b>", ":lua pickTab()<CR>", { noremap = true, silent = true })
+vim.keymap.set({"n"}, "<c-b>", pickTab, { noremap = true, silent = true })
+
+local finders = require "telescope.finders"
+local make_entry = require "telescope.make_entry"
+local pickers = require "telescope.pickers"
+local previewers = require "telescope.previewers"
+local utils = require "telescope.utils"
+local putils = require "telescope.previewers.utils"
+local conf = require("telescope.config").values
+
+local git_modified_previewer = function(base)
+  return previewers.new_buffer_previewer {
+    title = "Diff Preview with master",
+    get_buffer_by_name = function(_, entry)
+      return entry.value
+    end,
+
+    define_preview = function(self, entry, status)
+      putils.job_maker({ "git", "diff", base, "--", entry.value }, self.state.bufnr, {
+        value = entry.value,
+        bufname = self.state.bufname,
+        callback = function(bufnr)
+          if vim.api.nvim_buf_is_valid(bufnr) then
+            putils.regex_highlighter(bufnr, "diff")
+          end
+        end,
+      })
+    end,
+  }
+end
+
+function git_modified_picker()
+  local git_merge_base_cmd = { "git", "merge-base", "HEAD", "origin/master" }
+  local merge_base = utils.get_os_command_output(git_merge_base_cmd)[1]
+  local git_cmd = { "git", "diff", "--name-only", merge_base }
+
+  local output = utils.get_os_command_output(git_cmd)
+
+  if #output == 0 then
+    print "No changes found"
+    utils.notify("git_modified", {
+      msg = "No changes found",
+      level = "WARN",
+    })
+    return
+  end
+
+  local finder = finders.new_table {
+    results = output,
+    entry_maker = make_entry.gen_from_file(),
+  }
+
+  pickers
+    .new(opts, {
+      prompt_title = "Git Modified Files",
+      finder = finder,
+      previewer = git_modified_previewer(merge_base),
+      sorter = conf.file_sorter(),
+    })
+    :find()
+end
+vim.keymap.set({"n"}, "<c-m>", git_modified_picker, { noremap = true, silent = true })
 EOF
 
 " Switch source and header
@@ -1064,13 +1128,8 @@ vim.api.nvim_set_keymap("n", "<leader>ri", [[ <Cmd>lua require('refactoring').re
 -- load refactoring Telescope extension
 require("telescope").load_extension("refactoring")
 
--- remap to open the Telescope refactoring menu in visual mode
-vim.api.nvim_set_keymap(
-  "v",
-  "<leader>rr",
-  "<Esc><cmd>lua require('telescope').extensions.refactoring.refactors()<CR>",
-  { noremap = true }
-)
+-- remap to open the Telescope refactoring menu
+vim.keymap.set({"n", "v"}, "<leader>rr", require('telescope').extensions.refactoring.refactors, { noremap = true, silent = true })
 EOF
 
 " Nvim tree
