@@ -60,6 +60,7 @@
         diffFilter = delta --color-only
 [delta]
         navigate = true
+        features = "tangara-chilensis-villsau"
 [user]
         name = Valentin Tolmer
         email = valentin@tolmer.fr
@@ -83,12 +84,6 @@
         conflictStyle = diff3
 [diff]
         colorMoved = default
-        #tool = difft
-        #tool = nvim -d
-#[difftool]
-#        prompt = false
-#[difftool "difft"]
-#        cmd = difft "$LOCAL" "$REMOTE"
 [color]
         ui = true
 [log]
@@ -100,3 +95,30 @@
         autoSetupRemote = true
 [pull]
         rebase = true
+
+[delta "tangara-chilensis-villsau"]
+    # Mix of tangara-chilensis and villsau by clnoll and torarnv
+    dark = true
+    file-style = omit
+    hunk-header-decoration-style = "#00b494" box ul
+    hunk-header-file-style = magenta
+    hunk-header-line-number-style = dim magenta
+    hunk-header-style = file line-number syntax
+    line-numbers = true
+    line-numbers-left-style = black
+    line-numbers-minus-style = "#B10036"
+    line-numbers-plus-style = "#03a4ff"
+    line-numbers-right-style = black
+    line-numbers-zero-style = "#999999"
+    minus-emph-style = bold red 52
+    minus-empty-line-marker-style = normal "#3f0001"
+    minus-non-emph-style = dim red
+    minus-style = bold red
+    plus-emph-style = bold green 22
+    plus-empty-line-marker-style = normal "#002800"
+    plus-non-emph-style = dim green
+    plus-style = bold green
+    syntax-theme = OneHalfDark
+    whitespace-error-style = reverse red
+    zero-style = dim syntax
+    side-by-side = true
