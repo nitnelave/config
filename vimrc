@@ -383,6 +383,7 @@ command! Q q
 command! Qa qa
 command! Wq wq
 command! WQ wq
+command! Vs vs
 command! Ex NvimTreeFindFileToggle
 command! Vex NvimTreeFindFileToggle
 command! VEX NvimTreeFindFileToggle
