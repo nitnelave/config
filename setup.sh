@@ -43,7 +43,6 @@ link lesskey .lesskey
 link ssh_config .ssh/config
 link starship.toml .config/starship.toml
 
-link vim/ftplugin .vim/ftplugin
 link vim/cheat40.txt .vim/cheat40.txt
 
 
