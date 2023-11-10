@@ -4,8 +4,8 @@
 # Inserts a blank line between shell prompts
 add_newline = true
 
-scan_timeout = 30
-command_timeout = 500
+scan_timeout = 100
+command_timeout = 1000
 
 format = """
 [┌](blue)\
@@ -29,7 +29,7 @@ $hostname\
 $jobs\
 $status\
 $container\
-$character"""
+$character\u0007"""
 
 # Replace the '❯' symbol in the prompt with '➜'
 [character] # The name of the module we are configuring is 'character'
