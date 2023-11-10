@@ -12,6 +12,8 @@ gE -> show all errors
 g] -> next diagnostic
 g[ -> previous diagnostic
 <c-f> -> format the file
+,fs -> list symbols in current file
+,fS -> list symbols in whole project
 K -> hover doc
 <c-k> -> signature help
 

@@ -60,13 +60,15 @@ call plug#begin('~/.vim/plugged')
   Plug 'ray-x/navigator.lua'
   Plug 'ray-x/lsp_signature.nvim'
   " LSP status
-  Plug 'j-hui/fidget.nvim'
+  Plug 'j-hui/fidget.nvim', { 'tag': 'legacy' }
+   " Clangd inlay hints and more.
+  Plug 'p00f/clangd_extensions.nvim'
 
   " Completion framework
   Plug 'hrsh7th/nvim-cmp'
 
   " LSP completion source for nvim-cmp
-  Plug 'hrsh7th/cmp-nvim-lsp', {'commit': 'affe808a5c56b71630f17aa7c38e15c59fd648a8'}
+  Plug 'hrsh7th/cmp-nvim-lsp'
 
   " Snippet completion source for nvim-cmp
   Plug 'hrsh7th/cmp-vsnip'
@@ -456,15 +458,18 @@ nnoremap <c-f> :lua vim.lsp.buf.format { async = true }<CR>
 
 lua <<EOF
 local util = require 'lspconfig.util'
-local capabilities = vim.lsp.protocol.make_client_capabilities()
-capabilities.textDocument.completion.completionItem.snippetSupport = true
-capabilities.textDocument.completion.completionItem.resolveSupport = {
-  properties = { "documentation", "detail", "additionalTextEdits" },
-}
-local clangd_capabilities  = require("cmp_nvim_lsp").update_capabilities(capabilities)
+function get_capabilities()
+  local capabilities = require("cmp_nvim_lsp").default_capabilities()
+  capabilities.textDocument.completion.completionItem.snippetSupport = true
+  capabilities.textDocument.completion.completionItem.resolveSupport = {
+    properties = { "documentation", "detail", "additionalTextEdits" },
+  }
+  return capabilities
+end
+local clangd_capabilities = get_capabilities()
 clangd_capabilities.textDocument.semanticHighlighting = true
 clangd_capabilities.offsetEncoding = { "utf-16" }
-local rust_capabilities = capabilities
+local rust_capabilities = get_capabilities()
 rust_capabilities.document_formatting = true
 
 function clang_options()
@@ -485,16 +490,12 @@ end
 require'navigator'.setup({
   default_mapping = false,  -- set to false if you will remap every key
   keymaps = {
-    { key = 'gd', func = require('navigator.definition').definition, desc = 'definition' },
-    { key = 'gD', func = function () vim.lsp.buf.declaration({ border = 'rounded', max_width = 80 }) end, desc = 'declaration' },
     { key = '<c-k>', func = vim.lsp.signature_help, desc = 'signature_help' },
     { mode = 'i', key = '<c-k>', func = vim.lsp.signature_help, desc = 'signature_help' },
     { key = 'K', func = function () vim.lsp.buf.hover({ popup_opts = { border = single, max_width = 80 }}) end, desc = 'hover_doc' },
     { key = 'ga', mode = 'n', func = require('navigator.codeAction').code_action, desc = 'code_actions' },
     { key = 'ga', mode = 'v', func = vim.lsp.buf.code_action, desc = 'visual_code_actions' },
     { key = '<c-r>', func = require('navigator.rename').rename, desc = 'rename'},
-    { key = 'gi', func = vim.lsp.buf.incoming_calls, desc = 'incoming calls' },
-    { key = 'go', func = vim.lsp.buf.outgoing_calls, desc = 'outgoing calls' },
     { key = 'g]', func = function () vim.diagnostic.goto_next({ border = 'rounded', max_width = 80}) end, desc = 'next diagnostic' },
     { key = 'g[', func = function () vim.diagnostic.goto_prev({ border = 'rounded', max_width = 80}) end, desc = 'prev diagnostic' },
     { key = 'gE', func = vim.diagnostic.setloclist, desc = 'diagnostics set loclist' },
@@ -502,23 +503,10 @@ require'navigator'.setup({
   },
   lsp = {
     format_on_save = true,
-    disable_lsp = {'bashls', 'ccls', 'closure_lsp', 'cssls', 'dartls',
+    disable_lsp = {'bashls', 'ccls', 'clangd', 'closure_lsp', 'cssls', 'dartls',
     'denols', 'dockerls', 'dotls', 'graphql', 'intelephense',
-    'kotlin_language_server', 'nimls', 'pylsp', 'pyright', 'sqlls',
+    'kotlin_language_server', 'nimls', 'pylsp', 'sqlls',
     'sumneko_lua', 'vimls', 'vim-language-server', 'yamlls'},
-    clangd = {
-      root_dir = util.root_pattern('build/compile_commands.json', '.git'),
-      flags = {allow_incremental_sync = true, debounce_text_changes = 500},
-      cmd = clang_options(),
-      filetypes = {"c", "cpp", "objc", "objcpp"},
-      init_options = {
-        clangdFileStatus = true
-      },
-      on_attach = function(client)
-        client.server_capabilities.document_formatting = true
-      end,
-      capabilities = clangd_capabilities
-    },
     rust_analyzer = {
       root_dir = function(fname)
         return util.root_pattern("Cargo.toml", "rust-project.json", ".git")(fname)
@@ -540,7 +528,36 @@ require'navigator'.setup({
       },
       flags = {allow_incremental_sync = true, debounce_text_changes = 500},
     },
+    pyright = {},
   }
+})
+
+require("clangd_extensions").setup({
+  inlay_hints = {
+    only_current_line = false,
+    show_parameter_hints = false,
+    other_hints_prefix = "-> ",
+  }
+})
+
+require('lspconfig').clangd.setup({
+  root_dir = util.root_pattern('.git'),
+  flags = {allow_incremental_sync = true, debounce_text_changes = 500},
+  cmd = clang_options(),
+  filetypes = {"c", "cpp", "objc", "objcpp"},
+  init_options = {
+    clangdFileStatus = true
+  },
+  on_attach = function(client, bufnr)
+    client.server_capabilities.document_formatting = true
+    require('navigator.lspclient.mapping').setup({client=client, bufnr=bufnr}) -- setup navigator keymaps here,
+    require("navigator.dochighlight").documentHighlight(bufnr)
+    require('navigator.codeAction').code_action_prompt(bufnr)
+    require("clangd_extensions.inlay_hints").setup_autocmd()
+    require("clangd_extensions.inlay_hints").set_inlay_hints()
+    on_attach(client, bufnr)
+  end,
+  capabilities = clangd_capabilities
 })
 
 -- Don't open the loclist on compilation failure.
@@ -554,7 +571,7 @@ vim.api.nvim_create_autocmd({ 'BufWritePre' }, {
     end,
   })
 
-if vim.o.ft == 'clap_input' and vim.o.ft == 'guihua' and vim.o.ft == 'guihua_rust' then
+if vim.o.ft == 'clap_input' or vim.o.ft == 'guihua' or vim.o.ft == 'guihua_rust' then
   require'cmp'.setup.buffer { completion = {enable = false} }
 end
 
@@ -669,6 +686,8 @@ cmp.setup({
       cmp.config.compare.offset,
       cmp.config.compare.exact,
       cmp.config.compare.score,
+      cmp.config.compare.recently_used,
+      require("clangd_extensions.cmp_scores"),
       lspkind_comparator({
         kind_priority = {
           Field = 11,
@@ -920,8 +939,12 @@ EOF
 nnoremap <c-p> <cmd>Telescope git_files<cr>
 "nnoremap <c-b> <cmd>Telescope buffers<cr>
 nnoremap gr <cmd>Telescope lsp_references<cr>
-nnoremap ,fs <cmd>lua require('telescope.builtin').lsp_document_symbols({symbol_width = 60, ignore_symbols = {"namespace"}})<cr>
-nnoremap ,fS <cmd>lua require('telescope.builtin').lsp_dynamic_workspace_symbols({symbol_width = 60, ignore_symbols = {"namespace"}})<cr>
+nnoremap gi <cmd>Telescope lsp_incoming_calls<cr>
+nnoremap go <cmd>Telescope lsp_outgoing_calls<cr>
+nnoremap gd <cmd>Telescope lsp_definitions<cr>
+nnoremap gD <cmd>Telescope lsp_implementations<cr>
+nnoremap <leader>fs <cmd>lua require('telescope.builtin').lsp_document_symbols({symbol_width = 60, ignore_symbols = {"namespace"}})<cr>
+nnoremap <leader>fS <cmd>lua require('telescope.builtin').lsp_dynamic_workspace_symbols({symbol_width = 60, ignore_symbols = {"namespace"}})<cr>
 
 lua <<EOF
 function pickTab()
