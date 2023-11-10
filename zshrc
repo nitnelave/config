@@ -31,6 +31,17 @@ bindkey "^q" push-line-or-edit
 
 unsetopt beep notify
 
+# Setup fzf
+# ---------
+
+FZF_DEFAULT_COMMAND='rg -g ""'
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+bindkey '^g' fzf-cd-widget
+# Remove esc-c as fzf trigger
+bindkey -r '\ec'
+bindkey -r '^T'
 
 autoload up-line-or-beginning-search
 autoload down-line-or-beginning-search
@@ -80,16 +91,6 @@ export PATH=$PATH:~/projects/config/bin:~/.bin/nvim/bin:~/.cargo/bin:~/.local/bi
 
 eval "$(direnv hook zsh)"
 
-# Setup fzf
-# ---------
-
-FZF_DEFAULT_COMMAND='rg -g ""'
-
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
-bindkey '^g' fzf-cd-widget
-# Remove esc-c as fzf trigger
-bindkey -r '\ec'
 
 # Setup Starship.
 
