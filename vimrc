@@ -5,11 +5,29 @@ autocmd!
 let g:loaded_netrw = 1
 let g:loaded_netrwPlugin = 1
 
+lua <<EOF
+function is_ht()
+   local f=io.open('/usr/local/ht-clang-17-0-1/bin/clangd',"r")
+   if f~=nil then
+     io.close(f)
+     return true
+   end
+   return false
+end
+EOF
+
 " Install automatically Plug, if not already there.
 if empty(glob('~/.vim/autoload/plug.vim'))
   silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
     \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
   autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
+
+if luaeval("is_ht()") && empty(glob('~/.config/nvim/jdtls/1.15.0'))
+  silent !curl -fLo '/tmp/jdt-language-server-1.15.0-202208220516.tar.gz' --create-dirs
+    \ 'https://download.eclipse.org/jdtls/snapshots/jdt-language-server-1.15.0-202208220516.tar.gz'
+  silent !mkdir -p ~/.config/nvim/jdtls/1.15.0
+  silent !tar xvzf /tmp/jdt-language-server-1.15.0-202208220516.tar.gz --directory ~/.config/nvim/jdtls/1.15.0
 endif
 
 call plug#begin('~/.vim/plugged')
@@ -55,6 +73,10 @@ call plug#begin('~/.vim/plugged')
   " LSP & completion
   " Collection of common configurations for the Nvim LSP client
   Plug 'neovim/nvim-lspconfig'
+  if luaeval("is_ht()")
+    " Java support
+    Plug 'mfussenegger/nvim-jdtls'
+  endif
   " Nicer UI
   Plug 'ray-x/guihua.lua', {'do': 'cd lua/fzy && make' }
   Plug 'ray-x/navigator.lua'
@@ -473,11 +495,9 @@ local rust_capabilities = get_capabilities()
 rust_capabilities.document_formatting = true
 
 function clang_options()
-   local f=io.open('/usr/local/ht-clang-15-0-0/bin/clangd',"r")
-   if f~=nil then
-     io.close(f)
-     return {'/usr/local/ht-clang-15-0-0/bin/clangd', '-j=40',
-     '--compile-commands-dir=./build/ub-18.04-clang-15.0.0-generic.debug',
+   if is_ht() then
+     return {'/usr/local/ht-clang-17-0-1/bin/clangd', '-j=40',
+     '--compile-commands-dir=./build/ub-18.04-clang-17.0.1-generic.debug',
      "--background-index", "--clang-tidy", "--header-insertion=iwyu",
      "--all-scopes-completion", "--completion-style=bundled"}
    else
@@ -1081,13 +1101,7 @@ lua require"fidget".setup{}
 
 lua <<EOF
 if vim.g.enable_null_lints == nil then
-  local f=io.open('/usr/local/ht-clang-15-0-0/bin/clangd',"r")
-  if f~=nil then
-    io.close(f)
-    vim.g.enable_null_lints = true
-  else
-    vim.g.enable_null_lints = false
-  end
+  vim.g.enable_null_lints = is_ht()
 end
 -- Toggle the lints. Still need to save to refresh them.
 vim.api.nvim_set_keymap("n", "<leader>l", ":lua vim.g.enable_null_lints = not vim.g.enable_null_lints<CR>", {noremap = true, silent = true})
