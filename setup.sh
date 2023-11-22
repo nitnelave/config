@@ -23,7 +23,8 @@ echo "Linking config files..."
 
 [ "$FORCE" = "1" ] && echo "Force mode enabled, recreating links"
 
-link vimrc .vimrc-generic
+#link vimrc .vimrc-generic
+link nvim/lua .config/nvim/lua
 link zshrc .zshrc-generic
 link bashrc .bashrc-generic
 link dircolors .dircolors
@@ -64,6 +65,7 @@ copy gitconfig .gitconfig
 copy zshrc .zshrc
 copy bashrc .bashrc
 copy vimrc .vimrc
+copy nvim.lua .config/nvim/init.lua
 
 if ! [ -e $HOME/.urxvt/ext/font-size ]; then
   echo "Getting urxvt configuration"
