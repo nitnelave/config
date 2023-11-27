@@ -21,7 +21,6 @@ vim.opt.showcmd = true                           -- Show command being executed
 vim.opt.showtabline = 2                          -- always show tabs
 vim.opt.autoindent = true                        -- make indenting smarter again
 vim.opt.cinoptions="(0,W4,u0,U0,t0,g1,h1,N-s,>s" -- see :help cinoptions-values
-vim.opt.termguicolors = true                     -- set term gui colors (most terminals support this)
 vim.opt.timeoutlen = 300                         -- time to wait for a mapped sequence to complete (in milliseconds)
 vim.opt.undofile = true                          -- enable persistent undo
 vim.opt.undolevels = 1000                        -- number of undos to save
