@@ -60,14 +60,6 @@ vim.cmd([[cabbrev ex <c-r>=(getcmdtype()==':' && getcmdpos()==1 ? 'NvimTreeFindF
 vim.api.nvim_set_keymap("", ";", ":", { noremap = true })
 vim.api.nvim_set_keymap("n", "<Space>", "i<Space><Esc>", { noremap = true })
 
-vim.api.nvim_create_user_command("Reload",
-  function()
-    require("plenary").reloadconfig()
-  end,
-  {}
-)
-vim.cmd([[cab reload Reload]])
-
 -- tab settings
 vim.api.nvim_exec([[
 function! MoveToPrevTab()
