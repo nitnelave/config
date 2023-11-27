@@ -71,11 +71,11 @@ vim.cmd([[cab reload Reload]])
 -- tab settings
 vim.api.nvim_exec([[
 function! MoveToPrevTab()
-  -- there is only one window
+  " there is only one window
   if tabpagenr('$') == 1 && winnr('$') == 1
     return
   endif
-  -- preparing new window
+  " preparing new window
   let l:tab_nr = tabpagenr('$')
   let l:cur_buf = bufnr('%')
   if tabpagenr() != 1
@@ -88,16 +88,16 @@ function! MoveToPrevTab()
     close!
     exe "0tabnew"
   endif
-  -- opening current buffer in new window
+  " opening current buffer in new window
   exe "b".l:cur_buf
 endfunc
 
 function! MoveToNextTab()
-  -- there is only one window
+  " there is only one window
   if tabpagenr('$') == 1 && winnr('$') == 1
     return
   endif
-  -- preparing new window
+  " preparing new window
   let l:tab_nr = tabpagenr('$')
   let l:cur_buf = bufnr('%')
   if tabpagenr() < tab_nr
@@ -110,7 +110,7 @@ function! MoveToNextTab()
     close!
     tabnew
   endif
-  -- opening current buffer in new window
+  " opening current buffer in new window
   exe "b".l:cur_buf
 endfunc
 ]], {})
