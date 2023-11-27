@@ -13,7 +13,7 @@ vim.api.nvim_clear_autocmds({})
 -- Needs to be set early.
 vim.g.mapleader = ","
 
-dvorak_mappings = true
+dvorak_mappings = dvorak_mappings or false
 
 require "user.options"
 require "user.largefile"
