@@ -86,6 +86,9 @@ return {
   {
     "lifepillar/vim-cheat40",
     cmd = "Cheat40",
+    keys = {
+      { "<leader>?", nil, desc = "CheatSheet" },
+    },
     init = function()
       vim.g.cheat40_use_default = 0
     end,
