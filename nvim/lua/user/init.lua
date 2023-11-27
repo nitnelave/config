@@ -29,7 +29,6 @@ if not vim.loop.fs_stat(lazypath) then
   })
 end
 vim.opt.rtp:prepend(lazypath)
-package.path = package.path .. ";" .. lazypath .. "/lua/?/init.lua"
 require("lazy").setup({ import = "user.plugins" })
 require "user.autocmd"
 require "user.mappings"
