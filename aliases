@@ -57,12 +57,12 @@ dex ()
 }
 
 suv () {
-  sudo -E /home/nitnelave/.bin/nvim-linux64/bin/nvim $*
+  sudo -E /home/nitnelave/.bin/nvim/bin/nvim $*
 }
 
 dc () (
   cd /home/nitnelave/docker
-  docker-compose $*
+  docker compose $*
 )
 
 and ()
