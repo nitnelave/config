@@ -1,7 +1,10 @@
+local should_run_on_buffer = require("user.largefile").enable_except_large_or_diff
+
 return {
   {
     "nvim-treesitter/nvim-treesitter",
     build = ":TSUpdate",
+    cond = should_run_on_buffer,
     config = function ()
       require'nvim-treesitter.configs'.setup {
         ensure_installed = { "rust", "cpp", "c" },
@@ -45,6 +48,7 @@ return {
   },
   {
     "nvim-treesitter/nvim-treesitter-context",
+    cond = should_run_on_buffer,
     init = function()
       vim.cmd[[hi TreesitterContext ctermbg=236 ctermfg=white]]
     end,

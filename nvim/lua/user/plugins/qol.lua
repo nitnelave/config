@@ -27,6 +27,7 @@ return {
   -- Spellcheck with CamlCase support.
   {
     "kamykn/spelunker.vim",
+    cond = require("user.largefile").enable_except_large_or_diff,
     config = function()
       vim.cmd[[set nospell]]
       -- Only check words currently displayed
