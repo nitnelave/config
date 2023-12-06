@@ -28,3 +28,12 @@ vim.api.nvim_create_autocmd("BufNewFile", {
   group = "SheBang",
   command = [[normal! i#! /usr/bin/env python\n\n]],
 })
+
+vim.api.nvim_create_augroup("YankHighlight", {})
+vim.api.nvim_create_autocmd("TextYankPost", {
+  pattern = "*",
+  group = "YankHighlight",
+  callback = function()
+    require("vim.highlight").on_yank { higroug = "IncSearch", timeout = 350, visual = false }
+  end
+})
