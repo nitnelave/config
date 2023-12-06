@@ -359,6 +359,7 @@ return {
           { key = 'g[', func = function () vim.diagnostic.goto_prev({ border = 'rounded', max_width = 80}) end, desc = 'prev diagnostic' },
           { key = 'gE', func = vim.diagnostic.setloclist, desc = 'diagnostics set loclist' },
           { key = 'ge', func = require('navigator.diagnostics').show_diagnostics, desc = 'show_diagnostics' },
+          { key = '<c-f>', func = function() vim.lsp.buf.format { async = true } end, desc = 'format' },
         },
         lsp = lsp_config,
       }
