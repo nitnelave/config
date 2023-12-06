@@ -34,13 +34,16 @@ return {
   {
     "p00f/clangd_extensions.nvim",
     ft = {"cpp", "c"},
-    opts = {
-      inlay_hints = {
-        only_current_line = false,
-        show_parameter_hints = false,
-        other_hints_prefix = "-> ",
-      }
-    }
+    config = function()
+      require("clangd_extensions").setup({
+        inlay_hints = {
+          only_current_line = false,
+          show_parameter_hints = false,
+          other_hints_prefix = "-> ",
+        }
+      })
+      vim.api.nvim_set_keymap("n", "<leader>rh", ":ClangdSwitchSourceHeader<CR>", { noremap = true, silent = true })
+    end,
   },
 
   -- Rust inlay hints and more
