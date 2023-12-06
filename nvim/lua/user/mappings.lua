@@ -105,14 +105,11 @@ function! MoveToNextTab()
   exe "b".l:cur_buf
 endfunc
 ]], {})
-if dvorak_mappings then
-  vim.api.nvim_set_keymap("n", "<C-H>", ":tabprevious<CR>", { noremap = true, silent = true })
-  vim.api.nvim_set_keymap("n", "<C-S>", ":tabnext<CR>", { noremap = true, silent = true })
-  vim.api.nvim_set_keymap("n", "<C-T>", ":call MoveToPrevTab()<CR>", { noremap = true, silent = true })
-  vim.api.nvim_set_keymap("n", "<C-N>", ":call MoveToNextTab()<CR>", { noremap = true, silent = true })
-else
-  vim.api.nvim_set_keymap("n", "<C-H>", ":tabprevious<CR>", { noremap = true, silent = true })
-  vim.api.nvim_set_keymap("n", "<C-L>", ":tabnext<CR>", { noremap = true, silent = true })
-  vim.api.nvim_set_keymap("n", "<C-J>", ":call MoveToPrevTab()<CR>", { noremap = true, silent = true })
-  vim.api.nvim_set_keymap("n", "<C-K>", ":call MoveToNextTab()<CR>", { noremap = true, silent = true })
+vim.api.nvim_set_keymap("n", "<C-H>", ":tabprevious<CR>", { noremap = true, silent = true })
+vim.api.nvim_set_keymap("n", dvorak_mappings and "<C-S>" or "<C-L>", ":tabnext<CR>", { noremap = true, silent = true })
+vim.api.nvim_set_keymap("n", dvorak_mappings and "<C-T>" or "<C-J>", ":call MoveToPrevTab()<CR>", { noremap = true, silent = true })
+vim.api.nvim_set_keymap("n", dvorak_mappings and "<C-N>" or "<C-K>", ":call MoveToNextTab()<CR>", { noremap = true, silent = true })
+
+if is_ht then
+  vim.api.nvim_set_keymap("n", "<leader>rc", [[:execute 'e' expand("%:p:h")."/CMakeLists.txt"<CR>]], { noremap = true, silent = true })
 end
