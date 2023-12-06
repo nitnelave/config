@@ -1,8 +1,7 @@
-
 -- 'very magic' regexp searches and substitutions
 vim.api.nvim_set_keymap("n", "/", [[/\v]], { noremap = true })
 vim.api.nvim_set_keymap("n", "?", [[?\v]], { noremap = true })
-vim.api.nvim_set_keymap("c", "%s", [[%s\v]], { noremap = true })
+vim.api.nvim_set_keymap("c", "%s", [[%s/\v]], { noremap = true })
 -- Redo
 vim.api.nvim_set_keymap("n", "U", "<C-R>", { noremap = true })
 -- Ctrl-Backspace deletes a word.
