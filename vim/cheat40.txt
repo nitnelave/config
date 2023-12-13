@@ -38,7 +38,7 @@ FZF:
 <c-b> -> find tab
 <c-x> -> re-open last picker
 <c-m> -> git modified files since master
-in a picker:  <c-v> -> open in new vertical split
+in a picker:  <c-v> -> open in new vsplit
 
 REFACTOR:
 
@@ -56,7 +56,9 @@ F + 2 letters: jump backward on the screen
 
 Zg -> mark (sub-)word as spelled correctly
 
-, is a movement that means "the argument of the function"
-ci, -> delete the argument, switch to insert mode
-da, -> delete the argument and the comma
->, -> switch the argument with the next one
+, is a movement for "function argument"
+ci, -> delete the arg, switch to insert
+da, -> delete the arg and the comma
+>, -> swap the arg with the next one
+
+,uc -> Update CMakeLists.txt deps

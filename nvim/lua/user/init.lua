@@ -32,3 +32,6 @@ vim.opt.rtp:prepend(lazypath)
 require("lazy").setup({ import = "user.plugins" })
 require "user.autocmd"
 require "user.mappings"
+if is_ht then
+  require "user.cmake"
+end

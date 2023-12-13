@@ -441,6 +441,16 @@ return {
     config = true,
   },
 
+  -- Snippets
+  {
+    "L3MON4D3/LuaSnip",
+    version = "v2.*",
+    -- install jsregexp (optional!).
+    build = "make install_jsregexp"
+  },
+
+  { 'saadparwaiz1/cmp_luasnip' },
+
   -- Completion
   {
     "hrsh7th/nvim-cmp",
