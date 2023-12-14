@@ -25,6 +25,7 @@ echo "Linking config files..."
 
 #link vimrc .vimrc-generic
 link nvim/lua .config/nvim/lua
+link nvim/snippets .config/nvim/snippets
 link zshrc .zshrc-generic
 link bashrc .bashrc-generic
 link dircolors .dircolors

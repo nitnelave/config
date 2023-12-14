@@ -446,7 +446,10 @@ return {
     "L3MON4D3/LuaSnip",
     version = "v2.*",
     -- install jsregexp (optional!).
-    build = "make install_jsregexp"
+    build = "make install_jsregexp",
+    config = function ()
+      require("luasnip.loaders.from_snipmate").load()
+    end
   },
 
   { 'saadparwaiz1/cmp_luasnip' },
@@ -461,7 +464,14 @@ return {
       end
     end,
     config = function()
-      local cmp = require'cmp'
+      local cmp = require("cmp")
+      local luasnip = require("luasnip")
+
+      local has_words_before = function()
+        unpack = unpack or table.unpack
+        local line, col = unpack(vim.api.nvim_win_get_cursor(0))
+        return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
+      end
 
       local lspkind_comparator = function(conf)
         local lsp_types = require('cmp.types').lsp
@@ -482,9 +492,6 @@ return {
           end
           return priority2 < priority1
         end
-      end
-      local label_comparator = function(entry1, entry2)
-        return entry1.completion_item.label < entry2.completion_item.label
       end
 
       local no_text_kind = function(entry1, entry2)
@@ -508,6 +515,11 @@ return {
       end
       cmp.setup({
         -- Enable LSP snippets
+        snippet = {
+          expand = function(args)
+            luasnip.lsp_expand(args.body)
+          end
+        },
         mapping = {
           [dvorak_mappings and '<C-n>' or '<C-k>'] = cmp.mapping.select_prev_item(),
           [dvorak_mappings and '<C-t>' or '<C-j>'] = cmp.mapping.select_next_item(),
@@ -515,13 +527,19 @@ return {
           ["<Tab>"] = cmp.mapping(function(fallback)
             if cmp.visible() then
               cmp.select_next_item()
+            elseif luasnip.expand_or_locally_jumpable() then
+              luasnip.expand_or_jump()
+            elseif has_words_before() then
+              cmp.complete()
             else
-              fallback() -- The fallback function sends a already mapped key. In this case, it's probably `<Tab>`.
+              fallback()
             end
           end, { "i", "s" }),
-          ["<S-Tab>"] = cmp.mapping(function()
+          ["<S-Tab>"] = cmp.mapping(function(fallback)
             if cmp.visible() then
               cmp.select_prev_item()
+            elseif luasnip.jumpable(-1) then
+              luasnip.jump(-1)
             else
               fallback()
             end
@@ -537,7 +555,10 @@ return {
 
         -- Installed sources
         sources = {
+          { name = 'luasnip' },
           { name = 'nvim_lsp' },
+          { name = 'nvim_lsp_signature_help' },
+          { name = 'path' },
           { name = 'buffer' },
         },
         sorting = {
@@ -554,6 +575,7 @@ return {
               kind_priority = {
                 Field = 11,
                 Property = 11,
+                Variable = 11,
                 Constant = 10,
                 Enum = 10,
                 EnumMember = 10,
@@ -563,25 +585,22 @@ return {
                 Operator = 10,
                 Reference = 10,
                 Struct = 10,
-                Variable = 9,
+                Class = 10,
                 File = 8,
                 Folder = 8,
-                Class = 5,
-                Color = 5,
                 Module = 5,
-                Function = 4,
                 Keyword = 2,
                 Constructor = 1,
                 Interface = 1,
+                Color = 0,
                 Snippet = 0,
-                Text = 1,
-                TypeParameter = 1,
-                Unit = 1,
-                Value = 1,
+                Text = 0,
+                TypeParameter = 0,
+                Unit = 0,
+                Value = 0,
               },
             }),
-            label_comparator,
-            cmp.config.compare.sort_text,
+            --cmp.config.compare.sort_text,
             cmp.config.compare.length,
             cmp.config.compare.order,
           },
@@ -590,7 +609,18 @@ return {
       -- Set configuration for specific filetype.
       cmp.setup.filetype('gitcommit', {
         sources = cmp.config.sources({
-          { name = 'cmp_git' }, -- You can specify the `cmp_git` source if you were installed it.
+          { name = 'cmp_git' },
+        }, {
+          { name = 'buffer' },
+        })
+      })
+
+      cmp.setup.filetype('lua', {
+        sources = cmp.config.sources({
+          { name = 'nvim_lua' },
+          { name = 'luasnip' },
+          { name = 'nvim_lsp' },
+          { name = 'nvim_lsp_signature_help' },
         }, {
           { name = 'buffer' },
         })
@@ -619,8 +649,11 @@ return {
   { "hrsh7th/cmp-buffer" },
   { "hrsh7th/cmp-cmdline" },
   { "hrsh7th/cmp-nvim-lsp" },
+  { "hrsh7th/cmp-nvim-lua" },
+  { "hrsh7th/cmp-nvim-lsp-signature-help" },
   {
-    "hrsh7th/cmp-git",
+    "petertriho/cmp-git",
+    cond = not is_ht,
     opts = {
         -- defaults
         filetypes = { "gitcommit" },
