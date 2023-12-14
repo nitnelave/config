@@ -2,20 +2,20 @@ Press q to dismiss,
   <Tab> to lose focus
 
 LSP:
-gd -> definition
-gD -> implementation
-gr -> references
-ga -> code actions
-<c-r> -> rename variable
-ge -> show error on current line
-gE -> show all errors
-g] -> next diagnostic
-g[ -> previous diagnostic
-<c-f> -> format the file
-,fs -> list symbols in current file
-,fS -> list symbols in whole project
-K -> hover doc
-<c-k> -> signature help
+gd: definition
+gD: implementation
+gr: references
+ga: code actions
+<c-r>: rename variable
+ge: show error on current line
+gE: show all errors
+g]: next diagnostic
+g[: previous diagnostic
+<c-f>: format the file
+,fs: list symbols in current file
+,fS: list symbols in whole project
+K: hover doc
+<c-k>: signature help
 
 File explorer:
 ex / vex: open file tree
@@ -32,33 +32,33 @@ F: clear filter
 
 
 FZF:
-<c-p> -> find file
-<c-g> -> grep non-test files
-<c-G> -> grep all files
-<c-b> -> find tab
-<c-x> -> re-open last picker
-<c-m> -> git modified files since master
-in a picker:  <c-v> -> open in new vsplit
+<c-p>: find file
+<c-g>: grep non-test files
+<c-G>: grep all files
+<c-b>: find tab
+<c-x>: re-open last picker
+<c-m>: git modified files since master
+in a picker:  <c-v>: open in new vsplit
 
 REFACTOR:
 
-,rr -> refactor menu
-,re -> extract selection into function
-,rv -> extract selection into a variable
-,ri -> inline variable
-,rb -> extract block into function
+,rr: refactor menu
+,re: extract selection into function
+,rv: extract selection into a variable
+,ri: inline variable
+,rb: extract block into function
 
-,rh -> switch between header/cc
-,rc -> switch to CMakeLists.txt
+,rh: switch between header/cc
+,rc: switch to CMakeLists.txt
 
 f + 2 letters: jump forward on the screen
 F + 2 letters: jump backward on the screen
 
-Zg -> mark (sub-)word as spelled correctly
+Zg: mark (sub-)word as spelled correctly
 
 , is a movement for "function argument"
-ci, -> delete the arg, switch to insert
-da, -> delete the arg and the comma
->, -> swap the arg with the next one
+ci,: delete the arg, switch to insert
+da,: delete the arg and the comma
+>,: swap the arg with the next one
 
-,uc -> Update CMakeLists.txt deps
+,uc: Update CMakeLists.txt deps
