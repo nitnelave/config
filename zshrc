@@ -1,4 +1,9 @@
-eval `dircolors -b ~/.dircolors`
+DIRCOL=dircolors
+if ! which dircolors >/dev/null && which gdircolors > /dev/null
+then
+  DIRCOL=gdircolors
+fi
+eval `$DIRCOL -b ~/.dircolors`
 zstyle -e ':completion:*:default' list-colors 'reply=("${PREFIX:+=(#bi)($PREFIX:t)(?)*==02=01}:${(s.:.)LS_COLORS}")'
 
 # Disable software flow control, i.e. Ctrl-S freezes
