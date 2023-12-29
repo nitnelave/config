@@ -42,7 +42,7 @@ link xkb .xkb
 #link idea/ideavimrc .ideavimrc
 #link Xdefaults .Xdefaults
 link lesskey .lesskey
-link ssh_config .ssh/config
+link ssh_config .ssh/config-generic
 link starship.toml .config/starship.toml
 
 link vim/cheat40.txt .vim/cheat40.txt
@@ -67,6 +67,7 @@ copy zshrc .zshrc
 copy bashrc .bashrc
 copy vimrc .vimrc
 copy nvim.lua .config/nvim/init.lua
+copy sshconfig .ssh/config
 
 if ! [ -e $HOME/.urxvt/ext/font-size ]; then
   echo "Getting urxvt configuration"
@@ -128,6 +129,6 @@ which rg >/dev/null || cargo install ripgrep
 
 which direnv >/dev/null || sudo apt install direnv
 
-curl -sS https://starship.rs/install.sh | sh -s -- --bin-dir $HOME/.bin
+curl -sS https://starship.rs/install.sh | sh -s -- --bin-dir $HOME/.bin || true
 
 echo "Configuration successful!"
