@@ -58,6 +58,22 @@ return {
       })
     end
   },
+  { 
+    "rhysd/vim-grammarous",
+    init = function()
+      vim.g["grammarous#jar_url"] = 'https://www.languagetool.org/download/LanguageTool-5.9.zip'
+      vim.g["grammarous#show_first_error"] = 1
+      vim.g["grammarous#use_vim_spelllang"] = 1
+      vim.g["grammarous#disabled_rules"] = {
+        ['*'] = {
+          'COMMA_PARENTHESIS_WHITESPACE', 
+          'FRENCH_WHITESPACE_STRICT', 
+          'FRENCH_WHITESPACE', 
+          'ESPACE_UNITES',
+        },
+      }
+    end,
+  },
   -- Unix commands on the current file, :Move and :Mkdir
   { "tpope/vim-eunuch", },
   -- Bulk rename files

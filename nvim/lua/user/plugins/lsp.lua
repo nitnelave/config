@@ -77,7 +77,127 @@ return {
   },
 
   -- Rust inlay hints and more
-  { "simrat39/rust-tools.nvim", ft = "rust", cond = not is_ht, },
+  { 
+    "simrat39/rust-tools.nvim", 
+    ft = "rust", 
+    cond = not is_ht, 
+    opts = {
+      tools = { -- rust-tools options
+        autoSetHints = true,
+        -- hover_with_actions = true,
+        -- how to execute terminal commands
+        -- options right now: termopen / quickfix
+        -- executor = require('rust-tools/executors').termopen,
+        -- automatically call RustReloadWorkspace when writing to a Cargo.toml file.
+        reload_workspace_from_cargo_toml = true,
+        inlay_hints = {
+          -- automatically set inlay hints (type hints)
+          -- default: true
+          -- False for the lsp-inlayhints plugin
+          auto = false,
+          -- Only show inlay hints for the current line
+          only_current_line = false,
+          -- whether to show parameter hints with the inlay hints or not
+          -- default: true
+          show_parameter_hints = true,
+          -- prefix for parameter hints
+          -- default: "<-"
+          parameter_hints_prefix = '<- ',
+          -- prefix for all the other hints (type, chaining)
+          -- default: "=>"
+          other_hints_prefix = '=> ',
+          -- The color of the hints
+          highlight = 'Comment',
+        },
+
+        -- options same as lsp hover / vim.lsp.util.open_floating_preview()
+        hover_actions = {
+          -- the border that is used for the hover window
+          -- see vim.api.nvim_open_win()
+          border = {
+            { '╭', 'FloatBorder' },
+            { '─', 'FloatBorder' },
+            { '╮', 'FloatBorder' },
+            { '│', 'FloatBorder' },
+            { '╯', 'FloatBorder' },
+            { '─', 'FloatBorder' },
+            { '╰', 'FloatBorder' },
+            { '│', 'FloatBorder' },
+          },
+
+          -- whether the hover action window gets automatically focused
+          -- default: false
+          auto_focus = false,
+        },
+      },
+      server = {
+        capabilities = capabilities,
+        on_attach = function(client, bufnr)
+          require('navigator.lspclient.mapping').setup({ client = client, bufnr = bufnr })
+          require("navigator.dochighlight").documentHighlight(bufnr)
+          require('navigator.codeAction').code_action_prompt(bufnr)
+          require("lsp-inlayhints").on_attach(client, bufnr)
+          -- Hover actions
+          vim.keymap.set("n", "K", rt.hover_actions.hover_actions, { buffer = bufnr })
+          -- Code action groups
+          vim.keymap.set("n", "ga", rt.code_action_group.code_action_group, { buffer = bufnr })
+        end,
+        root_dir = function(fname)
+          return util.root_pattern("Cargo.toml", "rust-project.json", ".git")(fname)
+                     or util.path.dirname(fname)
+        end,
+        settings = {
+          ["rust-analyzer"] = {
+            assist = {importMergeBehavior = "last", importPrefix = "by_self"},
+            cargo = {loadOutDirsFromCheck = true},
+            procMacro = {enable = true},
+            imports = {
+              prefix = "crate",
+              granularity = {
+                group = "crate",
+                enforce = true,
+              },
+            },
+            checkOnSave = {
+              command = "clippy",
+              extraArgs = {"--target-dir", "target/rust-analyzer"},
+            },
+            inlayHints = {
+              lifetimeElisionHints = {
+                enable = true,
+                useParameterNames = true,
+              },
+            },
+          },
+        },
+        standalone = true,
+        flags = {allow_incremental_sync = true, debounce_text_changes = 500},
+      }
+    },
+  },
+  { "rust-lang/rust.vim", ft = "rust", cond = not is_ht, },
+  -- Crates & dependency management
+  { 
+    "Saecki/crates.nvim", 
+    ft = "rust", 
+    cond = not is_ht, 
+    opts = {
+      null_ls = {
+        enabled = true,
+        name = "crates.vim",
+      },
+    },
+  },
+  -- Inlay hints compatibility
+  { 
+    "lvimuser/lsp-inlayhints.nvim", 
+    ft = "rust", 
+    cond = not is_ht, 
+    init = function() 
+      vim.cmd [[ hi LspInlayHint cterm=italic ctermfg=241 gui=italic guifg=#5c6370 ]]
+    end,
+    config = true,
+  },
 
   -- Local checks
   {
@@ -94,6 +214,8 @@ return {
       null_ls.setup({
         sources = {
           null_ls.builtins.code_actions.refactoring,
+          null_ls.builtins.code_actions.proselint,
+          null_ls.builtins.diagnostics.proselint,
           -- pip3 install --user cmakelang
           null_ls.builtins.diagnostics.cmake_lint.with({
             extra_args = {
@@ -356,7 +478,7 @@ return {
         rust_capabilities.document_formatting = true
         lsp_config.rust_analyzer = {
           root_dir = function(fname)
-            return util.root_pattern("Cargo.toml", "rust-project.json", ".git")(fname)
+            return require('lspconfig.util').root_pattern("Cargo.toml", "rust-project.json", ".git")(fname)
                        or util.path.dirname(fname)
           end,
           filetypes = {"rust"},
@@ -588,6 +710,7 @@ return {
           { name = 'luasnip' },
           { name = 'nvim_lsp' },
           { name = 'nvim_lsp_signature_help' },
+          { name = 'crates' },
           { name = 'path' },
           { name = 'buffer' },
         },
