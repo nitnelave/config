@@ -312,6 +312,7 @@ return {
   {
     "ray-x/navigator.lua",
     config = function()
+      local util = require 'lspconfig.util'
       local lsp_config = {
         format_on_save = true,
         disable_lsp = {'bashls', 'ccls', 'clangd', 'closure_lsp', 'cssls', 'dartls',
