@@ -148,7 +148,14 @@ return {
       end
 
       function git_modified_picker(conf)
-        local git_merge_base_cmd = { "git", "merge-base", "HEAD", "origin/master" }
+        local master_branch
+        if is_ht then
+          master_branch = "master"
+        else
+          master_branch = utils.get_os_command_output({"git", "master"})[1]
+        end
+        vim.print(master_branch)
+        local git_merge_base_cmd = { "git", "merge-base", "HEAD", "origin/" .. master_branch }
         local merge_base = utils.get_os_command_output(git_merge_base_cmd)[1]
         local git_cmd = { "git", "diff", "--name-only", merge_base }
 
