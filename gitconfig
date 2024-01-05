@@ -97,6 +97,10 @@
 [pull]
         rebase = true
 
+[advice]
+        detachedHead = false
+        skippedCherryPicks = false
+
 [delta "tangara-chilensis-villsau"]
     # Mix of tangara-chilensis and villsau by clnoll and torarnv
     dark = true
