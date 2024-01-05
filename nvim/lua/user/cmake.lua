@@ -131,6 +131,11 @@ function update_dependencies()
         local dependency = get_dependencies(root_dir, string.gsub(path, "%.h$", ".cpp"))
         if type(dependency) == "table" then
           dependencies[dependency.target_name] = true
+        else
+          local dependency = get_dependencies(root_dir, string.gsub(path, "%.h$", ".cc"))
+          if type(dependency) == "table" then
+            dependencies[dependency.target_name] = true
+          end
         end
       end
       if not (all_target_files[root_dir .. "/source/cpp/app/" .. header_path] or all_target_files[root_dir .. "/source/cpp/lib/" .. header_path]) then
