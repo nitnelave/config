@@ -126,15 +126,17 @@ function update_dependencies()
   local dependencies = {} -- targets as keys
   local get_dependency_from_line = function(line)
     local header_path, count = string.gsub(line, '^%#include "(.*)"$', "%1")
-    if count == 1 then 
+    if count == 1 then
       local resolve_dependency = function(path)
-        local dependency = get_dependencies(root_dir, string.gsub(path, "%.h$", ".cpp"))
-        if type(dependency) == "table" then
-          dependencies[dependency.target_name] = true
-        else
-          local dependency = get_dependencies(root_dir, string.gsub(path, "%.h$", ".cc"))
+        local ht_base_path = root_dir .. "/source/cpp/lib/ht_base"
+        if string.sub(path, 1, string.len(ht_base_path)) == ht_base_path then
+          dependencies["ht_base"] = true
+        end
+        for _, extension in ipairs({".cpp", ".cc", ".h"}) do
+          local dependency = get_dependencies(root_dir, string.gsub(path, "%.h$", extension))
           if type(dependency) == "table" then
             dependencies[dependency.target_name] = true
+            return
           end
         end
       end
