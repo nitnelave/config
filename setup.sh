@@ -122,6 +122,7 @@ which rustup >/dev/null || curl --proto '=https' --tlsv1.2 -sSf https://sh.rustu
 if ! which nvim >/dev/null; then
   wget https://github.com/neovim/neovim/releases/download/v0.7.0/nvim-linux64.tar.gz -O /tmp/nvim.tar.gz
   tar xzvf /tmp/nvim.tar.gz -C ~/.bin
+  rm /tmp/nvim.tar.gz
 fi
 
 which delta >/dev/null || cargo install git-delta
@@ -129,6 +130,12 @@ which rg >/dev/null || cargo install ripgrep
 
 which direnv >/dev/null || sudo apt install direnv
 
-curl -sS https://starship.rs/install.sh | sh -s -- --bin-dir $HOME/.bin || true
+if ! which glow >/dev/null; then
+  wget https://github.com/charmbracelet/glow/releases/download/v1.5.1/glow_Linux_x86_64.tar.gz -O /tmp/glow.tar.gz
+  tar xzvf /tmp/glow.tar.gz -C ~/.bin glow
+  rm /tmp/glow.tar.gz
+fi
+
+which starship >/dev/null || curl -sS https://starship.rs/install.sh | sh -s -- --bin-dir $HOME/.bin
 
 echo "Configuration successful!"
