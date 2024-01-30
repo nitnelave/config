@@ -17,6 +17,10 @@ g[: previous diagnostic
 K: hover doc
 <c-k>: signature help
 
+,rh: switch between header/cc
+,rc: switch to CMakeLists.txt
+,uc: Update CMakeLists.txt deps
+
 File explorer:
 ex / vex: open file tree
 <c-v>: open file in new vsplit
@@ -41,24 +45,23 @@ FZF:
 in a picker:  <c-v>: open in new vsplit
 
 REFACTOR:
-
 ,rr: refactor menu
 ,re: extract selection into function
 ,rv: extract selection into a variable
 ,ri: inline variable
 ,rb: extract block into function
 
-,rh: switch between header/cc
-,rc: switch to CMakeLists.txt
-
+NAVIGATION:
 f + 2 letters: jump forward on the screen
 F + 2 letters: jump backward on the screen
-
-Zg: mark (sub-)word as spelled correctly
 
 , is a movement for "function argument"
 ci,: delete the arg, switch to insert
 da,: delete the arg and the comma
 >,: swap the arg with the next one
 
-,uc: Update CMakeLists.txt deps
+SPELLING:
+Zg: mark (sub-)word as spelled correctly
+
+DOCS:
+,dd: Open the dev docs

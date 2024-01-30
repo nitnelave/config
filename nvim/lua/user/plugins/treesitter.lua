@@ -7,7 +7,7 @@ return {
     cond = should_run_on_buffer,
     config = function ()
       require'nvim-treesitter.configs'.setup {
-        ensure_installed = { "rust", "cpp", "c", "vim", "lua", "bash" },
+        ensure_installed = { "rust", "cpp", "c", "vim", "lua", "bash", "html", "vimdoc", },
         ignore_install = { "javascript" }, -- List of parsers to ignore installing
         highlight = {
           enable = true,              -- false will disable the whole extension

@@ -1,5 +1,10 @@
 -- Quality of life plugins
 
+local has_glow = false
+if vim.fn.executable('glow') == 1 then
+  has_glow = true
+end
+
 return {
   -- Better delimiters
   { "tpope/vim-surround", },
@@ -93,5 +98,32 @@ return {
     init = function()
       vim.g.cheat40_use_default = 0
     end,
+  },
+  {
+    "luckasRanarison/nvim-devdocs",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "nvim-telescope/telescope.nvim",
+      "nvim-treesitter/nvim-treesitter",
+    },
+    cmd = { "DevdocsOpenFloat", "DevdocsFetch", "DevdocsInstall" },
+    keys = {
+      { "<leader>dd", "<cmd>DevdocsOpenFloat<cr>", desc = "Open DevDocs" },
+    },
+    opts = {
+      float_win = { -- passed to nvim_open_win(), see :h api-floatwin
+        relative = "editor",
+        height = 55,
+        width = 160,
+        border = "rounded",
+      },
+      previewer_cmd = has_glow and "glow" or nil,
+      cmd_args = { "-s", "dark", "-w", "155" },
+      after_open = function(bufnr)
+        vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Esc>', ':close<CR>', {})
+        vim.api.nvim_buf_set_keymap(bufnr, 'n', 'q', ':close<CR>', {})
+        vim.api.nvim_buf_set_keymap(bufnr, 'n', '<CR>', ':DevdocsOpenFloat<CR>', {})
+      end
+    }
   },
 }
