@@ -119,6 +119,8 @@ return {
       },
       previewer_cmd = has_glow and "glow" or nil,
       cmd_args = { "-s", "dark", "-w", "155" },
+      picker_cmd = has_glow,
+      picker_cmd_args = { "-s", "dark", "-w", "50" },
       after_open = function(bufnr)
         vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Esc>', ':close<CR>', {})
         vim.api.nvim_buf_set_keymap(bufnr, 'n', 'q', ':close<CR>', {})
