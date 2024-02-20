@@ -11,6 +11,8 @@ return {
         hi link NormalFloat Normal
         hi clear FloatBorder
         hi FloatBorder ctermfg=188 ctermbg=237 guifg=#dcdfe4 guibg=#313640
+        hi clear TreesitterContext
+        hi TreesitterContext ctermfg=188 ctermbg=237 guifg=#dcdfe4 guibg=#313640
         hi clear Pmenu
         hi link Pmenu Visual
         hi clear PmenuSel
