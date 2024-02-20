@@ -7,6 +7,35 @@ function get_capabilities()
   return capabilities
 end
 
+function find_related_test_file(path)
+  local telescope_builtin = require("telescope.builtin")
+  local Path = require("plenary.path")
+  local current_file = vim.api.nvim_buf_get_name(0)
+  local filename = string.gsub(string.gsub(current_file, "^.*/", ""), ".h$", ".cpp")
+  local dir = Path:new(current_file):parent()
+  local parent_path, is_test = string.gsub(dir:normalize(), "/tests?$", "", 1)
+  if is_test == 0 then
+    for _, test_dir_name in ipairs({ "test", "tests" }) do
+      local test_dir = dir / test_dir_name
+      if test_dir:exists() then
+        local test_file = test_dir / filename
+        if test_file:exists() then
+          return vim.cmd.edit(test_file:normalize())
+        end
+        return telescope_builtin.git_files({ default_text = test_dir:normalize()})
+      end
+    end
+    return telescope_builtin.git_files({ default_text = dir:normalize() .. "/test"})
+  else
+    local parent_dir = dir:parent()
+    local impl_file = parent_dir / filename
+    if impl_file:exists() then
+      return vim.cmd.edit(impl_file:normalize())
+    end
+    return telescope_builtin.git_files({ default_text = parent_dir:normalize() })
+  end
+end
+
 return {
   {
     "mfussenegger/nvim-jdtls",
@@ -43,6 +72,7 @@ return {
         }
       })
       vim.api.nvim_set_keymap("n", "<leader>rh", ":ClangdSwitchSourceHeader<CR>", { noremap = true, silent = true })
+      vim.keymap.set("n", "<leader>rt", find_related_test_file, { noremap = true, silent = true })
     end,
   },
 
@@ -312,7 +342,6 @@ return {
   {
     "ray-x/navigator.lua",
     config = function()
-      local util = require 'lspconfig.util'
       local lsp_config = {
         format_on_save = true,
         disable_lsp = {'bashls', 'ccls', 'clangd', 'closure_lsp', 'cssls', 'dartls',

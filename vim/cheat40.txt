@@ -18,6 +18,7 @@ K: hover doc
 <c-k>: signature help
 
 ,rh: switch between header/cc
+,rt: switch between impl/test
 ,rc: switch to CMakeLists.txt
 ,uc: Update CMakeLists.txt deps
 
