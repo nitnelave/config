@@ -8,6 +8,7 @@
         dms = dm --stat
         co = checkout
         com = "!git checkout origin/$(git master)"
+        ch = cherry-pick
         br = branch
         df = diff
         dc = diff --cached
@@ -82,15 +83,26 @@
         summary = true
         tool = nvim -d
         noprefix = true
-        conflictStyle = diff3
+        conflictStyle = zdiff3
 [diff]
         colorMoved = default
+        algorithm = histogram
+        context = 10
+[branch]
+        sort = -committerdate
+[tag]
+        sort = taggerdate
+[fetch]
+        prune = true
+        prunetags = true
+[rebase]
+        updateRefs = true
 [color]
         ui = true
 [log]
         decorate = full
 [help]
-        autocorrect = 1
+        autocorrect = 10
 [push]
         default = current
         autoSetupRemote = true
@@ -100,6 +112,16 @@
 [advice]
         detachedHead = false
         skippedCherryPicks = false
+
+[rerere]
+        enabled = true
+
+[url "git@github.com:nitnelave"]
+        insteadOf = "gh:nitnelave"
+[url "git@github.com:lldap"]
+        insteadOf = "gh:lldap"
+[url "https://github.com/"]
+        insteadOf = "gh:"
 
 [delta "tangara-chilensis-villsau"]
     # Mix of tangara-chilensis and villsau by clnoll and torarnv
