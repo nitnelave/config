@@ -28,8 +28,8 @@ setopt appendhistory extended_glob HIST_IGNORE_ALL_DUPS HIST_SAVE_NO_DUPS sh_wor
 autoload -Uz compinit
 compinit -u
 export HISTFILE=~/.histfile
-HISTSIZE=10000
-SAVEHIST=10000
+HISTSIZE=1000000
+SAVEHIST=1000000
 bindkey -v
 autoload -U edit-command-line
 bindkey "^q" push-line-or-edit
