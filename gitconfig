@@ -94,7 +94,6 @@
         sort = taggerdate
 [fetch]
         prune = true
-        prunetags = true
 [rebase]
         updateRefs = true
 [color]
