@@ -8,11 +8,17 @@ scan_timeout = 100
 command_timeout = 1000
 
 format = """
-[┌](blue)\
 $time\
 [─](blue)\
+$hostname\
+[─](blue)\
 $directory\
-$fill\
+$jobs\
+$status\
+$container\
+$character"""
+
+right_format = """
 $git_branch\
 $git_state\
 $git_status\
@@ -21,15 +27,8 @@ $docker_context\
 $package\
 $custom\
 $sudo\
-$cmd_duration\
-[┐](blue)\
-$line_break\
-[└](blue)\
-$hostname\
-$jobs\
-$status\
-$container\
-$character\u0007"""
+$cmd_duration
+"""
 
 # Replace the '❯' symbol in the prompt with '➜'
 [character] # The name of the module we are configuring is 'character'
