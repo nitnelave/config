@@ -118,5 +118,5 @@ if is_ht then
     local stripped, count = output:gsub("\n$", "")
     print("count " .. count)
     print(stripped)
-  end, { noremap = true, buffer = true })
+  end, { noremap = true })
 end
