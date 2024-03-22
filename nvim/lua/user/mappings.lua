@@ -112,4 +112,11 @@ vim.api.nvim_set_keymap("n", dvorak_mappings and "<C-N>" or "<C-K>", ":call Move
 
 if is_ht then
   vim.api.nvim_set_keymap("n", "<leader>rc", [[:execute 'e' expand("%:p:h")."/CMakeLists.txt"<CR>]], { noremap = true, silent = true })
+  vim.keymap.set("n", "<leader>uc", function()
+    local current_file = vim.api.nvim_buf_get_name(0)
+    local output = vim.fn.system { "python3", "development/find_cmake_dep.py", "--update", current_file }
+    local stripped, count = output:gsub("\n$", "")
+    print("count " .. count)
+    print(stripped)
+  end, { noremap = true, buffer = true })
 end
