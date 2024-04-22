@@ -404,11 +404,11 @@ return {
          clang_options = {'/usr/local/ht-clang-17-0-1/bin/clangd', '-j=40',
          '--compile-commands-dir=./build/ub-18.04-clang-17.0.1-generic.debug',
          "--background-index", "--clang-tidy", "--header-insertion=iwyu",
-         "--all-scopes-completion", "--completion-style=bundled"}
+         "--all-scopes-completion", "--completion-style=bundled", "--malloc-trim"}
        else
          clang_options = {"clangd", "--background-index", "--clang-tidy",
          "--header-insertion=iwyu", "--all-scopes-completion",
-         "--completion-style=bundled"}
+         "--completion-style=bundled", "--malloc-trim"}
        end
 
 
