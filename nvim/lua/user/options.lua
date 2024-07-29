@@ -42,7 +42,7 @@ vim.opt.breakindent = true                       -- (This and next 2): when wrap
 vim.opt.breakindentopt = "sbr"
 vim.opt.showbreak = ".."
 vim.opt.scrolloff = 8                            -- minimal number of screen lines to keep above and below the cursor
-vim.opt.shortmess = "ilmnrxc"                    -- flags to shorten vim messages, see :help 'shortmess'
+vim.opt.shortmess = "aOtTc"                      -- flags to shorten vim messages, see :help 'shortmess'
 vim.opt.runtimepath:remove("/usr/share/vim/vimfiles")  -- separate vim plugins from neovim in case vim still in use
 vim.opt.laststatus = 2                           -- Always show status line
 vim.opt.statusline = [[%f %l|%c %m %#warningmsg#%*%=%p%% (%Y%R)]] -- Status line format.
