@@ -91,3 +91,12 @@ f() (
   echo "$program $opts $arguments"
   eval $program $opts $arguments
 )
+
+is_weekday() {
+  DATE_INPUT=""
+  if [ $# -gt 0 ]
+  then
+      DATE_INPUT="-d $1"
+  fi
+  [ $(date $DATE_INPUT +%u) -lt 6 ]
+}
