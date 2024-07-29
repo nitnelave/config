@@ -127,6 +127,7 @@ fi
 
 which delta >/dev/null || cargo install git-delta
 which rg >/dev/null || cargo install ripgrep
+which eza >/dev/null || cargo install eza
 
 which direnv >/dev/null || sudo apt install direnv
 

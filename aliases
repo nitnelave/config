@@ -9,8 +9,10 @@ alias gco="g checkout"
 alias gs="g status"
 alias gst="g status"
 
-alias ll="ls -l"
-alias la="ls -a -l"
+alias ls="eza --icons=auto"
+alias ll="eza -lh --icons=auto --smart-group --git"
+alias la="eza -alh --icons=auto --smart-group --git"
+alias tree="eza -lhT --icons=auto --git"
 
 
 alias screen="$SCRIPTS/screen.sh"
