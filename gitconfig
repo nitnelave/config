@@ -13,6 +13,7 @@
         df = diff
         dc = diff --cached
         ds = diff --stat
+        aci = "!git add . && git commit \"$@\""
         ci = commit
         ca = commit --amend
         can = commit --amend --no-edit
@@ -83,13 +84,17 @@
         from = Valentin Tolmer <nitnelave1@gmail.com>
 [merge]
         summary = true
-        tool = nvim -d
+        tool = nvimdiff
         noprefix = true
         conflictStyle = zdiff3
 [diff]
         colorMoved = default
         algorithm = histogram
         context = 10
+[difftool]
+        prompt = false
+[difftool "nvimdiff"]
+        path = /home/vtolmer/.bin/nvim-linux64/bin/nvim
 [branch]
         sort = -committerdate
 [tag]
