@@ -290,6 +290,7 @@ return {
       local forbidden_patterns_list = {
         {pattern = "\bBOOST_TEST\b", message = "Use BOOST_CHECK"},
         {pattern = "\\(include <\\)\\@<!\\(ht_base/\\)\\@<!\\(std::\\)\\@<!\\(\\.\\)\\@<!\\(_\\)\\@<!\\(->\\)\\@<!string_view", message = "Use std::string_view"},
+        {pattern = "include .gmock/gmock.h.", message = "Include \"ht_test_helpers/gmock.h\""},
       };
 
       for _, pattern in pairs(forbidden_patterns_list) do
