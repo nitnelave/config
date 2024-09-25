@@ -23,8 +23,8 @@ if dvorak_mappings then
   vim.api.nvim_set_keymap("", "N", "8<Up>", { noremap = true })
 
   -- Switch between splits.
-  vim.api.nvim_set_keymap("", "S", "<C-w>w", { noremap = true })
-  vim.api.nvim_set_keymap("", "H", "<C-w>r", { noremap = true })
+  vim.api.nvim_set_keymap("n", "S", "<C-w>w", { noremap = true })
+  vim.api.nvim_set_keymap("n", "H", "<C-w>r", { noremap = true })
 else
   vim.api.nvim_set_keymap("", "j", "gj", { noremap = true })
   vim.api.nvim_set_keymap("", "k", "gk", { noremap = true })
@@ -33,8 +33,8 @@ else
   vim.api.nvim_set_keymap("", "K", "8<Up>", { noremap = true })
 
   -- Switch between splits.
-  vim.api.nvim_set_keymap("", "L", "<C-w>w", { noremap = true })
-  vim.api.nvim_set_keymap("", "H", "<C-w>r", { noremap = true })
+  vim.api.nvim_set_keymap("n", "L", "<C-w>w", { noremap = true })
+  vim.api.nvim_set_keymap("n", "H", "<C-w>r", { noremap = true })
 end
 
 vim.api.nvim_set_keymap("", "-", "$", { noremap = true })
