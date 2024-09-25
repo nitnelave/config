@@ -944,20 +944,6 @@ vim.keymap.set({ "n", "v" }, "<c-g>", function()
     "--with-filename",
     "--line-number",
     "--column",
-    "--smart-case",
-    "--glob",
-    "!test",
-    "--glob",
-    "!tests"} })
-end)
-vim.keymap.set({ "n", "v" }, "<c-a-g>", function()
-  telescope.extensions.live_grep_args.live_grep_args({ vimgrep_arguments = {
-    "rg",
-    "--color=never",
-    "--no-heading",
-    "--with-filename",
-    "--line-number",
-    "--column",
     "--smart-case"} })
 end)
 vim.keymap.set({ "n", "v" }, "<c-x>", function()
