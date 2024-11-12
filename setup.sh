@@ -32,6 +32,7 @@ link dircolors .dircolors
 link aliases .aliases
 link gitconfig .gitconfig-generic
 link gitignore-generic .gitignore
+link gitattributes .gitattributes
 
 mkdir -p $HOME/.i3
 link i3config .i3/config
@@ -138,5 +139,12 @@ if ! which glow >/dev/null; then
 fi
 
 which starship >/dev/null || curl -sS https://starship.rs/install.sh | sh -s -- --bin-dir $HOME/.bin
+
+if ! which glow >/dev/null; then
+  (cd ~/projects && \
+    git clone https://codeberg.org/mergiraf/mergiraf.git && \
+    cd mergiraf && \
+    cargo install --path . )
+fi
 
 echo "Configuration successful!"
