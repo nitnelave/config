@@ -347,7 +347,7 @@ return {
         format_on_save = true,
         disable_lsp = {'bashls', 'ccls', 'clangd', 'closure_lsp', 'cssls', 'dartls',
         'denols', 'dockerls', 'dotls', 'graphql', 'intelephense',
-        'kotlin_language_server', 'nimls', 'pylsp', 'sqlls',
+        'kotlin_language_server', 'nimls', 'pylsp', 'ruff_lsp', 'ruff', 'sqlls',
         'sumneko_lua', 'vimls', 'vim-language-server', 'yamlls'},
         pyright = {},
       }
@@ -434,7 +434,9 @@ return {
           require('navigator.codeAction').code_action_prompt(bufnr)
           require("clangd_extensions.inlay_hints").setup_autocmd()
           require("clangd_extensions.inlay_hints").set_inlay_hints()
-          on_attach(client, bufnr)
+          if on_attach ~= nil then
+            on_attach(client, bufnr)
+          end
         end,
         capabilities = clangd_capabilities
       })
