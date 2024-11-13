@@ -33,6 +33,7 @@ link aliases .aliases
 link gitconfig .gitconfig-generic
 link gitignore-generic .gitignore
 link gitattributes .gitattributes
+link wezterm.lua .wezterm.lua
 
 mkdir -p $HOME/.i3
 link i3config .i3/config
