@@ -118,7 +118,7 @@ return {
               (parameter_list
                 (_
                   .
-                  type: (_) @type
+                  type: (_) @type (#not-match? @type "^Optional\\<const .*\\>$")
                   declarator: (identifier) @id)))) @decl
       ]]
       local const_arg_parsed_query = vim.treesitter.query.parse("cpp", const_arg_query)
