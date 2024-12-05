@@ -43,15 +43,15 @@ return {
     cond = is_ht,
     init = function()
       local utils = require "user.utils"
-      if not utils.is_dir(vim.fn.expand("~/.config/nvim/jdtls/1.31.0")) then
+      if not utils.is_dir(vim.fn.expand("~/.config/nvim/jdtls/1.42.0")) then
         function execute_silent(command)
           local handle = require("io").popen(command)
           handle:read("*a")
           handle:close()
         end
-        execute_silent("curl -fLo '/tmp/jdt-language-server-1.31.0-202312211634.tar.gz' --create-dirs 'https://download.eclipse.org/jdtls/snapshots/jdt-language-server-1.31.0-202312211634.tar.gz'")
-        execute_silent("mkdir -p ~/.config/nvim/jdtls/1.31.0")
-        execute_silent("tar xvzf /tmp/jdt-language-server-1.31.0-202312211634.tar.gz --directory ~/.config/nvim/jdtls/1.31.0")
+        execute_silent("curl -fLo '/tmp/jdt-language-server-1.42.0.tar.gz' --create-dirs 'https://www.eclipse.org/downloads/download.php?file=/jdtls/milestones/1.42.0/jdt-language-server-1.42.0-202411281516.tar.gz'")
+        execute_silent("mkdir -p ~/.config/nvim/jdtls/1.42.0")
+        execute_silent("tar xvzf /tmp/jdt-language-server-1.42.0.tar.gz --directory ~/.config/nvim/jdtls/1.42.0")
       end
     end,
   },
