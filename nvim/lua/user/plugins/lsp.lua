@@ -431,7 +431,6 @@ return {
           client.server_capabilities.document_formatting = true
           require('navigator.lspclient.mapping').setup({client=client, bufnr=bufnr}) -- setup navigator keymaps here,
           require("navigator.dochighlight").documentHighlight(bufnr)
-          require('navigator.codeAction').code_action_prompt(bufnr)
           require("clangd_extensions.inlay_hints").setup_autocmd()
           require("clangd_extensions.inlay_hints").set_inlay_hints()
           if on_attach ~= nil then
