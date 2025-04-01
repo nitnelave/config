@@ -9,15 +9,6 @@ setopt +o nomatch
 
 export TERM="xterm-256color"
 
-# Completion
-zstyle ':completion:*' insert-unambiguous true
-zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
-zstyle :compinstall filename '$HOME/.zshrc'
-
-[ -e ~/.completion/git ] && zstyle ':completion:*:*:git:*' script ~/.completion/git/git-completion.sh && fpath=(~/.zsh $fpath)
-
-[ -e ~/.zsh/zsh-autosuggestions ] && source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
-
 # History
 setopt appendhistory extended_glob HIST_IGNORE_ALL_DUPS HIST_SAVE_NO_DUPS sh_word_split
 autoload -Uz compinit
@@ -29,6 +20,24 @@ bindkey -v
 autoload -U edit-command-line
 bindkey "^q" push-line-or-edit
 
+
+# Completion
+source ~/.zsh/fzf-tab/fzf-tab.plugin.zsh
+
+# set list-colors to enable filename colorizing
+zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+# force zsh not to show completion menu, which allows fzf-tab to capture the unambiguous prefix
+zstyle ':completion:*' menu no
+zstyle ':completion:*' insert-unambiguous true
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
+zstyle :compinstall filename '$HOME/.zshrc'
+
+[ -e ~/.completion/git ] && zstyle ':completion:*:*:git:*' script ~/.completion/git/git-completion.sh && fpath=(~/.zsh $fpath)
+
+[ -e ~/.zsh/zsh-autosuggestions ] && source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
+export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=#777777'
+
+
 unsetopt beep notify
 
 # Setup fzf
@@ -37,6 +46,9 @@ unsetopt beep notify
 FZF_DEFAULT_COMMAND='rg -g ""'
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+source ~/.fzf/shell/key-bindings.zsh
+
+export FZF_DEFAULT_COMMAND='fd --type f --strip-cwd-prefix'
 
 bindkey '^g' fzf-cd-widget
 # Remove esc-c as fzf trigger

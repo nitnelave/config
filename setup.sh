@@ -155,4 +155,8 @@ if ! which mcfly >/dev/null; then
     cargo install --path . )
 fi
 
+[ -e ~/.zsh/fzf-tab ] || git clone https://github.com/Aloxaf/fzf-tab ~/.zsh/fzf-tab
+
+which fd >/dev/null || cargo install fd-find
+
 echo "Configuration successful!"
