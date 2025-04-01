@@ -357,6 +357,7 @@ return {
         rust_capabilities.document_formatting = true
         lsp_config.rust_analyzer = {
           root_dir = function(fname)
+            local util = require("lspconfig.util")
             return util.root_pattern("Cargo.toml", "rust-project.json", ".git")(fname)
                        or util.path.dirname(fname)
           end,
