@@ -148,4 +148,11 @@ if ! which glow >/dev/null; then
     cargo install --path . )
 fi
 
+if ! which mcfly >/dev/null; then
+  (cd ~/projects && \
+    git clone https://github.com/cantino/mcfly && \
+    cd mcfly && \
+    cargo install --path . )
+fi
+
 echo "Configuration successful!"

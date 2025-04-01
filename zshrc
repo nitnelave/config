@@ -95,3 +95,5 @@ eval "$(direnv hook zsh)"
 # Setup Starship.
 
 eval "$(starship init zsh)"
+
+eval "$(mcfly init zsh)"
