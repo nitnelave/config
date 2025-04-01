@@ -23,8 +23,8 @@ setopt appendhistory extended_glob HIST_IGNORE_ALL_DUPS HIST_SAVE_NO_DUPS sh_wor
 autoload -Uz compinit
 compinit -u
 export HISTFILE=~/.histfile
-HISTSIZE=1000000
-SAVEHIST=1000000
+HISTSIZE=10000000
+SAVEHIST=10000000
 bindkey -v
 autoload -U edit-command-line
 bindkey "^q" push-line-or-edit
@@ -96,4 +96,7 @@ eval "$(direnv hook zsh)"
 
 eval "$(starship init zsh)"
 
+export MCFLY_FUZZY=2
+export MCFLY_RESULTS=50
+export MCFLY_KEY_SCHEME=vim
 eval "$(mcfly init zsh)"
